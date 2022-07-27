@@ -21,13 +21,14 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
+use jomini::JominiDeserialize;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 /// The file default.map references the bitmaps and text files that make up the map.  
 /// * All file paths can be changed and are relative to the `map/` directory.  
 /// * The map's width and height are taken from provinces.bmp. They both have to be multiples of 256.  
-#[derive(Debug)]
+#[derive(Debug, JominiDeserialize, PartialEq)]
 #[non_exhaustive]
 pub struct DefaultMap {
     /// Contains the provinces the game recognizes.
@@ -47,6 +48,7 @@ pub struct DefaultMap {
     /// The provinces.bmp file should be in RGB mode and saved as a 24-bit bitmap image file (.BMP).
     /// * If the map is saved with a 32-bit format, the game will crash with a 'warning X4008: floating point division by zero' error.
     pub provinces: Box<Path>,
+    /// Seems to be unused.
     pub positions: Box<Path>,
     /// An 8-bit indexed mode BMP file that controls the terrain assignment and textures.
     /// The indexes refer to the terrains at the bottom of `/Hearts of Iron IV/common/terrain/00_terrain.txt`.  
@@ -101,6 +103,7 @@ pub struct DefaultMap {
     /// 6. Asia   
     /// 7. Middle East  
     pub continent: Box<Path>,
+    /// The names of the Adjacency Rules
     pub adjacency_rules: Box<Path>,
     /// The adjacencies file is found at `/Hearts of Iron IV/map/adjacencies.csv`. As a comma-separated file,
     /// you may open it with Excel or other similar programs, or a text editor. The default encoding is ANSI.  
@@ -122,116 +125,307 @@ pub struct DefaultMap {
     /// * Even when otherwise empty, the file must be terminated with a line containing a negative
     /// from-field and a semicolon to prevent an infinite hang on start-up.
     pub adjacencies: Box<Path>,
+    /// Unused
     pub climate: Option<Box<Path>>,
+    /// Defines the cosmetic 3D objects found in the map. This includes the map frame, so don't
+    /// simply empty the file if you want to remove the other objects.
     pub ambient_object: Box<Path>,
     /// Used to define the color adjustments during the four seasons that pass in game.
     /// There are four seasons: winter, spring, summer and autumn.
     pub seasons: Box<Path>,
+    /// Define which indices in trees.bmp palette which should count as trees for automatic terrain
+    /// assignment
     pub tree: Vec<usize>,
 }
 
+/// The type of the province.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-enum ProvinceType {
+#[non_exhaustive]
+pub enum ProvinceType {
+    /// A land province
+    #[serde(rename = "land")]
     Land,
+    /// A sea province
+    #[serde(rename = "sea")]
     Sea,
-    Water,
+    /// A water province
+    #[serde(rename = "lake")]
+    Lake,
 }
 
+/// Whether a province is coastal.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-struct Coastal(bool);
+pub struct Coastal(bool);
 
 /// Terrain type defined in the `common/00_terrain.txt` file.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-enum Terrain {
-    Plains,
-    Hills,
-    Urban,
-}
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+pub struct Terrain(String);
 
 /// The continent is a 1-based index into the continent list. Sea provinces must have the continent of 0.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct Continent(u32);
+pub struct Continent(i32);
 
+/// The ID for a province.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct ProvinceId(i32);
+pub struct ProvinceId(i32);
 
+/// A red value.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct Red(u8);
+pub struct Red(u8);
 
+/// A green value.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct Green(u8);
+pub struct Green(u8);
 
+/// A blue value.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct Blue(u8);
+pub struct Blue(u8);
 
+/// An x coordinate on the map.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct XCoord(i32);
+pub struct XCoord(i32);
 
+/// A y coordinate on the map.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct YCoord(i32);
+pub struct YCoord(i32);
 
+/// An adjacency rule name.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-struct AdjacencyRuleName(String);
+pub struct AdjacencyRuleName(String);
 
+/// An entry in the definitions file.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
-struct Definition {
-    id: ProvinceId,
-    r: Red,
-    g: Green,
-    b: Blue,
-    province_type: ProvinceType,
-    coastal: Coastal,
-    terrain: Terrain,
-    continent: Continent,
+#[non_exhaustive]
+pub struct Definition {
+    /// The ID of the province
+    pub id: ProvinceId,
+    /// The red value of the province on the provinces map
+    pub r: Red,
+    /// The green value of the province on the provinces map
+    pub g: Green,
+    /// The blue value of the province on the provinces map
+    pub b: Blue,
+    /// The type of the province
+    pub province_type: ProvinceType,
+    /// Whether the province is coastal
+    pub coastal: Coastal,
+    /// The terrain type of the province
+    pub terrain: Terrain,
+    /// The continent of the province
+    pub continent: Continent,
 }
 
+/// The Adjacency type
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Deserialize, Serialize)]
 enum AdjacencyType {
+    /// The adjacent province cannot be reached from this province
     Impassable,
+    /// The adjacent province is a sea province
     Sea,
+    /// The adjacent province is bordered by a river
     River,
+    /// The adjacent province is bordered by a large river
     LargeRiver,
 }
 
+/// The type of adjacency between two provinces
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 struct Adjacency {
+    /// The ID of the starting province
     from: ProvinceId,
+    /// The ID of the destination province
     to: ProvinceId,
+    /// The type of adjacency
     adjacency_type: Option<AdjacencyType>,
+    /// Defines a province that can block the adjacency.
+    /// While an enemy unit controls this province, the connection will be unavailable. -1 disables
+    /// this feature; however, any adjacency with the type "sea" must have a province defined here.
     through: ProvinceId,
+    /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
+    /// adjustment is needed, use -1 in place of an actual coordinate.
     start_x: XCoord,
+    /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
+    /// adjustment is needed, use -1 in place of an actual coordinate.
     stop_x: XCoord,
+    /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
+    /// adjustment is needed, use -1 in place of an actual coordinate.
     start_y: YCoord,
+    /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
+    /// adjustment is needed, use -1 in place of an actual coordinate.
     stop_y: YCoord,
+    /// An adjacency rule can be referenced that controls access through the adjacency.
     adjacency_rule_name: Option<AdjacencyRuleName>,
-    comment: String,
+    /// The comment for the adjacency
+    comment: Option<String>,
 }
 
+/// A date in the format YYYY.MM.DD
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 struct Date(String);
 
+/// An HSV value.
 #[derive(Debug, Clone, Deserialize, Serialize)]
-struct HSV((f32, f32, f32));
+struct Hsv((f32, f32, f32));
 
-impl PartialEq for HSV {
+impl PartialEq for Hsv {
     fn eq(&self, other: &Self) -> bool {
         self.0 .0 == other.0 .0 && self.0 .1 == other.0 .1 && self.0 .2 == other.0 .2
     }
 }
 
-impl Eq for HSV {}
+impl Eq for Hsv {}
 
+/// Defines the color adjustment for a season.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 struct Season {
+    /// The starting date of the season.
+    /// Format is 00.\<month\>.\<day\>  
+    /// Ex. 00.12.01
     start_date: Date,
+    /// The ending date of the season.
     end_date: Date,
-    // Applies to northern hemisphere
-    hsv_north: HSV,
-    colorbalance_north: HSV,
-    // Applies to the equator
-    hsv_center: HSV,
-    colorbalance_center: HSV,
-    // Applies to southern hemisphere
-    hsv_south: HSV,
-    colorbalance_south: HSV,
+    /// Applies HSV to northern hemisphere
+    hsv_north: Hsv,
+    /// Applies colorbalance to northern hemisphere
+    colorbalance_north: Hsv,
+    /// Applies HSV to the equator
+    hsv_center: Hsv,
+    /// Applies colorbalance to the equator
+    colorbalance_center: Hsv,
+    /// Applies HSV to southern hemisphere
+    hsv_south: Hsv,
+    /// Applies colorbalance to southern hemisphere
+    colorbalance_south: Hsv,
+}
+
+/// The definitions from the definition csv file.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Definitions {
+    /// The definitions for the provinces
+    pub definitions: Vec<Definition>,
+}
+
+#[cfg(test)]
+#[allow(clippy::expect_used)]
+mod tests {
+    use super::*;
+    use jomini::TextDeserializer;
+    use std::fs;
+    use std::path::PathBuf;
+
+    #[test]
+    fn it_reads_a_default_map_file() {
+        let map_data =
+            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
+        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
+            .expect("Failed to deserialize default.map");
+        assert_eq!(
+            map.definitions
+                .to_str()
+                .expect("Failed to get map definitions"),
+            "definition.csv"
+        );
+        assert_eq!(
+            map.provinces.to_str().expect("Failed to get map provinces"),
+            "provinces.bmp"
+        );
+        assert_eq!(
+            map.terrain.to_str().expect("Failed to get map terrain"),
+            "terrain.bmp"
+        );
+        assert_eq!(
+            map.rivers.to_str().expect("Failed to get map rivers"),
+            "rivers.bmp"
+        );
+        assert_eq!(
+            map.heightmap.to_str().expect("Failed to get map heightmap"),
+            "heightmap.bmp"
+        );
+        assert_eq!(
+            map.tree_definition
+                .to_str()
+                .expect("Failed to get map tree definition"),
+            "trees.bmp"
+        );
+        assert_eq!(
+            map.continent
+                .to_str()
+                .expect("Failed to get map continents"),
+            "continent.txt"
+        );
+        assert_eq!(
+            map.adjacency_rules
+                .to_str()
+                .expect("Failed to get map adjacency rules"),
+            "adjacency_rules.txt"
+        );
+        assert!(map.climate.is_none());
+        assert_eq!(
+            map.ambient_object
+                .to_str()
+                .expect("Failed to get map ambient objects"),
+            "ambient_object.txt"
+        );
+        assert_eq!(
+            map.seasons.to_str().expect("Failed to get map seasons"),
+            "seasons.txt"
+        );
+        assert_eq!(map.tree, vec![3, 4, 7, 10]);
+    }
+
+    #[test]
+    fn it_reads_definitions_from_the_map() {
+        let map_data =
+            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
+        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
+            .expect("Failed to deserialize default.map");
+        let definitions_path = map.definitions.to_path_buf();
+        let definitions_path = append_dir(&definitions_path, "./test");
+        let definitions_data =
+            fs::read_to_string(&definitions_path).expect("Failed to read definition.csv");
+
+        let mut rdr = csv::ReaderBuilder::new()
+            .has_headers(false)
+            .delimiter(b';')
+            .from_reader(definitions_data.as_bytes());
+        let mut definitions = Vec::new();
+        for definition in rdr.deserialize() {
+            definitions.push(definition.expect("Failed to deserialize definition"));
+        }
+        let definitions = Definitions { definitions };
+        assert_eq!(definitions.definitions.len(), 17007);
+        assert_eq!(
+            definitions.definitions[0],
+            Definition {
+                id: ProvinceId(0),
+                r: Red(0),
+                g: Green(0),
+                b: Blue(0),
+                province_type: ProvinceType::Land,
+                coastal: Coastal(false),
+                terrain: Terrain("hills".to_owned()),
+                continent: Continent(2)
+            }
+        );
+
+        assert_eq!(
+            definitions.definitions[16999],
+            Definition {
+                id: ProvinceId(16999),
+                r: Red(189),
+                g: Green(48),
+                b: Blue(218),
+                province_type: ProvinceType::Land,
+                coastal: Coastal(false),
+                terrain: Terrain("hills".to_owned()),
+                continent: Continent(2)
+            }
+        );
+    }
+
+    fn append_dir(p: &Path, d: &str) -> PathBuf {
+        let dirs = p.parent().unwrap();
+        dirs.join(d).join(p.file_name().unwrap())
+    }
 }

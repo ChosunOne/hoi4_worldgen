@@ -62,6 +62,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b71991ff56294aa922b450139ee08b3bfc70982c6b2c7562771375cf73542dd4"
 
 [[package]]
+name = "jomini"
+version = "0.19.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "abcf56da419099ea8558927a5db96655db1d725d24517473367d4f03c877d9bf"
+dependencies = [
+ "jomini_derive",
+ "serde",
+]
+
+[[package]]
+name = "jomini_derive"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "708b3655354ca22e0ba5c70fab085f14b53da09522f68d0ae84ef5e54d432c38"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -161,5 +181,6 @@ version = "0.1.0"
 dependencies = [
  "csv",
  "derive_more",
+ "jomini",
  "serde",
 ]
