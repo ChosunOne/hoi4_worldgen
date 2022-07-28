@@ -158,7 +158,7 @@ pub enum ProvinceType {
 pub struct Coastal(bool);
 
 /// Terrain type defined in the `common/00_terrain.txt` file.
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize, Hash, PartialOrd, Ord)]
 pub struct Terrain(String);
 
 /// The continent is a 1-based index into the continent list. Sea provinces must have the continent of 0.
@@ -190,7 +190,7 @@ pub struct XCoord(i32);
 pub struct YCoord(i32);
 
 /// An adjacency rule name.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
 pub struct AdjacencyRuleName(String);
 
 /// An entry in the definitions file.
@@ -217,46 +217,56 @@ pub struct Definition {
 
 /// The Adjacency type
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Deserialize, Serialize)]
-enum AdjacencyType {
+#[non_exhaustive]
+pub enum AdjacencyType {
     /// The adjacent province cannot be reached from this province
+    #[serde(rename = "impassable")]
     Impassable,
     /// The adjacent province is a sea province
+    #[serde(rename = "sea")]
     Sea,
     /// The adjacent province is bordered by a river
+    #[serde(rename = "river")]
     River,
     /// The adjacent province is bordered by a large river
+    #[serde(rename = "large_river")]
     LargeRiver,
 }
 
 /// The type of adjacency between two provinces
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
-struct Adjacency {
+#[non_exhaustive]
+pub struct Adjacency {
     /// The ID of the starting province
-    from: ProvinceId,
+    #[serde(rename = "From")]
+    pub from: ProvinceId,
     /// The ID of the destination province
-    to: ProvinceId,
+    #[serde(rename = "To")]
+    pub to: ProvinceId,
     /// The type of adjacency
-    adjacency_type: Option<AdjacencyType>,
+    #[serde(rename = "Type")]
+    pub adjacency_type: Option<AdjacencyType>,
     /// Defines a province that can block the adjacency.
     /// While an enemy unit controls this province, the connection will be unavailable. -1 disables
     /// this feature; however, any adjacency with the type "sea" must have a province defined here.
-    through: ProvinceId,
+    #[serde(rename = "Through")]
+    pub through: Option<ProvinceId>,
     /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
     /// adjustment is needed, use -1 in place of an actual coordinate.
-    start_x: XCoord,
+    pub start_x: XCoord,
     /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
     /// adjustment is needed, use -1 in place of an actual coordinate.
-    stop_x: XCoord,
+    pub stop_x: XCoord,
     /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
     /// adjustment is needed, use -1 in place of an actual coordinate.
-    start_y: YCoord,
+    pub start_y: YCoord,
     /// Used to adjust the starting and ending point of the graphic displaying the adjacency. If no
     /// adjustment is needed, use -1 in place of an actual coordinate.
-    stop_y: YCoord,
+    pub stop_y: YCoord,
     /// An adjacency rule can be referenced that controls access through the adjacency.
-    adjacency_rule_name: Option<AdjacencyRuleName>,
+    pub adjacency_rule_name: Option<AdjacencyRuleName>,
     /// The comment for the adjacency
-    comment: Option<String>,
+    pub comment: Option<String>,
 }
 
 /// A date in the format YYYY.MM.DD
@@ -306,10 +316,19 @@ pub struct Definitions {
     pub definitions: Vec<Definition>,
 }
 
+/// The adjacencies from the adjacency csv file.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Adjacencies {
+    /// The adjacencies between provinces
+    pub adjacencies: Vec<Adjacency>,
+}
+
 #[cfg(test)]
 #[allow(clippy::expect_used)]
 mod tests {
     use super::*;
+    use crate::AdjacencyType::Impassable;
     use jomini::TextDeserializer;
     use std::fs;
     use std::path::PathBuf;
@@ -420,6 +439,42 @@ mod tests {
                 coastal: Coastal(false),
                 terrain: Terrain("hills".to_owned()),
                 continent: Continent(2)
+            }
+        );
+    }
+
+    #[test]
+    fn it_reads_adjacencies_from_the_map() {
+        let map_data =
+            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
+        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
+            .expect("Failed to deserialize default.map");
+        let adjacency_rules_path = append_dir(&map.adjacencies, "./test");
+        let adjacency_rules_data =
+            fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
+        let mut rdr = csv::ReaderBuilder::new()
+            .has_headers(true)
+            .delimiter(b';')
+            .from_reader(adjacency_rules_data.as_bytes());
+        let mut adjacencies = Vec::new();
+        for adjacency in rdr.deserialize() {
+            adjacencies.push(adjacency.expect("Failed to deserialize adjacency"));
+        }
+        let adjacencies = Adjacencies { adjacencies };
+        assert_eq!(adjacencies.adjacencies.len(), 486);
+        assert_eq!(
+            adjacencies.adjacencies[0],
+            Adjacency {
+                from: ProvinceId(6402),
+                to: ProvinceId(6522),
+                adjacency_type: Some(Impassable),
+                through: Some(ProvinceId(-1)),
+                start_x: XCoord(-1),
+                stop_x: XCoord(-1),
+                start_y: YCoord(-1),
+                stop_y: YCoord(-1),
+                adjacency_rule_name: None,
+                comment: None
             }
         );
     }
