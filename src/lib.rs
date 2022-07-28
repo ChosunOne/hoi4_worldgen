@@ -23,6 +23,7 @@
 
 use jomini::JominiDeserialize;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::path::Path;
 
 /// The file default.map references the bitmaps and text files that make up the map.  
@@ -193,6 +194,65 @@ pub struct YCoord(i32);
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
 pub struct AdjacencyRuleName(String);
 
+/// An adjacency rule
+#[derive(Clone, Debug, JominiDeserialize, Serialize)]
+#[non_exhaustive]
+pub struct RawAdjacencyRules {
+    /// The info of the adjacency rule.
+    #[jomini(duplicated)]
+    adjacency_rule: Vec<AdjacencyRule>,
+}
+
+/// An adjacency rule
+#[derive(Clone, Debug, JominiDeserialize, Serialize, PartialEq, Eq)]
+#[non_exhaustive]
+pub struct AdjacencyRule {
+    /// The name of the adjacency rule.
+    pub name: AdjacencyRuleName,
+    /// The logic for when the adjacency is contested.
+    pub contested: AdjacencyLogic,
+    /// The logic for when the adjacency is controlled by an enemy.
+    pub enemy: AdjacencyLogic,
+    /// The logic for when the adjacency is controlled by a friend.
+    pub friend: AdjacencyLogic,
+    /// The logic for when the adjacency is controlled by a neutral.
+    pub neutral: AdjacencyLogic,
+    /// The provinces for which the rule applies.
+    pub required_provinces: Vec<ProvinceId>,
+    /// The icon for the adjacency rule.
+    pub icon: Icon,
+    /// Graphical offsets
+    pub offset: Vec<i32>,
+    /// Conditions when the rule can be disabled.
+    pub is_disabled: Option<IsDisabled>,
+}
+
+/// Conditions when an adjacency rule can be disabled
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, JominiDeserialize, Serialize)]
+#[non_exhaustive]
+pub struct IsDisabled {
+    /// The tooltip to display when the rule is disabled.
+    pub tooltip: String,
+}
+
+/// The logic for the adjacency rule.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, JominiDeserialize, Serialize)]
+#[non_exhaustive]
+pub struct AdjacencyLogic {
+    /// Whether armies can pass
+    pub army: bool,
+    /// Whether fleets can pass
+    pub navy: bool,
+    /// Whether subs can pass
+    pub submarine: bool,
+    /// Whether trade can pass
+    pub trade: bool,
+}
+
+/// The the province on which to show the crossing icon
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+pub struct Icon(ProvinceId);
+
 /// An entry in the definitions file.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 #[non_exhaustive]
@@ -322,6 +382,14 @@ pub struct Definitions {
 pub struct Adjacencies {
     /// The adjacencies between provinces
     pub adjacencies: Vec<Adjacency>,
+}
+
+/// The adjacency rules from the adjacency rule file
+#[derive(Debug, Clone)]
+#[non_exhaustive]
+pub struct AdjacencyRules {
+    /// The adjacency rules
+    pub adjacency_rules: HashMap<AdjacencyRuleName, AdjacencyRule>,
 }
 
 #[cfg(test)]
@@ -476,6 +544,66 @@ mod tests {
                 adjacency_rule_name: None,
                 comment: None
             }
+        );
+    }
+
+    #[test]
+    fn it_reads_adjacency_rules_from_the_map() {
+        let map_data =
+            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
+        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
+            .expect("Failed to deserialize default.map");
+        let adjacency_rules_path = append_dir(&map.adjacency_rules, "./test");
+        let adjacency_rules_data =
+            fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
+        let rules = TextDeserializer::from_windows1252_slice::<RawAdjacencyRules>(
+            adjacency_rules_data.as_bytes(),
+        )
+        .expect("Failed to deserialize adjacency_rules.txt");
+        let mut adjacency_rules = AdjacencyRules {
+            adjacency_rules: HashMap::new(),
+        };
+        for rule in rules.adjacency_rule {
+            adjacency_rules
+                .adjacency_rules
+                .insert(rule.name.clone(), rule);
+        }
+        assert_eq!(adjacency_rules.adjacency_rules.len(), 11);
+        assert_eq!(
+            adjacency_rules
+                .adjacency_rules
+                .get(&AdjacencyRuleName("Veracruz Canal".to_owned())),
+            Some(&AdjacencyRule {
+                name: AdjacencyRuleName("Veracruz Canal".to_owned()),
+                contested: AdjacencyLogic {
+                    army: false,
+                    navy: false,
+                    submarine: false,
+                    trade: false
+                },
+                enemy: AdjacencyLogic {
+                    army: false,
+                    navy: false,
+                    submarine: false,
+                    trade: false
+                },
+                friend: AdjacencyLogic {
+                    army: true,
+                    navy: true,
+                    submarine: true,
+                    trade: true
+                },
+                neutral: AdjacencyLogic {
+                    army: false,
+                    navy: false,
+                    submarine: false,
+                    trade: true
+                },
+                required_provinces: vec![ProvinceId(10033), ProvinceId(10101)],
+                icon: Icon(ProvinceId(10101)),
+                offset: vec![-3, 0, -6],
+                is_disabled: None
+            })
         );
     }
 
