@@ -10,3 +10,4 @@ csv = "1.1.6"
 derive_more = "0.99.17"
 serde = { version = "1.0.140", features = ["derive"] }
 jomini = "0.19.1"
+image = "0.24.3"

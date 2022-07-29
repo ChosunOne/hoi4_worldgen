@@ -1,0 +1,8 @@
+continents = {
+	west_coast
+	northern_reaches
+	land_of_titans
+	midwest
+	east_coast
+	caribbean_expanse
+}

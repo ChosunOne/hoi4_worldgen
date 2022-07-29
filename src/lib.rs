@@ -21,9 +21,12 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
-use jomini::JominiDeserialize;
+use image::open;
+use jomini::{JominiDeserialize, TextDeserializer};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::error::Error;
+use std::fs;
 use std::path::Path;
 
 /// The file default.map references the bitmaps and text files that make up the map.  
@@ -139,6 +142,19 @@ pub struct DefaultMap {
     pub tree: Vec<usize>,
 }
 
+impl DefaultMap {
+    /// Reads the default.map file from the given path.
+    /// # Errors
+    /// If the file is not found or is invalid, an error is returned.
+    #[inline]
+    pub fn from_file(path: &Path) -> Result<Self, Box<dyn Error>> {
+        let map_data = fs::read_to_string(path)?;
+        Ok(TextDeserializer::from_windows1252_slice::<DefaultMap>(
+            map_data.as_bytes(),
+        )?)
+    }
+}
+
 /// The type of the province.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[non_exhaustive]
@@ -164,22 +180,26 @@ pub struct Terrain(String);
 
 /// The continent is a 1-based index into the continent list. Sea provinces must have the continent of 0.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
-pub struct Continent(i32);
+pub struct ContinentIndex(i32);
+
+/// A contintent identifier
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
+pub struct Continent(String);
 
 /// The ID for a province.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
 pub struct ProvinceId(i32);
 
 /// A red value.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
 pub struct Red(u8);
 
 /// A green value.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
 pub struct Green(u8);
 
 /// A blue value.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
 pub struct Blue(u8);
 
 /// An x coordinate on the map.
@@ -272,7 +292,7 @@ pub struct Definition {
     /// The terrain type of the province
     pub terrain: Terrain,
     /// The continent of the province
-    pub continent: Continent,
+    pub continent: ContinentIndex,
 }
 
 /// The Adjacency type
@@ -338,6 +358,7 @@ pub struct Date(String);
 pub struct Hsv((f32, f32, f32));
 
 impl PartialEq for Hsv {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.0 .0 == other.0 .0 && self.0 .1 == other.0 .1 && self.0 .2 == other.0 .2
     }
@@ -433,21 +454,28 @@ pub struct AdjacencyRules {
     pub adjacency_rules: HashMap<AdjacencyRuleName, AdjacencyRule>,
 }
 
+/// The list of continents
+#[derive(Debug, Clone, JominiDeserialize, Serialize)]
+#[non_exhaustive]
+pub struct Continents {
+    /// The list of continents
+    pub continents: Vec<Continent>,
+}
+
 #[cfg(test)]
 #[allow(clippy::expect_used)]
+#[allow(clippy::panic)]
 mod tests {
     use super::*;
     use crate::AdjacencyType::Impassable;
+    use image::DynamicImage;
     use jomini::TextDeserializer;
     use std::fs;
     use std::path::PathBuf;
 
     #[test]
     fn it_reads_a_default_map_file() {
-        let map_data =
-            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
-        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
-            .expect("Failed to deserialize default.map");
+        let map = DefaultMap::from_file(Path::new("test/default.map")).expect("Failed to read map");
         assert_eq!(
             map.definitions
                 .to_str()
@@ -504,10 +532,7 @@ mod tests {
 
     #[test]
     fn it_reads_definitions_from_the_map() {
-        let map_data =
-            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
-        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
-            .expect("Failed to deserialize default.map");
+        let map = DefaultMap::from_file(Path::new("test/default.map")).expect("Failed to read map");
         let definitions_path = map.definitions.to_path_buf();
         let definitions_path = append_dir(&definitions_path, "./test");
         let definitions_data =
@@ -533,7 +558,7 @@ mod tests {
                 province_type: ProvinceType::Land,
                 coastal: Coastal(false),
                 terrain: Terrain("hills".to_owned()),
-                continent: Continent(2)
+                continent: ContinentIndex(2)
             }
         );
 
@@ -547,17 +572,15 @@ mod tests {
                 province_type: ProvinceType::Land,
                 coastal: Coastal(false),
                 terrain: Terrain("hills".to_owned()),
-                continent: Continent(2)
+                continent: ContinentIndex(2)
             }
         );
     }
 
     #[test]
     fn it_reads_adjacencies_from_the_map() {
-        let map_data =
-            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
-        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
-            .expect("Failed to deserialize default.map");
+        let map = DefaultMap::from_file(Path::new("./test/default.map"))
+            .expect("Failed to read default.map");
         let adjacency_rules_path = append_dir(&map.adjacencies, "./test");
         let adjacency_rules_data =
             fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
@@ -590,10 +613,8 @@ mod tests {
 
     #[test]
     fn it_reads_adjacency_rules_from_the_map() {
-        let map_data =
-            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
-        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
-            .expect("Failed to deserialize default.map");
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
         let adjacency_rules_path = append_dir(&map.adjacency_rules, "./test");
         let adjacency_rules_data =
             fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
@@ -650,10 +671,8 @@ mod tests {
 
     #[test]
     fn it_loads_seasons_from_the_map() {
-        let map_data =
-            fs::read_to_string("./test/default.map").expect("Failed to read default.map");
-        let map = TextDeserializer::from_windows1252_slice::<DefaultMap>(map_data.as_bytes())
-            .expect("Failed to deserialize default.map");
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
         let seasons_path = append_dir(&map.seasons, "./test");
         let seasons_data = fs::read_to_string(&seasons_path).expect("Failed to read seasons.txt");
         let seasons = TextDeserializer::from_windows1252_slice::<Seasons>(seasons_data.as_bytes())
@@ -680,8 +699,115 @@ mod tests {
         );
     }
 
+    #[test]
+    fn it_reads_continents_from_the_map() {
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
+        let continents_path = append_dir(&map.continent, "./test");
+        let continents_data =
+            fs::read_to_string(&continents_path).expect("Failed to read continents.txt");
+        let continents =
+            TextDeserializer::from_windows1252_slice::<Continents>(continents_data.as_bytes())
+                .expect("Failed to deserialize continents.txt");
+        assert_eq!(continents.continents.len(), 6);
+        assert_eq!(continents.continents[0], Continent("west_coast".to_owned()));
+        assert_eq!(
+            continents.continents[1],
+            Continent("northern_reaches".to_owned())
+        );
+        assert_eq!(
+            continents.continents[2],
+            Continent("land_of_titans".to_owned())
+        );
+        assert_eq!(continents.continents[3], Continent("midwest".to_owned()));
+        assert_eq!(continents.continents[4], Continent("east_coast".to_owned()));
+        assert_eq!(
+            continents.continents[5],
+            Continent("caribbean_expanse".to_owned())
+        );
+    }
+
+    #[test]
+    fn it_loads_provinces_bmp_from_the_map() {
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
+        let provinces_bmp_path = append_dir(&map.provinces, "./test");
+        let provinces_bmp: DynamicImage =
+            open(&provinces_bmp_path).expect("Failed to read provinces.bmp");
+        match provinces_bmp {
+            DynamicImage::ImageRgb8(image) => {
+                assert_eq!(image.width(), 5632);
+                assert_eq!(image.height(), 2304);
+            }
+            _ => panic!("Failed to read provinces.bmp"),
+        }
+    }
+
+    #[test]
+    fn it_reads_terrain_bmp_from_the_map() {
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
+        let terrain_bmp_path = append_dir(&map.terrain, "./test");
+        let terrain_bmp: DynamicImage =
+            open(&terrain_bmp_path).expect("Failed to read terrain.bmp");
+        match terrain_bmp {
+            DynamicImage::ImageRgb8(image) => {
+                assert_eq!(image.width(), 5632);
+                assert_eq!(image.height(), 2304);
+            }
+            _ => panic!("Failed to read terrain.bmp"),
+        }
+    }
+
+    #[test]
+    fn it_reads_rivers_bmp_from_the_map() {
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
+        let rivers_bmp_path = append_dir(&map.rivers, "./test");
+        let rivers_bmp: DynamicImage = open(&rivers_bmp_path).expect("Failed to read rivers.bmp");
+        match rivers_bmp {
+            DynamicImage::ImageRgb8(image) => {
+                assert_eq!(image.width(), 5632);
+                assert_eq!(image.height(), 2304);
+            }
+            _ => panic!("Failed to read rivers.bmp"),
+        }
+    }
+
+    #[test]
+    fn it_reads_heightmap_from_the_map() {
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
+        let heightmap_bmp_path = append_dir(&map.heightmap, "./test");
+        let heightmap_bmp: DynamicImage =
+            open(&heightmap_bmp_path).expect("Failed to read heightmap.bmp");
+        match heightmap_bmp {
+            DynamicImage::ImageRgb8(image) => {
+                assert_eq!(image.width(), 5632);
+                assert_eq!(image.height(), 2304);
+            }
+            _ => panic!("Failed to read heightmap.bmp"),
+        }
+    }
+
+    #[test]
+    fn it_reads_trees_bmp_from_the_map() {
+        let map = DefaultMap::from_file(Path::new("test/default.map"))
+            .expect("Failed to read default.map");
+        let tree_bmp_path = append_dir(&map.tree_definition, "./test");
+        let tree_bmp: DynamicImage = open(&tree_bmp_path).expect("Failed to read trees.bmp");
+        match tree_bmp {
+            DynamicImage::ImageRgb8(image) => {
+                assert_eq!(image.width(), 1650);
+                assert_eq!(image.height(), 675);
+            }
+            _ => panic!("Failed to read trees.bmp"),
+        }
+    }
+
     fn append_dir(p: &Path, d: &str) -> PathBuf {
-        let dirs = p.parent().unwrap();
-        dirs.join(d).join(p.file_name().unwrap())
+        let dirs = p.parent().expect("Failed to get parent dir");
+        dirs.join(d)
+            .join(p.file_name().expect("Failed to get file name"))
     }
 }
