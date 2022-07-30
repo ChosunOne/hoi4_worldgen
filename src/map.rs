@@ -1,4 +1,8 @@
-use crate::{Adjacencies, AdjacencyRules, Airports, Continents, Definitions, Seasons};
+use crate::components::adjacency::{Adjacencies, AdjacencyRules};
+use crate::components::airport::Airports;
+use crate::components::continent::Continents;
+use crate::components::province::Definitions;
+use crate::components::season::Seasons;
 use image::RgbImage;
 
 /// All the components needed to represent a map.
