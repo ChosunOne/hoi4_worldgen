@@ -21,13 +21,19 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
-use image::open;
-use jomini::{JominiDeserialize, TextDeserializer};
-use serde::{Deserialize, Serialize};
+pub mod map;
+
+use derive_more::FromStr;
+use jomini::common::Date;
+use jomini::{JominiDeserialize, TextDeserializer, TextTape};
+use serde::de::Visitor;
+use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::HashMap;
 use std::error::Error;
+use std::fmt::Formatter;
 use std::fs;
 use std::path::Path;
+use std::str::FromStr;
 
 /// The file default.map references the bitmaps and text files that make up the map.  
 /// * All file paths can be changed and are relative to the `map/` directory.  
@@ -187,8 +193,16 @@ pub struct ContinentIndex(i32);
 pub struct Continent(String);
 
 /// The ID for a province.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
+#[derive(
+    Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
 pub struct ProvinceId(i32);
+
+/// The ID for a state.
+#[derive(
+    Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+pub struct StateId(i32);
 
 /// A red value.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
@@ -349,10 +363,6 @@ pub struct Adjacency {
     pub comment: Option<String>,
 }
 
-/// A date in the format YYYY.MM.DD
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
-pub struct Date(String);
-
 /// An HSV value.
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Hsv((f32, f32, f32));
@@ -462,14 +472,74 @@ pub struct Continents {
     pub continents: Vec<Continent>,
 }
 
+/// The list of airports in each state
+#[derive(Debug, Clone)]
+#[non_exhaustive]
+pub struct Airports {
+    /// The airports by state
+    pub airports: HashMap<StateId, Vec<ProvinceId>>,
+}
+
+impl FromStr for Airports {
+    type Err = String;
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut airports = Airports {
+            airports: HashMap::new(),
+        };
+
+        for line in s.lines() {
+            let tape = match TextTape::from_slice(line.as_bytes()) {
+                Ok(tape) => tape,
+                Err(e) => return Err(format!("{}", e)),
+            };
+            let reader = tape.windows1252_reader();
+            for (key, _op, value) in reader.fields() {
+                let state_id = match key.read_str().parse::<StateId>() {
+                    Ok(state_id) => state_id,
+                    Err(e) => return Err(format!("failed to parse state id: {}", e)),
+                };
+                let province_ids = match value.read_array() {
+                    Ok(province_ids) => {
+                        let mut ids = Vec::new();
+                        for id in province_ids.values() {
+                            let id_string = match id.read_string() {
+                                Ok(id) => id,
+                                Err(e) => {
+                                    return Err(format!("failed to parse province id: {}", e))
+                                }
+                            };
+                            match id_string.parse::<ProvinceId>() {
+                                Ok(id) => ids.push(id),
+                                Err(e) => {
+                                    return Err(format!("failed to parse province id: {}", e))
+                                }
+                            };
+                        }
+                        ids
+                    }
+                    Err(e) => return Err(format!("failed to parse province ids: {}", e)),
+                };
+                airports.airports.insert(state_id, province_ids);
+            }
+        }
+
+        Ok(airports)
+    }
+}
+
 #[cfg(test)]
 #[allow(clippy::expect_used)]
 #[allow(clippy::panic)]
 mod tests {
     use super::*;
     use crate::AdjacencyType::Impassable;
+    use image::open;
     use image::DynamicImage;
     use jomini::TextDeserializer;
+    use serde::de::value::StringDeserializer;
+    use serde::de::IntoDeserializer;
     use std::fs;
     use std::path::PathBuf;
 
@@ -680,8 +750,8 @@ mod tests {
         assert_eq!(
             seasons.winter,
             Season {
-                start_date: Date("00.12.01".to_owned()),
-                end_date: Date("00.02.28".to_owned()),
+                start_date: Date::from_ymd(0, 12, 1),
+                end_date: Date::from_ymd(0, 2, 28),
                 hsv_north: Hsv((0.0, 0.4, 0.7)),
                 colorbalance_north: Hsv((0.8, 0.8, 1.1)),
                 hsv_center: Hsv((0.0, 0.85, 1.0)),
@@ -693,8 +763,8 @@ mod tests {
         assert_eq!(
             seasons.tree_spring2,
             TreeSeason {
-                start_date: Date("00.03.20".to_owned()),
-                end_date: Date("00.04.20".to_owned()),
+                start_date: Date::from_ymd(0, 3, 20),
+                end_date: Date::from_ymd(0, 4, 20),
             }
         );
     }
@@ -803,6 +873,15 @@ mod tests {
             }
             _ => panic!("Failed to read trees.bmp"),
         }
+    }
+
+    #[test]
+    fn it_reads_the_airports_file() {
+        let airports_path = Path::new("./test/airports.txt");
+        let airports_data = fs::read_to_string(airports_path).expect("Failed to read airports.txt");
+        let airports = airports_data
+            .parse::<Airports>()
+            .expect("Failed to parse airports.txt");
     }
 
     fn append_dir(p: &Path, d: &str) -> PathBuf {
