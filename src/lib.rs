@@ -882,6 +882,11 @@ mod tests {
         let airports = airports_data
             .parse::<Airports>()
             .expect("Failed to parse airports.txt");
+        assert_eq!(airports.airports.len(), 1388);
+        assert_eq!(
+            airports.airports.get(&StateId(1371)),
+            Some(&vec![ProvinceId(15230)])
+        );
     }
 
     fn append_dir(p: &Path, d: &str) -> PathBuf {
