@@ -23,9 +23,14 @@
 
 use std::path::{Path, PathBuf};
 
+/// Holds the components of the map
 pub mod components;
+/// Holds the components together into one struct
 pub mod map;
 
+/// Appends a directory to the front of a given path.
+#[inline]
+#[must_use]
 pub fn append_dir(p: &Path, d: &str) -> PathBuf {
     let dirs = p.parent().expect("Failed to get parent dir");
     dirs.join(d)

@@ -46,6 +46,8 @@ pub struct Definitions {
     pub definitions: Vec<Definition>,
 }
 
+#[allow(clippy::expect_used)]
+#[allow(clippy::indexing_slicing)]
 #[cfg(test)]
 mod tests {
     use super::*;

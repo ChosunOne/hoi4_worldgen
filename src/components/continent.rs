@@ -10,6 +10,8 @@ pub struct Continents {
     pub continents: Vec<Continent>,
 }
 
+#[allow(clippy::expect_used)]
+#[allow(clippy::indexing_slicing)]
 #[cfg(test)]
 mod tests {
     use super::*;

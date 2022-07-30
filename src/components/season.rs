@@ -67,6 +67,7 @@ pub struct Seasons {
     pub tree_autumn2: TreeSeason,
 }
 
+#[allow(clippy::expect_used)]
 #[cfg(test)]
 mod tests {
     use super::*;

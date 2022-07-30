@@ -60,6 +60,8 @@ impl FromStr for Airports {
     }
 }
 
+#[allow(clippy::expect_used)]
+#[allow(clippy::indexing_slicing)]
 #[cfg(test)]
 mod tests {
     use super::*;

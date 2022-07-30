@@ -127,6 +127,8 @@ pub struct AdjacencyRules {
     pub adjacency_rules: HashMap<AdjacencyRuleName, AdjacencyRule>,
 }
 
+#[allow(clippy::expect_used)]
+#[allow(clippy::indexing_slicing)]
 #[cfg(test)]
 mod tests {
     use super::*;

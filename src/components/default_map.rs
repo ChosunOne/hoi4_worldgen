@@ -129,6 +129,9 @@ impl DefaultMap {
     }
 }
 
+#[allow(clippy::expect_used)]
+#[allow(clippy::indexing_slicing)]
+#[allow(clippy::panic)]
 #[cfg(test)]
 mod tests {
     use super::*;
