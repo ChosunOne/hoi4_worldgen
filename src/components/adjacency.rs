@@ -3,6 +3,7 @@ use jomini::JominiDeserialize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+/// An adjacency rule
 #[derive(Clone, Debug, JominiDeserialize, Serialize, PartialEq, Eq)]
 #[non_exhaustive]
 pub struct AdjacencyRule {

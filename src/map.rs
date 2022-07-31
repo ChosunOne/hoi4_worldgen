@@ -3,6 +3,7 @@ use crate::components::airport::Airports;
 use crate::components::continent::Continents;
 use crate::components::province::Definitions;
 use crate::components::season::Seasons;
+use crate::components::strategic_region::StrategicRegions;
 use image::RgbImage;
 
 /// All the components needed to represent a map.
@@ -21,7 +22,7 @@ pub struct Map {
     adjacencies: Adjacencies,
     seasons: Seasons,
     tree_indices: Vec<usize>,
-    // strategic_regions: StrategicRegions,
+    strategic_regions: StrategicRegions,
     // supply_nodes: SupplyNodes,
     // railways: Railways,
     // buildings: Buildings,
