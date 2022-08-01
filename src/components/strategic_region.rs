@@ -2,9 +2,14 @@ use crate::components::day_month::DayMonth;
 use crate::components::wrappers::{
     ProvinceId, SnowLevel, StrategicRegionId, StrategicRegionName, Temperature, Weight,
 };
-use jomini::JominiDeserialize;
+use crate::MapError;
+use jomini::{JominiDeserialize, TextDeserializer};
+use log::{debug, error, info, warn};
 use serde::Serialize;
 use std::collections::HashMap;
+use std::ffi::OsStr;
+use std::fs;
+use std::path::Path;
 
 /// Defines a raw strategic region
 #[derive(Debug, Clone, JominiDeserialize, Serialize)]
@@ -12,6 +17,20 @@ use std::collections::HashMap;
 pub struct RawStrategicRegion {
     /// The parsed strategic region
     pub strategic_region: StrategicRegion,
+}
+
+impl RawStrategicRegion {
+    /// Loads a raw strategic region from a file
+    /// # Errors
+    /// If the file cannot be read, or if the file is not a valid strategic region
+    #[inline]
+    pub fn from_file(path: &Path) -> Result<Self, MapError> {
+        let raw_strategic_region_data = fs::read_to_string(path)?;
+        let raw_strategic_region = TextDeserializer::from_windows1252_slice::<RawStrategicRegion>(
+            raw_strategic_region_data.as_bytes(),
+        )?;
+        Ok(raw_strategic_region)
+    }
 }
 
 /// Defines a strategic region
@@ -84,6 +103,91 @@ pub struct Period {
 pub struct StrategicRegions {
     /// The strategic regions
     pub strategic_regions: HashMap<StrategicRegionId, StrategicRegion>,
+}
+
+impl StrategicRegions {
+    /// Checks if a file looks like a strategic region file.  Strategic region files should have the
+    /// form: `X-StrategicRegion.txt` where X is the strategic region id.
+    fn verify_strategic_region_file_name(path: &Path) -> Result<(), MapError> {
+        if let Some(filename) = path.file_name() {
+            let (id, name) = Self::get_strategic_region_id_and_filename(filename)?;
+            if id < StrategicRegionId(1) || name != "StrategicRegion.txt" {
+                warn!(
+                    "Strategic region file name is not correct: {}",
+                    filename.to_string_lossy()
+                );
+            }
+        } else {
+            warn!(
+                "Strategic region file name is not correct: {}",
+                path.to_string_lossy()
+            );
+        }
+
+        Ok(())
+    }
+
+    /// Gets the strategic region id and filename from a file name.
+    fn get_strategic_region_id_and_filename(
+        filename: &OsStr,
+    ) -> Result<(StrategicRegionId, String), MapError> {
+        let name_parts = filename
+            .to_str()
+            .ok_or_else(|| {
+                MapError::InvalidStrategicRegionFileName(filename.to_string_lossy().to_string())
+            })?
+            .split('-')
+            .collect::<Vec<_>>();
+        let id = name_parts
+            .get(0)
+            .ok_or_else(|| {
+                MapError::InvalidStrategicRegionFileName(filename.to_string_lossy().to_string())
+            })?
+            .parse::<StrategicRegionId>()?;
+        let name = (*name_parts.get(1).ok_or_else(|| {
+            MapError::InvalidStrategicRegionFileName(filename.to_string_lossy().to_string())
+        })?)
+        .to_owned();
+        Ok((id, name))
+    }
+
+    /// Creates a new map of strategic regions from the `strategicregions` directory.  
+    /// # Errors
+    /// If the directory cannot be read.
+    #[inline]
+    pub fn from_dir(path: &Path) -> Result<Self, MapError> {
+        let strategic_region_files = fs::read_dir(path)?;
+        let mut strategic_regions = HashMap::new();
+        for strategic_region_file_result in strategic_region_files {
+            let strategic_region_file = strategic_region_file_result?;
+            let strategic_region_path = strategic_region_file.path();
+            // Check if the file looks like a strategic region
+            Self::verify_strategic_region_file_name(&strategic_region_path);
+            let (filename_id, _) =
+                Self::get_strategic_region_id_and_filename(&strategic_region_file.file_name())?;
+
+            let raw_strategic_region = RawStrategicRegion::from_file(&strategic_region_path)?;
+            let strategic_region = raw_strategic_region.strategic_region;
+            let id = strategic_region.id;
+
+            if id == StrategicRegionId(0) {
+                return Err(MapError::InvalidStrategicRegion(id));
+            }
+            if strategic_region.name == StrategicRegionName("".to_owned()) {
+                return Err(MapError::InvalidStrategicRegionName(strategic_region.name));
+            }
+
+            if id != filename_id {
+                return Err(MapError::InvalidStrategicRegionFileName(
+                    strategic_region_path.to_string_lossy().to_string(),
+                ));
+            }
+
+            strategic_regions.insert(id, strategic_region);
+        }
+
+        Ok(Self { strategic_regions })
+    }
 }
 
 #[allow(clippy::expect_used)]
@@ -389,6 +493,22 @@ mod tests {
                     ]
                 }
             }
+        );
+    }
+
+    #[test]
+    fn it_reads_strategic_regions_from_a_directory() {
+        let strategicregions_path = Path::new("./test/strategicregions");
+        let strategicregions = StrategicRegions::from_dir(strategicregions_path)
+            .expect("failed to read strategicregions");
+        assert_eq!(strategicregions.strategic_regions.len(), 177);
+        assert_eq!(
+            strategicregions
+                .strategic_regions
+                .get(&StrategicRegionId(161))
+                .expect("failed to get strategic region")
+                .name,
+            StrategicRegionName("GWW".to_owned())
         );
     }
 }

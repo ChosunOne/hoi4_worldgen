@@ -21,12 +21,41 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
+use crate::components::wrappers::{StrategicRegionId, StrategicRegionName};
 use std::path::{Path, PathBuf};
+use thiserror::Error;
 
 /// Holds the components of the map
 pub mod components;
 /// Holds the components together into one struct
 pub mod map;
+
+/// Errors that may occur when loading/verifying/creating a map.
+#[derive(Error, Debug)]
+#[non_exhaustive]
+pub enum MapError {
+    /// Error while reading/writing to a file on disk.
+    #[error("{0}")]
+    IOError(#[from] std::io::Error),
+    /// Error parsing a value
+    #[error("{0}")]
+    ParseError(#[from] jomini::Error),
+    /// Error finding a file
+    #[error("File not found")]
+    FileNotFoundError(PathBuf),
+    /// An invalid strategic region id
+    #[error("{0}")]
+    InvalidStrategicRegionId(#[from] std::num::ParseIntError),
+    /// An invalid strategic region name
+    #[error("{0}")]
+    InvalidStrategicRegionName(StrategicRegionName),
+    /// An invalid strategic region
+    #[error("{0}")]
+    InvalidStrategicRegion(StrategicRegionId),
+    /// An invalid strategic region file name
+    #[error("{0}")]
+    InvalidStrategicRegionFileName(String),
+}
 
 /// Appends a directory to the front of a given path.
 #[inline]
