@@ -32,7 +32,7 @@ impl SupplyNodes {
     #[inline]
     pub fn from_file(path: &Path) -> Result<Self, MapError> {
         let data = fs::read_to_string(path)?;
-        let supply_nodes = SupplyNodes::from_str(&data)?;
+        let supply_nodes = data.parse()?;
         Ok(supply_nodes)
     }
 }
@@ -55,7 +55,7 @@ impl FromStr for SupplyNodes {
             let province_id = parts
                 .get(1)
                 .ok_or_else(|| MapError::InvalidSupplyNode(line.to_owned()))?
-                .parse::<ProvinceId>()?;
+                .parse()?;
             nodes.insert(province_id);
         }
 

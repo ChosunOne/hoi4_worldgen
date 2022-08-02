@@ -2,13 +2,14 @@ use crate::components::adjacency::{Adjacencies, AdjacencyRules};
 use crate::components::airport::Airports;
 use crate::components::continent::Continents;
 use crate::components::province::Definitions;
+use crate::components::railway::Railways;
 use crate::components::season::Seasons;
 use crate::components::strategic_region::StrategicRegions;
 use crate::components::supply_node::SupplyNodes;
 use image::RgbImage;
 
 /// All the components needed to represent a map.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 #[non_exhaustive]
 pub struct Map {
     /// The provinces.bmp image.
@@ -41,7 +42,8 @@ pub struct Map {
     pub strategic_regions: StrategicRegions,
     /// The supply nodes on the map
     pub supply_nodes: SupplyNodes,
-    // railways: Railways,
+    /// The railways on the map
+    pub railways: Railways,
     // buildings: Buildings,
     // cities: Cities,
     // colors: Colors,

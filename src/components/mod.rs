@@ -4,6 +4,7 @@ pub mod continent;
 pub mod day_month;
 pub mod default_map;
 pub mod province;
+pub mod railway;
 pub mod season;
 pub mod strategic_region;
 pub mod supply_node;

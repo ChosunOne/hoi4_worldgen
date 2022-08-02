@@ -60,6 +60,9 @@ pub enum MapError {
     /// An invalid supply node
     #[error("{0}")]
     InvalidSupplyNode(String),
+    /// An invalid railway
+    #[error("{0}")]
+    InvalidRailway(String),
 }
 
 /// Appends a directory to the front of a given path.

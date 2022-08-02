@@ -90,6 +90,24 @@ pub struct StateId(pub i32);
 #[non_exhaustive]
 pub struct StrategicRegionId(pub i32);
 
+/// The level of the railroad.
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    FromStr,
+)]
+#[non_exhaustive]
+pub struct RailLevel(pub i32);
+
 /// A red value.
 #[derive(
     Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash,
