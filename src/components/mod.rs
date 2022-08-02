@@ -6,4 +6,5 @@ pub mod default_map;
 pub mod province;
 pub mod season;
 pub mod strategic_region;
+pub mod supply_node;
 pub mod wrappers;

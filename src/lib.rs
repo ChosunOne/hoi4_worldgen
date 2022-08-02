@@ -57,6 +57,9 @@ pub enum MapError {
     /// An invalid strategic region file name
     #[error("{0}")]
     InvalidStrategicRegionFileName(String),
+    /// An invalid supply node
+    #[error("{0}")]
+    InvalidSupplyNode(String),
 }
 
 /// Appends a directory to the front of a given path.
