@@ -1,4 +1,5 @@
 use crate::components::wrappers::{ProvinceId, StateId};
+use crate::MapError;
 use jomini::TextTape;
 use std::collections::HashMap;
 use std::str::FromStr;
@@ -12,7 +13,7 @@ pub struct Airports {
 }
 
 impl FromStr for Airports {
-    type Err = String;
+    type Err = MapError;
 
     #[inline]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -21,36 +22,18 @@ impl FromStr for Airports {
         };
 
         for line in s.lines() {
-            let tape = match TextTape::from_slice(line.as_bytes()) {
-                Ok(tape) => tape,
-                Err(e) => return Err(format!("{}", e)),
-            };
+            let tape = TextTape::from_slice(line.as_bytes())?;
             let reader = tape.windows1252_reader();
             for (key, _op, value) in reader.fields() {
-                let state_id = match key.read_str().parse::<StateId>() {
-                    Ok(state_id) => state_id,
-                    Err(e) => return Err(format!("failed to parse state id: {}", e)),
-                };
-                let province_ids = match value.read_array() {
-                    Ok(province_ids) => {
-                        let mut ids = Vec::new();
-                        for id in province_ids.values() {
-                            let id_string = match id.read_string() {
-                                Ok(id) => id,
-                                Err(e) => {
-                                    return Err(format!("failed to parse province id: {}", e))
-                                }
-                            };
-                            match id_string.parse::<ProvinceId>() {
-                                Ok(id) => ids.push(id),
-                                Err(e) => {
-                                    return Err(format!("failed to parse province id: {}", e))
-                                }
-                            };
-                        }
-                        ids
+                let state_id = key.read_str().parse::<StateId>()?;
+                let province_ids = {
+                    let array = value.read_array()?;
+                    let mut ids = Vec::new();
+                    for id in array.values() {
+                        let id_string = id.read_string()?;
+                        ids.push(id_string.parse::<ProvinceId>()?);
                     }
-                    Err(e) => return Err(format!("failed to parse province ids: {}", e)),
+                    ids
                 };
                 airports.airports.insert(state_id, province_ids);
             }

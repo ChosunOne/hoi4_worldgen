@@ -40,6 +40,8 @@ pub enum MapError {
     /// Error parsing a value
     #[error("{0}")]
     ParseError(#[from] jomini::Error),
+    #[error("{0}")]
+    DeserializeError(#[from] jomini::DeserializeError),
     /// Error finding a file
     #[error("File not found")]
     FileNotFoundError(PathBuf),

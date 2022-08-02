@@ -8,21 +8,36 @@ use image::RgbImage;
 
 /// All the components needed to represent a map.
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct Map {
-    provinces: RgbImage,
-    terrain: RgbImage,
-    rivers: RgbImage,
-    heightmap: RgbImage,
-    trees: RgbImage,
-    normal_map: RgbImage,
-    cities_map: RgbImage,
-    definitions: Definitions,
-    continents: Continents,
-    adjacency_rules: AdjacencyRules,
-    adjacencies: Adjacencies,
-    seasons: Seasons,
-    tree_indices: Vec<usize>,
-    strategic_regions: StrategicRegions,
+    /// The provinces.bmp image.
+    pub provinces: RgbImage,
+    /// The terrain.bmp image
+    pub terrain: RgbImage,
+    /// The rivers.bmp image
+    pub rivers: RgbImage,
+    /// The heightmap.bmp image
+    pub heightmap: RgbImage,
+    /// The trees.bmp image
+    pub trees: RgbImage,
+    /// The worldnormal.bmp image
+    pub normal_map: RgbImage,
+    /// The cities.bmp image
+    pub cities_map: RgbImage,
+    /// The province definitions
+    pub definitions: Definitions,
+    /// The continent definitions
+    pub continents: Continents,
+    /// The adjacency rules definitions
+    pub adjacency_rules: AdjacencyRules,
+    /// The adjacencies between provinces
+    pub adjacencies: Adjacencies,
+    /// The seasons definitions
+    pub seasons: Seasons,
+    /// The tree indices
+    pub tree_indices: Vec<usize>,
+    /// The strategic regions definitions
+    pub strategic_regions: StrategicRegions,
     // supply_nodes: SupplyNodes,
     // railways: Railways,
     // buildings: Buildings,
@@ -31,5 +46,6 @@ pub struct Map {
     // rocket_sites: RocketSites,
     // unit_stacks: UnitStacks,
     // weather_positions: WeatherPositions,
-    airports: Airports,
+    /// The airports definitions
+    pub airports: Airports,
 }
