@@ -23,6 +23,7 @@
 
 use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName, Terrain};
 use jomini::TextTape;
+use serde::Deserialize;
 use std::collections::HashSet;
 use std::fs;
 use std::hash::Hash;
@@ -92,6 +93,30 @@ pub fn append_dir(p: &Path, d: &str) -> PathBuf {
     let dirs = p.parent().expect("Failed to get parent dir");
     dirs.join(d)
         .join(p.file_name().expect("Failed to get file name"))
+}
+
+/// Returns a vector of rows from a CSV file.
+pub trait Csv
+where
+    Self: Sized,
+{
+    /// Returns a vector of rows from a CSV file.
+    /// # Errors
+    /// Returns an error if the file cannot be read.
+    fn load_csv<P: AsRef<Path>>(path: P, has_headers: bool) -> Result<Vec<Self>, MapError>;
+}
+
+impl<T: Sized + for<'de> Deserialize<'de>> Csv for T {
+    #[inline]
+    fn load_csv<P: AsRef<Path>>(path: P, has_headers: bool) -> Result<Vec<Self>, MapError> {
+        let data = fs::read_to_string(path)?;
+        let mut rdr = csv::ReaderBuilder::new()
+            .has_headers(has_headers)
+            .delimiter(b';')
+            .from_reader(data.as_bytes());
+        let rows = rdr.deserialize().flatten().collect();
+        Ok(rows)
+    }
 }
 
 /// Returns a set of all the keys in the first object of the file.

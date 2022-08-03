@@ -1,5 +1,5 @@
 use crate::components::wrappers::{BuildingId, ProvinceId, StateId};
-use crate::{KeySet, MapError};
+use crate::{Csv, KeySet, MapError};
 use log::warn;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
@@ -69,7 +69,7 @@ impl Buildings {
     #[inline]
     pub fn from_files(types_path: &Path, buildings_path: &Path) -> Result<Self, MapError> {
         let types = BuildingId::load_keys(types_path)?;
-        let raw_buildings = Self::load_buildings(buildings_path)?;
+        let raw_buildings = StateBuilding::load_csv(buildings_path, false)?;
 
         // Verify that all building ids are defined in types
         for building in &raw_buildings {
@@ -87,17 +87,6 @@ impl Buildings {
             .collect();
 
         Ok(Self { types, buildings })
-    }
-
-    /// Loads the building from a file
-    fn load_buildings(path: &Path) -> Result<Vec<StateBuilding>, MapError> {
-        let buildings_data = fs::read_to_string(path)?;
-        let mut rdr = csv::ReaderBuilder::new()
-            .has_headers(false)
-            .delimiter(b';')
-            .from_reader(buildings_data.as_bytes());
-        let buildings = rdr.deserialize().flatten().collect();
-        Ok(buildings)
     }
 }
 

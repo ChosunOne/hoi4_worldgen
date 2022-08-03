@@ -1,5 +1,5 @@
 use crate::components::wrappers::{Blue, Coastal, ContinentIndex, Green, ProvinceId, Red, Terrain};
-use crate::{KeySet, MapError};
+use crate::{Csv, KeySet, MapError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::fs;
@@ -58,23 +58,12 @@ impl Definitions {
     /// If the file cannot be read, or if the file is not a valid csv file, then an error is returned.
     #[inline]
     pub fn from_files(definitions_path: &Path, terrain_path: &Path) -> Result<Self, MapError> {
-        let definitions = Self::load_definitions(definitions_path)?;
+        let definitions = Definition::load_csv(definitions_path, false)?;
         let terrain = Terrain::load_keys(terrain_path)?;
         Ok(Self {
             definitions,
             terrain,
         })
-    }
-
-    /// Load the definitions from the given path.
-    fn load_definitions(definitions_path: &Path) -> Result<Vec<Definition>, MapError> {
-        let definitions_data = fs::read_to_string(&definitions_path)?;
-        let mut rdr = csv::ReaderBuilder::new()
-            .has_headers(false)
-            .delimiter(b';')
-            .from_reader(definitions_data.as_bytes());
-        let definitions = rdr.deserialize().flatten().collect();
-        Ok(definitions)
     }
 }
 
