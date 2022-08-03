@@ -13,6 +13,13 @@ pub struct Coastal(pub bool);
 #[non_exhaustive]
 pub struct Terrain(pub String);
 
+impl From<String> for Terrain {
+    #[inline]
+    fn from(s: String) -> Self {
+        Terrain(s)
+    }
+}
+
 /// The continent is a 1-based index into the continent list. Sea provinces must have the continent of 0.
 #[derive(Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
 #[non_exhaustive]

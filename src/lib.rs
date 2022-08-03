@@ -21,7 +21,7 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
-use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName};
+use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName, Terrain};
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
@@ -73,6 +73,12 @@ pub enum MapError {
     /// Invalid building id
     #[error("{0}")]
     InvalidBuildingId(BuildingId),
+    /// Invalid terrain file
+    #[error("{0}")]
+    InvalidTerrainFile(String),
+    /// Duplicate terrain type
+    #[error("0")]
+    DuplicateTerrainType(Terrain),
 }
 
 /// Appends a directory to the front of a given path.
