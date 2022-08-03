@@ -1,6 +1,7 @@
 use crate::components::wrappers::{BuildingId, ProvinceId, StateId};
 use crate::MapError;
-use jomini::{JominiDeserialize, TextDeserializer, TextTape};
+use jomini::TextTape;
+use log::warn;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::fs;
@@ -69,7 +70,22 @@ impl Buildings {
     #[inline]
     pub fn from_files(types_path: &Path, buildings_path: &Path) -> Result<Self, MapError> {
         let types = Self::load_building_types(types_path)?;
-        let buildings = Self::load_buildings(buildings_path)?;
+        let raw_buildings = Self::load_buildings(buildings_path)?;
+
+        // Verify that all building ids are defined in types
+        for building in &raw_buildings {
+            if !types.contains(&building.building_id) {
+                warn!(
+                    "BuildingId {} is not defined in types",
+                    building.building_id
+                );
+            }
+        }
+
+        let buildings = raw_buildings
+            .into_iter()
+            .filter(|b| types.contains(&b.building_id))
+            .collect();
 
         Ok(Self { types, buildings })
     }
@@ -127,18 +143,15 @@ mod tests {
         assert!(buildings
             .types
             .contains(&BuildingId("circuitry_generator".to_owned())));
-        assert_eq!(buildings.buildings.len(), 51276);
+        assert_eq!(buildings.buildings.len(), 47522);
         assert_eq!(
-            buildings.buildings[51077].building_id,
-            BuildingId("floating_harbor".to_owned())
+            buildings.buildings[12].building_id,
+            BuildingId("coastal_bunker".to_owned())
         );
-        assert!((buildings.buildings[51077].x - 3221.0_f32).abs() < f32::EPSILON);
-        assert!((buildings.buildings[51077].y - 9.5_f32).abs() < f32::EPSILON);
-        assert!((buildings.buildings[51077].z - 979.0_f32).abs() < f32::EPSILON);
-        assert!((buildings.buildings[51077].rotation - -3.0_f32).abs() < f32::EPSILON);
-        assert_eq!(
-            buildings.buildings[51077].adjacent_sea_province,
-            ProvinceId(16758)
-        );
+        assert!((buildings.buildings[12].x - 1672.0_f32).abs() < f32::EPSILON);
+        assert!((buildings.buildings[12].y - 9.68_f32).abs() < f32::EPSILON);
+        assert!((buildings.buildings[12].z - 1559.0_f32).abs() < f32::EPSILON);
+        assert!((buildings.buildings[12].rotation - -3.93_f32).abs() < f32::EPSILON);
+        assert_eq!(buildings.buildings[12].adjacent_sea_province, ProvinceId(0));
     }
 }

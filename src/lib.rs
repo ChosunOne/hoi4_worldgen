@@ -70,6 +70,9 @@ pub enum MapError {
     /// Duplicate building type
     #[error("{0}")]
     DuplicateBuildingType(BuildingId),
+    /// Invalid building id
+    #[error("{0}")]
+    InvalidBuildingId(BuildingId),
 }
 
 /// Appends a directory to the front of a given path.
