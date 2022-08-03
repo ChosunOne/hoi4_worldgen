@@ -22,6 +22,10 @@
 #![allow(clippy::pattern_type_mismatch)]
 
 use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName, Terrain};
+use jomini::TextTape;
+use std::collections::HashSet;
+use std::fs;
+use std::hash::Hash;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
@@ -75,10 +79,10 @@ pub enum MapError {
     InvalidBuildingId(BuildingId),
     /// Invalid terrain file
     #[error("{0}")]
-    InvalidTerrainFile(String),
+    InvalidKeyFile(String),
     /// Duplicate terrain type
     #[error("0")]
-    DuplicateTerrainType(Terrain),
+    DuplicateKeyType(String),
 }
 
 /// Appends a directory to the front of a given path.
@@ -88,4 +92,39 @@ pub fn append_dir(p: &Path, d: &str) -> PathBuf {
     let dirs = p.parent().expect("Failed to get parent dir");
     dirs.join(d)
         .join(p.file_name().expect("Failed to get file name"))
+}
+
+/// Returns a set of all the keys in the first object of the file.
+pub trait KeySet
+where
+    Self: Sized,
+{
+    /// Returns a set of all the keys in the first object of the file.
+    /// # Errors
+    /// If the file is not found or if the file is empty.
+    fn load_keys(path: &Path) -> Result<HashSet<Self>, MapError>;
+}
+
+impl<T: Sized + From<String> + Eq + Hash> KeySet for T {
+    #[inline]
+    fn load_keys(path: &Path) -> Result<HashSet<T>, MapError> {
+        let data = fs::read_to_string(&path)?;
+        let tape = TextTape::from_slice(data.as_bytes())?;
+        let reader = tape.windows1252_reader();
+        let fields = reader.fields().collect::<Vec<_>>();
+        let (_key, _op, value) = fields
+            .get(0)
+            .ok_or_else(|| MapError::InvalidKeyFile(path.to_string_lossy().to_string()))?;
+        let types_container = value.read_object()?;
+        let types_objects = types_container.fields().collect::<Vec<_>>();
+        let mut types = HashSet::new();
+        for (key, _op, _value) in types_objects {
+            let terrain_type = key.read_string().into();
+            if types.contains(&terrain_type) {
+                return Err(MapError::DuplicateKeyType(key.read_string()));
+            }
+            types.insert(terrain_type);
+        }
+        Ok(types)
+    }
 }

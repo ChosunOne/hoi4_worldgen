@@ -1,6 +1,5 @@
 use crate::components::wrappers::{Blue, Coastal, ContinentIndex, Green, ProvinceId, Red, Terrain};
-use crate::MapError;
-use jomini::TextTape;
+use crate::{KeySet, MapError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::fs;
@@ -60,7 +59,7 @@ impl Definitions {
     #[inline]
     pub fn from_files(definitions_path: &Path, terrain_path: &Path) -> Result<Self, MapError> {
         let definitions = Self::load_definitions(definitions_path)?;
-        let terrain = Self::load_terrain(terrain_path)?;
+        let terrain = Terrain::load_keys(terrain_path)?;
         Ok(Self {
             definitions,
             terrain,
@@ -76,28 +75,6 @@ impl Definitions {
             .from_reader(definitions_data.as_bytes());
         let definitions = rdr.deserialize().flatten().collect();
         Ok(definitions)
-    }
-
-    /// Load the terrain types from the given path.
-    fn load_terrain(path: &Path) -> Result<HashSet<Terrain>, MapError> {
-        let data = fs::read_to_string(&path)?;
-        let tape = TextTape::from_slice(data.as_bytes())?;
-        let reader = tape.windows1252_reader();
-        let fields = reader.fields().collect::<Vec<_>>();
-        let (_key, _op, value) = fields
-            .get(0)
-            .ok_or_else(|| MapError::InvalidTerrainFile(path.to_string_lossy().to_string()))?;
-        let types_container = value.read_object()?;
-        let types_objects = types_container.fields().collect::<Vec<_>>();
-        let mut types = HashSet::new();
-        for (key, _op, _value) in types_objects {
-            let terrain_type = key.read_string().into();
-            if types.contains(&terrain_type) {
-                return Err(MapError::DuplicateTerrainType(terrain_type));
-            }
-            types.insert(terrain_type);
-        }
-        Ok(types)
     }
 }
 
