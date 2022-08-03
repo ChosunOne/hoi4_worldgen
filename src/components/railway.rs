@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn it_reads_railways_from_a_file() {
-        let path = Path::new("./test/railways.txt");
+        let path = Path::new("./test/map/railways.txt");
         let railways = Railways::from_file(path).expect("Failed to read railways");
         assert_eq!(railways.railways.len(), 1520);
     }

@@ -21,7 +21,7 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
-use crate::components::wrappers::{StrategicRegionId, StrategicRegionName};
+use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName};
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
@@ -40,6 +40,7 @@ pub enum MapError {
     /// Error parsing a value
     #[error("{0}")]
     ParseError(#[from] jomini::Error),
+    /// Error while parsing a file
     #[error("{0}")]
     DeserializeError(#[from] jomini::DeserializeError),
     /// Error finding a file
@@ -63,6 +64,12 @@ pub enum MapError {
     /// An invalid railway
     #[error("{0}")]
     InvalidRailway(String),
+    /// An invalid buildings file
+    #[error("{0}")]
+    InvalidBuildingsFile(String),
+    /// Duplicate building type
+    #[error("{0}")]
+    DuplicateBuildingType(BuildingId),
 }
 
 /// Appends a directory to the front of a given path.

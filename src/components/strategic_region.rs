@@ -162,7 +162,7 @@ impl StrategicRegions {
             let strategic_region_file = strategic_region_file_result?;
             let strategic_region_path = strategic_region_file.path();
             // Check if the file looks like a strategic region
-            Self::verify_strategic_region_file_name(&strategic_region_path);
+            Self::verify_strategic_region_file_name(&strategic_region_path)?;
             let (filename_id, _) =
                 Self::get_strategic_region_id_and_filename(&strategic_region_file.file_name())?;
 
@@ -205,7 +205,7 @@ mod tests {
 
     #[test]
     fn it_reads_a_strategic_region_from_a_file() {
-        let path = Path::new("./test/strategicregions/1-StrategicRegion.txt");
+        let path = Path::new("./test/map/strategicregions/1-StrategicRegion.txt");
         let strategic_region_data = fs::read_to_string(path).expect("Failed to read file");
         let raw_strategic_region = TextDeserializer::from_windows1252_slice::<RawStrategicRegion>(
             strategic_region_data.as_bytes(),
@@ -498,7 +498,7 @@ mod tests {
 
     #[test]
     fn it_reads_strategic_regions_from_a_directory() {
-        let strategicregions_path = Path::new("./test/strategicregions");
+        let strategicregions_path = Path::new("./test/map/strategicregions");
         let strategicregions = StrategicRegions::from_dir(strategicregions_path)
             .expect("failed to read strategicregions");
         assert_eq!(strategicregions.strategic_regions.len(), 177);

@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn it_reads_supply_nodes_from_a_file() {
-        let path = Path::new("./test/supply_nodes.txt");
+        let path = Path::new("./test/map/supply_nodes.txt");
         let supply_nodes = SupplyNodes::from_file(path).expect("Failed to read supply nodes");
         assert_eq!(supply_nodes.nodes.len(), 1049);
         assert!(supply_nodes.nodes.contains(&ProvinceId(15116)));

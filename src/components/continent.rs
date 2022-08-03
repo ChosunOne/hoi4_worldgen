@@ -1,6 +1,9 @@
 use crate::components::wrappers::Continent;
-use jomini::JominiDeserialize;
+use crate::MapError;
+use jomini::{JominiDeserialize, TextDeserializer};
 use serde::Serialize;
+use std::fs;
+use std::path::Path;
 
 /// The list of continents
 #[derive(Debug, Clone, JominiDeserialize, Serialize)]
@@ -8,6 +11,19 @@ use serde::Serialize;
 pub struct Continents {
     /// The list of continents
     pub continents: Vec<Continent>,
+}
+
+impl Continents {
+    /// Loads the continents from the given path.
+    /// # Errors
+    /// If the file cannot be read, or if it is invalid.
+    #[inline]
+    pub fn from_file(path: &Path) -> Result<Self, MapError> {
+        let continents_data = fs::read_to_string(&path)?;
+        let continents =
+            TextDeserializer::from_windows1252_slice::<Continents>(continents_data.as_bytes())?;
+        Ok(continents)
+    }
 }
 
 #[allow(clippy::expect_used)]
@@ -23,14 +39,11 @@ mod tests {
 
     #[test]
     fn it_reads_continents_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("test/default.map"))
+        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let continents_path = append_dir(&map.continent, "./test");
-        let continents_data =
-            fs::read_to_string(&continents_path).expect("Failed to read continents.txt");
+        let continents_path = append_dir(&map.continent, "./test/map");
         let continents =
-            TextDeserializer::from_windows1252_slice::<Continents>(continents_data.as_bytes())
-                .expect("Failed to deserialize continents.txt");
+            Continents::from_file(&continents_path).expect("Failed to read continents");
         assert_eq!(continents.continents.len(), 6);
         assert_eq!(continents.continents[0], Continent("west_coast".to_owned()));
         assert_eq!(

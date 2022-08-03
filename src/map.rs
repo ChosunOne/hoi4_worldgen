@@ -1,5 +1,6 @@
 use crate::components::adjacency::{Adjacencies, AdjacencyRules};
 use crate::components::airport::Airports;
+use crate::components::building::Buildings;
 use crate::components::continent::Continents;
 use crate::components::province::Definitions;
 use crate::components::railway::Railways;
@@ -44,7 +45,8 @@ pub struct Map {
     pub supply_nodes: SupplyNodes,
     /// The railways on the map
     pub railways: Railways,
-    // buildings: Buildings,
+    /// The buildings on the map
+    pub buildings: Buildings,
     // cities: Cities,
     // colors: Colors,
     // rocket_sites: RocketSites,

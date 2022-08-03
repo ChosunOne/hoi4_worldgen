@@ -57,11 +57,11 @@ impl FromStr for DayMonth {
         if parts.len() != 2 {
             return Err(DayMonthParseError);
         }
-        let day = parts[0].parse::<u8>()?;
+        let day = parts.get(0).ok_or(DayMonthParseError)?.parse::<u8>()?;
         if day > 30 {
             return Err(DayMonthParseError);
         }
-        let month = parts[1].parse::<u8>()?;
+        let month = parts.get(1).ok_or(DayMonthParseError)?.parse::<u8>()?;
         if month > 11 {
             return Err(DayMonthParseError);
         }
@@ -69,6 +69,9 @@ impl FromStr for DayMonth {
     }
 }
 
+/// Visitor for a `DayMonth`
+#[derive(Debug)]
+#[non_exhaustive]
 pub struct DayMonthVisitor;
 
 impl<'de> Visitor<'de> for DayMonthVisitor {

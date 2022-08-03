@@ -79,9 +79,9 @@ mod tests {
 
     #[test]
     fn it_loads_seasons_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("test/default.map"))
+        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let seasons_path = append_dir(&map.seasons, "./test");
+        let seasons_path = append_dir(&map.seasons, "./test/map");
         let seasons_data = fs::read_to_string(&seasons_path).expect("Failed to read seasons.txt");
         let seasons = TextDeserializer::from_windows1252_slice::<Seasons>(seasons_data.as_bytes())
             .expect("Failed to deserialize seasons.txt");

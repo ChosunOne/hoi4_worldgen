@@ -7,7 +7,9 @@ use serde::{Deserialize, Serialize};
 pub struct Coastal(pub bool);
 
 /// Terrain type defined in the `common/00_terrain.txt` file.
-#[derive(Clone, Debug, Display, PartialEq, Eq, Deserialize, Serialize, Hash, PartialOrd, Ord)]
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, Deserialize, Serialize, Hash, PartialOrd, Ord, FromStr,
+)]
 #[non_exhaustive]
 pub struct Terrain(pub String);
 
@@ -17,9 +19,25 @@ pub struct Terrain(pub String);
 pub struct ContinentIndex(pub i32);
 
 /// A continent identifier
-#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
 #[non_exhaustive]
 pub struct Continent(pub String);
+
+/// A building type defined in the `common/00_buildings.txt` file.
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+#[non_exhaustive]
+pub struct BuildingId(pub String);
+
+impl From<String> for BuildingId {
+    #[inline]
+    fn from(s: String) -> Self {
+        BuildingId(s)
+    }
+}
 
 /// The ID for a province.
 #[derive(
@@ -140,12 +158,16 @@ pub struct XCoord(pub i32);
 pub struct YCoord(pub i32);
 
 /// An adjacency rule name.
-#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
 #[non_exhaustive]
 pub struct AdjacencyRuleName(pub String);
 
 /// An adjacency rule name.
-#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash)]
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
 #[non_exhaustive]
 pub struct StrategicRegionName(pub String);
 

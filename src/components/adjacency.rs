@@ -142,9 +142,9 @@ mod tests {
 
     #[test]
     fn it_reads_adjacencies_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/default.map"))
+        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let adjacency_rules_path = append_dir(&map.adjacencies, "./test");
+        let adjacency_rules_path = append_dir(&map.adjacencies, "./test/map");
         let adjacency_rules_data =
             fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
         let mut rdr = csv::ReaderBuilder::new()
@@ -176,9 +176,9 @@ mod tests {
 
     #[test]
     fn it_reads_adjacency_rules_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("test/default.map"))
+        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let adjacency_rules_path = append_dir(&map.adjacency_rules, "./test");
+        let adjacency_rules_path = append_dir(&map.adjacency_rules, "./test/map");
         let adjacency_rules_data =
             fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
         let rules = TextDeserializer::from_windows1252_slice::<RawAdjacencyRules>(

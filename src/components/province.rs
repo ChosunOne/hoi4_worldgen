@@ -1,5 +1,8 @@
 use crate::components::wrappers::{Blue, Coastal, ContinentIndex, Green, ProvinceId, Red, Terrain};
+use crate::MapError;
 use serde::{Deserialize, Serialize};
+use std::fs;
+use std::path::Path;
 
 /// An entry in the definitions file.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
@@ -46,6 +49,22 @@ pub struct Definitions {
     pub definitions: Vec<Definition>,
 }
 
+impl Definitions {
+    /// Load the definitions from the given path.
+    /// # Errors
+    /// If the file cannot be read, or if the file is not a valid csv file, then an error is returned.
+    #[inline]
+    pub fn from_file(path: &Path) -> Result<Self, MapError> {
+        let definitions_data = fs::read_to_string(&path)?;
+        let mut rdr = csv::ReaderBuilder::new()
+            .has_headers(false)
+            .delimiter(b';')
+            .from_reader(definitions_data.as_bytes());
+        let definitions = rdr.deserialize().flatten().collect();
+        Ok(Self { definitions })
+    }
+}
+
 #[allow(clippy::expect_used)]
 #[allow(clippy::indexing_slicing)]
 #[cfg(test)]
@@ -58,21 +77,12 @@ mod tests {
 
     #[test]
     fn it_reads_definitions_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("test/default.map")).expect("Failed to read map");
+        let map =
+            DefaultMap::from_file(Path::new("./test/map/default.map")).expect("Failed to read map");
         let definitions_path = map.definitions.to_path_buf();
-        let definitions_path = append_dir(&definitions_path, "./test");
-        let definitions_data =
-            fs::read_to_string(&definitions_path).expect("Failed to read definition.csv");
-
-        let mut rdr = csv::ReaderBuilder::new()
-            .has_headers(false)
-            .delimiter(b';')
-            .from_reader(definitions_data.as_bytes());
-        let mut definitions = Vec::new();
-        for definition in rdr.deserialize() {
-            definitions.push(definition.expect("Failed to deserialize definition"));
-        }
-        let definitions = Definitions { definitions };
+        let definitions_path = append_dir(&definitions_path, "./test/map");
+        let definitions =
+            Definitions::from_file(&definitions_path).expect("Failed to read definitions");
         assert_eq!(definitions.definitions.len(), 17007);
         assert_eq!(
             definitions.definitions[0],

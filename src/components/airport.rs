@@ -65,7 +65,7 @@ mod tests {
 
     #[test]
     fn it_reads_the_airports_file() {
-        let airports = Airports::from_file(Path::new("./test/airports.txt"))
+        let airports = Airports::from_file(Path::new("./test/map/airports.txt"))
             .expect("Failed to read airports.txt");
         assert_eq!(airports.airports.len(), 1388);
         assert_eq!(
