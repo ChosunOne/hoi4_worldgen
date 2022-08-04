@@ -116,32 +116,19 @@ pub struct DefaultMap {
     pub tree: Vec<usize>,
 }
 
-impl DefaultMap {
-    /// Reads the default.map file from the given path.
-    /// # Errors
-    /// If the file is not found or is invalid, an error is returned.
-    #[inline]
-    pub fn from_file(path: &Path) -> Result<Self, Box<dyn Error>> {
-        let map_data = fs::read_to_string(path)?;
-        Ok(TextDeserializer::from_windows1252_slice::<DefaultMap>(
-            map_data.as_bytes(),
-        )?)
-    }
-}
-
 #[allow(clippy::expect_used)]
 #[allow(clippy::indexing_slicing)]
 #[allow(clippy::panic)]
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::append_dir;
+    use crate::{append_dir, DirectlyDeserialize};
     use image::{open, DynamicImage};
 
     #[test]
     fn it_reads_a_default_map_file() {
-        let map =
-            DefaultMap::from_file(Path::new("./test/map/default.map")).expect("Failed to read map");
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
+            .expect("Failed to read map");
         assert_eq!(
             map.definitions
                 .to_str()
@@ -198,7 +185,7 @@ mod tests {
 
     #[test]
     fn it_loads_provinces_bmp_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let provinces_bmp_path = append_dir(&map.provinces, "./test/map");
         let provinces_bmp: DynamicImage =
@@ -214,7 +201,7 @@ mod tests {
 
     #[test]
     fn it_reads_terrain_bmp_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let terrain_bmp_path = append_dir(&map.terrain, "./test/map");
         let terrain_bmp: DynamicImage =
@@ -230,7 +217,7 @@ mod tests {
 
     #[test]
     fn it_reads_rivers_bmp_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let rivers_bmp_path = append_dir(&map.rivers, "./test/map");
         let rivers_bmp: DynamicImage = open(&rivers_bmp_path).expect("Failed to read rivers.bmp");
@@ -245,7 +232,7 @@ mod tests {
 
     #[test]
     fn it_reads_heightmap_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let heightmap_bmp_path = append_dir(&map.heightmap, "./test/map");
         let heightmap_bmp: DynamicImage =
@@ -261,7 +248,7 @@ mod tests {
 
     #[test]
     fn it_reads_trees_bmp_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let tree_bmp_path = append_dir(&map.tree_definition, "./test/map");
         let tree_bmp: DynamicImage = open(&tree_bmp_path).expect("Failed to read trees.bmp");

@@ -72,15 +72,15 @@ impl Definitions {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::append_dir;
     use crate::components::default_map::DefaultMap;
+    use crate::{append_dir, DirectlyDeserialize};
     use std::fs;
     use std::path::Path;
 
     #[test]
     fn it_reads_definitions_from_the_map() {
-        let map =
-            DefaultMap::from_file(Path::new("./test/map/default.map")).expect("Failed to read map");
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
+            .expect("Failed to read map");
         let definitions_path = map.definitions.to_path_buf();
         let definitions_path = append_dir(&definitions_path, "./test/map");
         let terrain_path = Path::new("./test/common/terrain/00_terrain.txt");

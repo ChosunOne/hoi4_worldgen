@@ -3,7 +3,6 @@ use crate::{Csv, KeySet, MapError};
 use log::warn;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
-use std::fs;
 use std::path::Path;
 
 /// The locations of building models for each state are defined in

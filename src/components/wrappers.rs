@@ -196,3 +196,63 @@ impl PartialEq for Hsv {
 }
 
 impl Eq for Hsv {}
+
+/// The pixel step
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    FromStr,
+)]
+#[non_exhaustive]
+pub struct PixelStep(pub u32);
+
+/// A building mesh ID.
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+#[non_exhaustive]
+pub struct MeshId(pub String);
+
+impl From<String> for MeshId {
+    #[inline]
+    fn from(s: String) -> Self {
+        MeshId(s)
+    }
+}
+
+/// The distance
+#[derive(Copy, Clone, Debug, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr)]
+#[non_exhaustive]
+pub struct Distance(pub f32);
+
+/// A pixel density value. Negative=less dense
+#[derive(Copy, Clone, Debug, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr)]
+#[non_exhaustive]
+pub struct PixelDensity(pub f32);
+
+/// The color index in bmp palette
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    FromStr,
+)]
+#[non_exhaustive]
+pub struct ColorIndex(pub u32);

@@ -22,7 +22,7 @@
 #![allow(clippy::pattern_type_mismatch)]
 
 use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName, Terrain};
-use jomini::TextTape;
+use jomini::{JominiDeserialize, TextDeserializer, TextTape};
 use serde::Deserialize;
 use std::collections::HashSet;
 use std::fs;
@@ -151,5 +151,27 @@ impl<T: Sized + From<String> + Eq + Hash> KeySet for T {
             types.insert(terrain_type);
         }
         Ok(types)
+    }
+}
+
+/// A trait for when a structure can easily be converted from a string directly via `jomini`'s
+/// `TextDeserializer`..
+pub trait DirectlyDeserialize
+where
+    Self: Sized,
+{
+    /// Deserializes a string into a structure.  Only works if the string requires no modification
+    /// prior to deserialization.
+    /// # Errors
+    /// Returns an error if the file cannot be read.
+    fn load_object<P: AsRef<Path>>(path: P) -> Result<Self, MapError>;
+}
+
+impl<T: Sized + for<'de> Deserialize<'de>> DirectlyDeserialize for T {
+    #[inline]
+    fn load_object<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+        let data = fs::read_to_string(path)?;
+        let object = TextDeserializer::from_windows1252_slice(data.as_bytes())?;
+        Ok(object)
     }
 }

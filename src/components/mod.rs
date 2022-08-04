@@ -1,6 +1,7 @@
 pub mod adjacency;
 pub mod airport;
 pub mod building;
+pub mod city;
 pub mod continent;
 pub mod day_month;
 pub mod default_map;

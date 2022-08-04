@@ -13,37 +13,24 @@ pub struct Continents {
     pub continents: Vec<Continent>,
 }
 
-impl Continents {
-    /// Loads the continents from the given path.
-    /// # Errors
-    /// If the file cannot be read, or if it is invalid.
-    #[inline]
-    pub fn from_file(path: &Path) -> Result<Self, MapError> {
-        let continents_data = fs::read_to_string(&path)?;
-        let continents =
-            TextDeserializer::from_windows1252_slice::<Continents>(continents_data.as_bytes())?;
-        Ok(continents)
-    }
-}
-
 #[allow(clippy::expect_used)]
 #[allow(clippy::indexing_slicing)]
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::append_dir;
     use crate::components::default_map::DefaultMap;
+    use crate::{append_dir, DirectlyDeserialize};
     use jomini::TextDeserializer;
     use std::fs;
     use std::path::Path;
 
     #[test]
     fn it_reads_continents_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let continents_path = append_dir(&map.continent, "./test/map");
         let continents =
-            Continents::from_file(&continents_path).expect("Failed to read continents");
+            Continents::load_object(&continents_path).expect("Failed to read continents");
         assert_eq!(continents.continents.len(), 6);
         assert_eq!(continents.continents[0], Continent("west_coast".to_owned()));
         assert_eq!(

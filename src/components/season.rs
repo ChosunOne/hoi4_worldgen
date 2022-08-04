@@ -71,20 +71,16 @@ pub struct Seasons {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::append_dir;
     use crate::components::default_map::DefaultMap;
-    use jomini::TextDeserializer;
-    use std::fs;
+    use crate::{append_dir, DirectlyDeserialize};
     use std::path::Path;
 
     #[test]
     fn it_loads_seasons_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let seasons_path = append_dir(&map.seasons, "./test/map");
-        let seasons_data = fs::read_to_string(&seasons_path).expect("Failed to read seasons.txt");
-        let seasons = TextDeserializer::from_windows1252_slice::<Seasons>(seasons_data.as_bytes())
-            .expect("Failed to deserialize seasons.txt");
+        let seasons = Seasons::load_object(&seasons_path).expect("Failed to read seasons");
         assert_eq!(
             seasons.winter,
             Season {

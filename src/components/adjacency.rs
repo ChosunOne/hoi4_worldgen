@@ -133,28 +133,20 @@ pub struct AdjacencyRules {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::append_dir;
     use crate::components::adjacency::AdjacencyType::Impassable;
     use crate::components::default_map::DefaultMap;
+    use crate::{append_dir, Csv, DirectlyDeserialize};
     use jomini::TextDeserializer;
     use std::fs;
     use std::path::Path;
 
     #[test]
     fn it_reads_adjacencies_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let adjacency_rules_path = append_dir(&map.adjacencies, "./test/map");
-        let adjacency_rules_data =
-            fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
-        let mut rdr = csv::ReaderBuilder::new()
-            .has_headers(true)
-            .delimiter(b';')
-            .from_reader(adjacency_rules_data.as_bytes());
-        let mut adjacencies = Vec::new();
-        for adjacency in rdr.deserialize() {
-            adjacencies.push(adjacency.expect("Failed to deserialize adjacency"));
-        }
+        let adjacencies = Adjacency::load_csv(adjacency_rules_path, true)
+            .expect("Failed to read adjacencies.csv");
         let adjacencies = Adjacencies { adjacencies };
         assert_eq!(adjacencies.adjacencies.len(), 486);
         assert_eq!(
@@ -176,15 +168,11 @@ mod tests {
 
     #[test]
     fn it_reads_adjacency_rules_from_the_map() {
-        let map = DefaultMap::from_file(Path::new("./test/map/default.map"))
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
         let adjacency_rules_path = append_dir(&map.adjacency_rules, "./test/map");
-        let adjacency_rules_data =
-            fs::read_to_string(&adjacency_rules_path).expect("Failed to read adjacency_rules.txt");
-        let rules = TextDeserializer::from_windows1252_slice::<RawAdjacencyRules>(
-            adjacency_rules_data.as_bytes(),
-        )
-        .expect("Failed to deserialize adjacency_rules.txt");
+        let rules = RawAdjacencyRules::load_object(adjacency_rules_path)
+            .expect("Failed to read adjacency_rules.csv");
         let mut adjacency_rules = AdjacencyRules {
             adjacency_rules: HashMap::new(),
         };

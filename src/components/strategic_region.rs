@@ -2,7 +2,7 @@ use crate::components::day_month::DayMonth;
 use crate::components::wrappers::{
     ProvinceId, SnowLevel, StrategicRegionId, StrategicRegionName, Temperature, Weight,
 };
-use crate::MapError;
+use crate::{DirectlyDeserialize, MapError};
 use jomini::{JominiDeserialize, TextDeserializer};
 use log::{debug, error, info, warn};
 use serde::Serialize;
@@ -17,20 +17,6 @@ use std::path::Path;
 pub struct RawStrategicRegion {
     /// The parsed strategic region
     pub strategic_region: StrategicRegion,
-}
-
-impl RawStrategicRegion {
-    /// Loads a raw strategic region from a file
-    /// # Errors
-    /// If the file cannot be read, or if the file is not a valid strategic region
-    #[inline]
-    pub fn from_file(path: &Path) -> Result<Self, MapError> {
-        let raw_strategic_region_data = fs::read_to_string(path)?;
-        let raw_strategic_region = TextDeserializer::from_windows1252_slice::<RawStrategicRegion>(
-            raw_strategic_region_data.as_bytes(),
-        )?;
-        Ok(raw_strategic_region)
-    }
 }
 
 /// Defines a strategic region
@@ -166,7 +152,7 @@ impl StrategicRegions {
             let (filename_id, _) =
                 Self::get_strategic_region_id_and_filename(&strategic_region_file.file_name())?;
 
-            let raw_strategic_region = RawStrategicRegion::from_file(&strategic_region_path)?;
+            let raw_strategic_region = RawStrategicRegion::load_object(&strategic_region_path)?;
             let strategic_region = raw_strategic_region.strategic_region;
             let id = strategic_region.id;
 
