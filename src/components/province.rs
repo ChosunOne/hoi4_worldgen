@@ -1,5 +1,5 @@
 use crate::components::wrappers::{Blue, Coastal, ContinentIndex, Green, ProvinceId, Red, Terrain};
-use crate::{Csv, KeySet, MapError};
+use crate::{LoadCsv, LoadKeys, MapError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::fs;
@@ -73,7 +73,7 @@ impl Definitions {
 mod tests {
     use super::*;
     use crate::components::default_map::DefaultMap;
-    use crate::{append_dir, DirectlyDeserialize};
+    use crate::{append_dir, LoadObject};
     use std::fs;
     use std::path::Path;
 

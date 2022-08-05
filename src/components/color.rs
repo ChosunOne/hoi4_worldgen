@@ -24,7 +24,7 @@ pub struct Color(pub Red, pub Green, pub Blue);
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::DirectlyDeserialize;
+    use crate::LoadObject;
     use std::path::Path;
 
     #[test]

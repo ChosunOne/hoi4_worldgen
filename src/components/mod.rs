@@ -8,6 +8,7 @@ pub mod day_month;
 pub mod default_map;
 pub mod province;
 pub mod railway;
+pub mod rocket_site;
 pub mod season;
 pub mod strategic_region;
 pub mod supply_node;

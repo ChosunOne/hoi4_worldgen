@@ -21,10 +21,12 @@
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
 
-use crate::components::wrappers::{BuildingId, StrategicRegionId, StrategicRegionName, Terrain};
+use crate::components::wrappers::{
+    BuildingId, ProvinceId, StateId, StrategicRegionId, StrategicRegionName, Terrain,
+};
 use jomini::{JominiDeserialize, TextDeserializer, TextTape};
 use serde::Deserialize;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::hash::Hash;
 use std::path::{Path, PathBuf};
@@ -96,7 +98,7 @@ pub fn append_dir(p: &Path, d: &str) -> PathBuf {
 }
 
 /// Returns a vector of rows from a CSV file.
-pub trait Csv
+pub trait LoadCsv
 where
     Self: Sized,
 {
@@ -106,7 +108,7 @@ where
     fn load_csv<P: AsRef<Path>>(path: P, has_headers: bool) -> Result<Vec<Self>, MapError>;
 }
 
-impl<T: Sized + for<'de> Deserialize<'de>> Csv for T {
+impl<T: Sized + for<'de> Deserialize<'de>> LoadCsv for T {
     #[inline]
     fn load_csv<P: AsRef<Path>>(path: P, has_headers: bool) -> Result<Vec<Self>, MapError> {
         let data = fs::read_to_string(path)?;
@@ -120,7 +122,7 @@ impl<T: Sized + for<'de> Deserialize<'de>> Csv for T {
 }
 
 /// Returns a set of all the keys in the first object of the file.
-pub trait KeySet
+pub trait LoadKeys
 where
     Self: Sized,
 {
@@ -130,7 +132,7 @@ where
     fn load_keys(path: &Path) -> Result<HashSet<Self>, MapError>;
 }
 
-impl<T: Sized + From<String> + Eq + Hash> KeySet for T {
+impl<T: Sized + From<String> + Eq + Hash> LoadKeys for T {
     #[inline]
     fn load_keys(path: &Path) -> Result<HashSet<T>, MapError> {
         let data = fs::read_to_string(&path)?;
@@ -156,7 +158,7 @@ impl<T: Sized + From<String> + Eq + Hash> KeySet for T {
 
 /// A trait for when a structure can easily be converted from a string directly via `jomini`'s
 /// `TextDeserializer`..
-pub trait DirectlyDeserialize
+pub trait LoadObject
 where
     Self: Sized,
 {
@@ -167,11 +169,42 @@ where
     fn load_object<P: AsRef<Path>>(path: P) -> Result<Self, MapError>;
 }
 
-impl<T: Sized + for<'de> Deserialize<'de>> DirectlyDeserialize for T {
+impl<T: Sized + for<'de> Deserialize<'de>> LoadObject for T {
     #[inline]
     fn load_object<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
         let data = fs::read_to_string(path)?;
         let object = TextDeserializer::from_windows1252_slice(data.as_bytes())?;
         Ok(object)
     }
+}
+
+/// Loads a map where the keys are `StateId`s and the values are `Vec<ProvinceId>`s.
+/// # Errors
+/// Returns an error if the file cannot be read.
+#[inline]
+pub fn load_state_map<P: AsRef<Path>>(
+    path: P,
+) -> Result<HashMap<StateId, Vec<ProvinceId>>, MapError> {
+    let data = fs::read_to_string(path)?;
+    let mut state_map = HashMap::new();
+
+    for line in data.lines() {
+        let tape = TextTape::from_slice(line.as_bytes())?;
+        let reader = tape.windows1252_reader();
+        for (key, _op, value) in reader.fields() {
+            let state_id = key.read_str().parse::<StateId>()?;
+            let province_ids = {
+                let array = value.read_array()?;
+                let mut ids = Vec::new();
+                for id in array.values() {
+                    let id_string = id.read_string()?;
+                    ids.push(id_string.parse::<ProvinceId>()?);
+                }
+                ids
+            };
+            state_map.insert(state_id, province_ids);
+        }
+    }
+
+    Ok(state_map)
 }

@@ -6,6 +6,7 @@ use crate::components::color::Colors;
 use crate::components::continent::Continents;
 use crate::components::province::Definitions;
 use crate::components::railway::Railways;
+use crate::components::rocket_site::RocketSites;
 use crate::components::season::Seasons;
 use crate::components::strategic_region::StrategicRegions;
 use crate::components::supply_node::SupplyNodes;
@@ -53,7 +54,8 @@ pub struct Map {
     pub cities: Cities,
     /// TODO: Unknown
     pub colors: Colors,
-    // rocket_sites: RocketSites,
+    /// The rocket sites on the map
+    pub rocket_sites: RocketSites,
     // unit_stacks: UnitStacks,
     // weather_positions: WeatherPositions,
     /// The airports definitions

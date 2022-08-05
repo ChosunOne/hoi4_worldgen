@@ -19,7 +19,7 @@ pub struct Continents {
 mod tests {
     use super::*;
     use crate::components::default_map::DefaultMap;
-    use crate::{append_dir, DirectlyDeserialize};
+    use crate::{append_dir, LoadObject};
     use jomini::TextDeserializer;
     use std::fs;
     use std::path::Path;

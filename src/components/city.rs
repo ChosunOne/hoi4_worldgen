@@ -51,7 +51,7 @@ pub struct BuildingMesh {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::DirectlyDeserialize;
+    use crate::LoadObject;
 
     #[test]
     fn it_loads_cities_from_a_file() {

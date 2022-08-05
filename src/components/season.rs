@@ -72,7 +72,7 @@ pub struct Seasons {
 mod tests {
     use super::*;
     use crate::components::default_map::DefaultMap;
-    use crate::{append_dir, DirectlyDeserialize};
+    use crate::{append_dir, LoadObject};
     use std::path::Path;
 
     #[test]

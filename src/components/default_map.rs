@@ -122,7 +122,7 @@ pub struct DefaultMap {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{append_dir, DirectlyDeserialize};
+    use crate::{append_dir, LoadObject};
     use image::{open, DynamicImage};
 
     #[test]
