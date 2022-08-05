@@ -2,6 +2,7 @@ use crate::components::adjacency::{Adjacencies, AdjacencyRules};
 use crate::components::airport::Airports;
 use crate::components::building::Buildings;
 use crate::components::city::Cities;
+use crate::components::color::Colors;
 use crate::components::continent::Continents;
 use crate::components::province::Definitions;
 use crate::components::railway::Railways;
@@ -50,7 +51,8 @@ pub struct Map {
     pub buildings: Buildings,
     /// The graphical information for cities on the map
     pub cities: Cities,
-    // colors: Colors,
+    /// TODO: Unknown
+    pub colors: Colors,
     // rocket_sites: RocketSites,
     // unit_stacks: UnitStacks,
     // weather_positions: WeatherPositions,
