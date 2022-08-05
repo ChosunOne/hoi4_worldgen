@@ -10,6 +10,7 @@ use crate::components::rocket_site::RocketSites;
 use crate::components::season::Seasons;
 use crate::components::strategic_region::StrategicRegions;
 use crate::components::supply_node::SupplyNodes;
+use crate::components::unit_stack::UnitStacks;
 use image::RgbImage;
 
 /// All the components needed to represent a map.
@@ -56,7 +57,8 @@ pub struct Map {
     pub colors: Colors,
     /// The rocket sites on the map
     pub rocket_sites: RocketSites,
-    // unit_stacks: UnitStacks,
+    /// The unit stacks on the map
+    pub unit_stacks: UnitStacks,
     // weather_positions: WeatherPositions,
     /// The airports definitions
     pub airports: Airports,

@@ -12,4 +12,5 @@ pub mod rocket_site;
 pub mod season;
 pub mod strategic_region;
 pub mod supply_node;
+pub mod unit_stack;
 pub mod wrappers;

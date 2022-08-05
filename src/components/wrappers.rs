@@ -256,3 +256,22 @@ pub struct PixelDensity(pub f32);
 )]
 #[non_exhaustive]
 pub struct ColorIndex(pub u32);
+
+/// The model index to show for the 3d model on the map.
+/// 0 is "Standstill", 1-7 are the different moving models, 8 is attacking and 9 is defending.
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    FromStr,
+)]
+#[non_exhaustive]
+pub struct ModelIndex(pub u32);
