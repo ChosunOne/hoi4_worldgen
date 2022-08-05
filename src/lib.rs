@@ -20,11 +20,10 @@
 #![allow(clippy::struct_excessive_bools)]
 #![allow(clippy::use_self)]
 #![allow(clippy::pattern_type_mismatch)]
+#![allow(clippy::pub_use)]
 
-use crate::components::wrappers::{
-    BuildingId, ProvinceId, StateId, StrategicRegionId, StrategicRegionName, Terrain,
-};
-use jomini::{JominiDeserialize, TextDeserializer, TextTape};
+use crate::components::prelude::*;
+use jomini::{TextDeserializer, TextTape};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -89,12 +88,18 @@ pub enum MapError {
 }
 
 /// Appends a directory to the front of a given path.
+/// # Errors
+/// * If the path has no parent directory
+/// * If the path has no file name
 #[inline]
-#[must_use]
-pub fn append_dir(p: &Path, d: &str) -> PathBuf {
-    let dirs = p.parent().expect("Failed to get parent dir");
-    dirs.join(d)
-        .join(p.file_name().expect("Failed to get file name"))
+pub fn append_dir(p: &Path, d: &str) -> Result<PathBuf, MapError> {
+    let dirs = p
+        .parent()
+        .ok_or_else(|| MapError::FileNotFoundError(p.to_path_buf()))?;
+    Ok(dirs.join(d).join(
+        p.file_name()
+            .ok_or_else(|| MapError::FileNotFoundError(p.to_path_buf()))?,
+    ))
 }
 
 /// Returns a vector of rows from a CSV file.

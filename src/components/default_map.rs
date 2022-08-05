@@ -187,7 +187,8 @@ mod tests {
     fn it_loads_provinces_bmp_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let provinces_bmp_path = append_dir(&map.provinces, "./test/map");
+        let provinces_bmp_path =
+            append_dir(&map.provinces, "./test/map").expect("Failed to get path");
         let provinces_bmp: DynamicImage =
             open(&provinces_bmp_path).expect("Failed to read provinces.bmp");
         match provinces_bmp {
@@ -203,7 +204,7 @@ mod tests {
     fn it_reads_terrain_bmp_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let terrain_bmp_path = append_dir(&map.terrain, "./test/map");
+        let terrain_bmp_path = append_dir(&map.terrain, "./test/map").expect("Failed to get path");
         let terrain_bmp: DynamicImage =
             open(&terrain_bmp_path).expect("Failed to read terrain.bmp");
         match terrain_bmp {
@@ -219,7 +220,7 @@ mod tests {
     fn it_reads_rivers_bmp_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let rivers_bmp_path = append_dir(&map.rivers, "./test/map");
+        let rivers_bmp_path = append_dir(&map.rivers, "./test/map").expect("Failed to get path");
         let rivers_bmp: DynamicImage = open(&rivers_bmp_path).expect("Failed to read rivers.bmp");
         match rivers_bmp {
             DynamicImage::ImageRgb8(image) => {
@@ -234,7 +235,8 @@ mod tests {
     fn it_reads_heightmap_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let heightmap_bmp_path = append_dir(&map.heightmap, "./test/map");
+        let heightmap_bmp_path =
+            append_dir(&map.heightmap, "./test/map").expect("Failed to get path");
         let heightmap_bmp: DynamicImage =
             open(&heightmap_bmp_path).expect("Failed to read heightmap.bmp");
         match heightmap_bmp {
@@ -250,7 +252,8 @@ mod tests {
     fn it_reads_trees_bmp_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let tree_bmp_path = append_dir(&map.tree_definition, "./test/map");
+        let tree_bmp_path =
+            append_dir(&map.tree_definition, "./test/map").expect("Failed to get path");
         let tree_bmp: DynamicImage = open(&tree_bmp_path).expect("Failed to read trees.bmp");
         match tree_bmp {
             DynamicImage::ImageRgb8(image) => {

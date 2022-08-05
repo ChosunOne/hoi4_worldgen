@@ -82,7 +82,8 @@ mod tests {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read map");
         let definitions_path = map.definitions.to_path_buf();
-        let definitions_path = append_dir(&definitions_path, "./test/map");
+        let definitions_path =
+            append_dir(&definitions_path, "./test/map").expect("Failed to find definitions");
         let terrain_path = Path::new("./test/common/terrain/00_terrain.txt");
         let definitions = Definitions::from_files(&definitions_path, terrain_path)
             .expect("Failed to read definitions");

@@ -28,7 +28,8 @@ mod tests {
     fn it_reads_continents_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let continents_path = append_dir(&map.continent, "./test/map");
+        let continents_path =
+            append_dir(&map.continent, "./test/map").expect("Failed to find continents");
         let continents =
             Continents::load_object(&continents_path).expect("Failed to read continents");
         assert_eq!(continents.continents.len(), 6);

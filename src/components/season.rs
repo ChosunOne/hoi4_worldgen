@@ -79,7 +79,7 @@ mod tests {
     fn it_loads_seasons_from_the_map() {
         let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
             .expect("Failed to read default.map");
-        let seasons_path = append_dir(&map.seasons, "./test/map");
+        let seasons_path = append_dir(&map.seasons, "./test/map").expect("Failed to append dir");
         let seasons = Seasons::load_object(&seasons_path).expect("Failed to read seasons");
         assert_eq!(
             seasons.winter,
