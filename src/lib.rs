@@ -98,6 +98,12 @@ pub enum MapError {
     /// Image size mismatch
     #[error("{0}")]
     ImageSizeMismatch(String),
+    /// Invalid province color
+    #[error("{0:?}")]
+    InvalidProvinceColor((Red, Green, Blue)),
+    /// Incomplete province definitions
+    #[error("{0:?}")]
+    IncompleteProvinceDefinitions(Vec<(Red, Green, Blue)>),
 }
 
 /// Appends a directory to the front of a given path.
