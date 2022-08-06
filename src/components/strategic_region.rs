@@ -192,11 +192,7 @@ mod tests {
     #[test]
     fn it_reads_a_strategic_region_from_a_file() {
         let path = Path::new("./test/map/strategicregions/1-StrategicRegion.txt");
-        let strategic_region_data = fs::read_to_string(path).expect("Failed to read file");
-        let raw_strategic_region = TextDeserializer::from_windows1252_slice::<RawStrategicRegion>(
-            strategic_region_data.as_bytes(),
-        )
-        .expect("Failed to deserialize file");
+        let raw_strategic_region = RawStrategicRegion::load_object(path).unwrap();
         let strategic_region = raw_strategic_region.strategic_region;
         println!("{:?}", strategic_region);
         assert_eq!(

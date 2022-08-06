@@ -1,7 +1,9 @@
 use crate::components::wrappers::{AdjacencyRuleName, Icon, ProvinceId, XCoord, YCoord};
+use crate::{LoadCsv, LoadObject, MapError};
 use jomini::JominiDeserialize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::path::Path;
 
 /// An adjacency rule
 #[derive(Clone, Debug, JominiDeserialize, Serialize, PartialEq, Eq)]
@@ -120,12 +122,38 @@ pub struct Adjacencies {
     pub adjacencies: Vec<Adjacency>,
 }
 
+impl Adjacencies {
+    /// Loads the adjacencies from the given path.
+    /// # Errors
+    /// Returns an error if the file could not be loaded.
+    #[inline]
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+        let adjacencies = Adjacency::load_csv(path, true)?;
+        Ok(Self { adjacencies })
+    }
+}
+
 /// The adjacency rules from the adjacency rule file
 #[derive(Debug, Clone)]
 #[non_exhaustive]
 pub struct AdjacencyRules {
     /// The adjacency rules
     pub adjacency_rules: HashMap<AdjacencyRuleName, AdjacencyRule>,
+}
+
+impl AdjacencyRules {
+    /// Loads the adjacency rules from the given path.
+    /// # Errors
+    /// Returns an error if the file could not be loaded.
+    #[inline]
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+        let mut adjacency_rules = HashMap::new();
+        let rules = RawAdjacencyRules::load_object(path)?;
+        for rule in rules.adjacency_rule {
+            adjacency_rules.insert(rule.name.clone(), rule);
+        }
+        Ok(Self { adjacency_rules })
+    }
 }
 
 #[allow(clippy::expect_used)]
@@ -135,9 +163,7 @@ mod tests {
     use super::*;
     use crate::components::adjacency::AdjacencyType::Impassable;
     use crate::components::default_map::DefaultMap;
-    use crate::{append_dir, LoadCsv, LoadObject};
-    use jomini::TextDeserializer;
-    use std::fs;
+    use crate::{append_dir, LoadCsv};
     use std::path::Path;
 
     #[test]
@@ -173,16 +199,8 @@ mod tests {
             .expect("Failed to read default.map");
         let adjacency_rules_path =
             append_dir(&map.adjacency_rules, "./test/map").expect("Failed to find adjacency rules");
-        let rules = RawAdjacencyRules::load_object(adjacency_rules_path)
-            .expect("Failed to read adjacency_rules.csv");
-        let mut adjacency_rules = AdjacencyRules {
-            adjacency_rules: HashMap::new(),
-        };
-        for rule in rules.adjacency_rule {
-            adjacency_rules
-                .adjacency_rules
-                .insert(rule.name.clone(), rule);
-        }
+        let adjacency_rules = AdjacencyRules::from_file(adjacency_rules_path)
+            .expect("Failed to read adjacency rules");
         assert_eq!(adjacency_rules.adjacency_rules.len(), 11);
         assert_eq!(
             adjacency_rules

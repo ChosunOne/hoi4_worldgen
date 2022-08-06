@@ -68,6 +68,8 @@ pub struct DefaultMap {
     pub heightmap: Box<Path>,
     /// Controls the tree placement on the map. The resolution of the trees.bmp file affects the density of trees placed.
     /// The trees.bmp file should be in Indexed mode and saved as a 8-bit bitmap image file (.BMP).
+    /// Generally, darker pixels indicate denser regions of trees.  Each color indicates a different
+    /// tree mesh.
     pub tree_definition: Box<Path>,
     /// Found in continent.txt, located in the map folder, continents are used to group large swathes
     /// of provinces together as a traditional continent. Continents are used to define AI areas.  

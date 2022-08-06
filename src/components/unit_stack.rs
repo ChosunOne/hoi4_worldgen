@@ -1,6 +1,7 @@
 use crate::components::wrappers::ModelIndex;
-use crate::ProvinceId;
+use crate::{LoadCsv, MapError, ProvinceId};
 use serde::{Deserialize, Serialize};
+use std::path::Path;
 
 /// The unit stack information for displaying units on the map.
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -30,6 +31,17 @@ pub struct UnitStack {
     scale: f32,
 }
 
+impl UnitStacks {
+    /// Loads the `UnitStacks` from a given path
+    /// # Errors
+    /// If the file cannot be read, or if it is invalid
+    #[inline]
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+        let stacks = UnitStack::load_csv(path, false)?;
+        Ok(Self { stacks })
+    }
+}
+
 #[allow(clippy::expect_used)]
 #[allow(clippy::indexing_slicing)]
 #[allow(clippy::panic)]
@@ -44,9 +56,8 @@ mod tests {
     #[test]
     fn it_loads_unit_stacks_from_file() {
         let unit_stacks_path = Path::new("./test/map/unitstacks.txt");
-        let stacks =
-            UnitStack::load_csv(unit_stacks_path, false).expect("Failed to read unit stacks");
-        let unit_stacks = UnitStacks { stacks };
+        let unit_stacks =
+            UnitStacks::from_file(unit_stacks_path).expect("Failed to load unit stacks");
         assert_eq!(unit_stacks.stacks.len(), 307_834);
         assert_eq!(unit_stacks.stacks[307_592].province_id, ProvinceId(16765));
         assert_eq!(unit_stacks.stacks[307_592].model_index, ModelIndex(38));

@@ -1,5 +1,6 @@
-use crate::StrategicRegionId;
+use crate::{LoadCsv, MapError, StrategicRegionId};
 use serde::{Deserialize, Serialize};
+use std::path::Path;
 
 /// The positions for weather effects on the map.
 #[derive(Debug, Clone)]
@@ -7,6 +8,17 @@ use serde::{Deserialize, Serialize};
 pub struct WeatherPositions {
     /// The weather positions
     pub positions: Vec<WeatherPosition>,
+}
+
+impl WeatherPositions {
+    /// Loads the `WeatherPositions` from a given path
+    /// # Errors
+    /// If the file cannot be read, or if it is invalid
+    #[inline]
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+        let positions = WeatherPosition::load_csv(path, false)?;
+        Ok(Self { positions })
+    }
 }
 
 /// A position for a weather effect.
@@ -49,9 +61,8 @@ mod tests {
 
     #[test]
     fn it_loads_weather_positions_from_a_file() {
-        let positions = WeatherPosition::load_csv("./test/map/weatherpositions.txt", false)
-            .expect("Failed to read weather positions");
-        let weather_positions = WeatherPositions { positions };
+        let weather_positions = WeatherPositions::from_file("./test/map/weatherpositions.txt")
+            .expect("Failed to load weather positions");
         assert_eq!(weather_positions.positions.len(), 265);
         assert_eq!(weather_positions.positions[0].id, StrategicRegionId(1));
         assert!((weather_positions.positions[0].x - 3339.0).abs() < f32::EPSILON);

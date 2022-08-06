@@ -23,6 +23,7 @@
 #![allow(clippy::pub_use)]
 
 use crate::components::prelude::*;
+use image::ImageError;
 use jomini::{TextDeserializer, TextTape};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
@@ -85,6 +86,18 @@ pub enum MapError {
     /// Duplicate terrain type
     #[error("0")]
     DuplicateKeyType(String),
+    /// Invalid image file
+    #[error("{0}")]
+    InvalidImageFile(#[from] ImageError),
+    /// Invalid image type
+    #[error("{0}")]
+    InvalidImageType(PathBuf),
+    /// Invalid image size
+    #[error("{0}")]
+    InvalidImageSize(PathBuf),
+    /// Image size mismatch
+    #[error("{0}")]
+    ImageSizeMismatch(String),
 }
 
 /// Appends a directory to the front of a given path.
