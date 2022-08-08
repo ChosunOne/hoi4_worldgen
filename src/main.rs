@@ -7,21 +7,31 @@ use image::{DynamicImage, RgbImage};
 use std::path::PathBuf;
 use world_gen::map::Map;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
+struct MapImages {
+    heightmap_image: Option<ColorImage>,
+    terrain_image: Option<ColorImage>,
+    provinces_image: Option<ColorImage>,
+    rivers_image: Option<ColorImage>,
+}
+
+#[derive(Default, Clone)]
+struct MapTextures {
+    heightmap_texture: Option<TextureHandle>,
+    terrain_texture: Option<TextureHandle>,
+    provinces_texture: Option<TextureHandle>,
+    rivers_texture: Option<TextureHandle>,
+}
+
+#[derive(Default, Clone)]
 struct WorldGenApp {
     root_path: Option<PathBuf>,
     map: Option<Map>,
     map_err_text: Option<String>,
     map_loading_state: MapLoadingState,
     map_display_mode: MapDisplayMode,
-    heightmap_image: Option<ColorImage>,
-    terrain_image: Option<ColorImage>,
-    provinces_image: Option<ColorImage>,
-    rivers_image: Option<ColorImage>,
-    heightmap_texture: Option<TextureHandle>,
-    terrain_texture: Option<TextureHandle>,
-    provinces_texture: Option<TextureHandle>,
-    rivers_texture: Option<TextureHandle>,
+    images: MapImages,
+    textures: MapTextures,
 }
 
 #[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
@@ -61,10 +71,26 @@ impl WorldGenApp {
         self.set_map_mode(MapDisplayMode::Rivers);
         self.set_map_mode(MapDisplayMode::HeightMap);
 
-        Self::render_map_mode(ui, &mut self.heightmap_image, &mut self.heightmap_texture);
-        Self::render_map_mode(ui, &mut self.terrain_image, &mut self.terrain_texture);
-        Self::render_map_mode(ui, &mut self.provinces_image, &mut self.provinces_texture);
-        Self::render_map_mode(ui, &mut self.rivers_image, &mut self.rivers_texture);
+        Self::render_map_mode(
+            ui,
+            &mut self.images.heightmap_image,
+            &mut self.textures.heightmap_texture,
+        );
+        Self::render_map_mode(
+            ui,
+            &mut self.images.terrain_image,
+            &mut self.textures.terrain_texture,
+        );
+        Self::render_map_mode(
+            ui,
+            &mut self.images.provinces_image,
+            &mut self.textures.provinces_texture,
+        );
+        Self::render_map_mode(
+            ui,
+            &mut self.images.rivers_image,
+            &mut self.textures.rivers_texture,
+        );
 
         self.map_loading_state = MapLoadingState::NotLoading;
     }
@@ -80,27 +106,27 @@ impl WorldGenApp {
         if let Some(map) = &self.map {
             match self.map_display_mode {
                 MapDisplayMode::HeightMap => {
-                    if self.heightmap_texture.is_none() {
+                    if self.textures.heightmap_texture.is_none() {
                         let image = self.load_map_image(&map.heightmap);
-                        self.heightmap_image = Some(image);
+                        self.images.heightmap_image = Some(image);
                     }
                 }
                 MapDisplayMode::Terrain => {
-                    if self.terrain_texture.is_none() {
+                    if self.textures.terrain_texture.is_none() {
                         let image = self.load_map_image(&map.terrain);
-                        self.terrain_image = Some(image);
+                        self.images.terrain_image = Some(image);
                     }
                 }
                 MapDisplayMode::Provinces => {
-                    if self.provinces_texture.is_none() {
+                    if self.textures.provinces_texture.is_none() {
                         let image = self.load_map_image(&map.provinces);
-                        self.provinces_image = Some(image);
+                        self.images.provinces_image = Some(image);
                     }
                 }
                 MapDisplayMode::Rivers => {
-                    if self.rivers_texture.is_none() {
+                    if self.textures.rivers_texture.is_none() {
                         let image = self.load_map_image(&map.rivers);
-                        self.rivers_image = Some(image);
+                        self.images.rivers_image = Some(image);
                     }
                 }
             };
@@ -114,14 +140,8 @@ impl WorldGenApp {
 
     fn clear_map(&mut self) {
         self.root_path = None;
-        self.heightmap_image = None;
-        self.terrain_image = None;
-        self.provinces_image = None;
-        self.rivers_image = None;
-        self.heightmap_texture = None;
-        self.terrain_texture = None;
-        self.provinces_texture = None;
-        self.rivers_texture = None;
+        self.images = MapImages::default();
+        self.textures = MapTextures::default();
         self.map = None;
     }
 
@@ -197,22 +217,30 @@ impl App for WorldGenApp {
                 MapDisplayMode::HeightMap => {
                     Self::render_map_mode(
                         ui,
-                        &mut self.heightmap_image,
-                        &mut self.heightmap_texture,
+                        &mut self.images.heightmap_image,
+                        &mut self.textures.heightmap_texture,
                     );
                 }
                 MapDisplayMode::Terrain => {
-                    Self::render_map_mode(ui, &mut self.terrain_image, &mut self.terrain_texture);
+                    Self::render_map_mode(
+                        ui,
+                        &mut self.images.terrain_image,
+                        &mut self.textures.terrain_texture,
+                    );
                 }
                 MapDisplayMode::Provinces => {
                     Self::render_map_mode(
                         ui,
-                        &mut self.provinces_image,
-                        &mut self.provinces_texture,
+                        &mut self.images.provinces_image,
+                        &mut self.textures.provinces_texture,
                     );
                 }
                 MapDisplayMode::Rivers => {
-                    Self::render_map_mode(ui, &mut self.rivers_image, &mut self.rivers_texture);
+                    Self::render_map_mode(
+                        ui,
+                        &mut self.images.rivers_image,
+                        &mut self.textures.rivers_texture,
+                    );
                 }
             }
         });
