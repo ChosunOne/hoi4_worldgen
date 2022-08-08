@@ -2,7 +2,7 @@ use crate::components::prelude::*;
 use crate::{LoadObject, MapError};
 use image::{open, DynamicImage, Pixel, RgbImage};
 use log::{debug, info, warn};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 
 /// All the components needed to represent a map.

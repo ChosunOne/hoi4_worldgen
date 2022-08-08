@@ -64,10 +64,28 @@ impl Definitions {
             terrain,
         })
     }
+
+    /// Verifies the province terrain types against the `common/terrain/00_terrain.txt` file
+    /// # Errors
+    /// * If the provinces contain terrain not defined in the `common/terrain/00_terrain.txt` file
+    #[inline]
+    pub fn verify_province_terrain(&self) -> Result<(), Vec<MapError>> {
+        let errors = self
+            .definitions
+            .iter()
+            .filter(|def| !self.terrain.contains(&def.terrain))
+            .map(|def| MapError::InvalidProvinceTerrain(def.clone()))
+            .collect::<Vec<_>>();
+        if !errors.is_empty() {
+            return Err(errors);
+        }
+        Ok(())
+    }
 }
 
 #[allow(clippy::expect_used)]
 #[allow(clippy::indexing_slicing)]
+#[allow(clippy::panic)]
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -113,5 +131,23 @@ mod tests {
                 continent: ContinentIndex(2)
             }
         );
+    }
+
+    #[test]
+    fn it_verifies_province_terrain() {
+        let map = DefaultMap::load_object(Path::new("./test/map/default.map"))
+            .expect("Failed to read map");
+        let definitions_path = map.definitions.to_path_buf();
+        let definitions_path =
+            append_dir(&definitions_path, "./test/map").expect("Failed to find definitions");
+        let terrain_path = Path::new("./test/common/terrain/00_terrain.txt");
+        let definitions = Definitions::from_files(&definitions_path, terrain_path)
+            .expect("Failed to read definitions");
+        if let Err(errors) = definitions.verify_province_terrain() {
+            println!("{:#?}", errors);
+            assert_eq!(errors.len(), 32);
+        } else {
+            panic!("Failed to detect invalid terrain in provinces");
+        }
     }
 }

@@ -104,6 +104,9 @@ pub enum MapError {
     /// Incomplete province definitions
     #[error("{0:?}")]
     IncompleteProvinceDefinitions(Vec<(Red, Green, Blue)>),
+    /// Invalid province terrain
+    #[error("{0:?}")]
+    InvalidProvinceTerrain(Definition),
 }
 
 /// Appends a directory to the front of a given path.
