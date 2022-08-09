@@ -116,10 +116,7 @@ impl WorldGenApp {
     }
 
     fn clear_map(&mut self) {
-        self.root_path = None;
-        self.images = MapImages::default();
-        self.textures = MapTextures::default();
-        self.map = None;
+        *self = WorldGenApp::default();
     }
 
     fn render_map(
