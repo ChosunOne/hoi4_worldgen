@@ -18,3 +18,15 @@ egui = "0.18.1"
 eframe = "0.18.0"
 rfd = "0.10.0"
 tokio = {version = "1.20.1", features = ["full"] }
+
+[profile.release]
+opt-level = 3
+debug = false
+strip = true
+debug-assertions = false
+overflow-checks = false
+lto = true
+codegen-units = 16
+incremental = false
+split-debuginfo = "packed"
+rpath = false

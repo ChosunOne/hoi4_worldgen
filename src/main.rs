@@ -2,10 +2,10 @@
 
 use eframe::egui::{menu::bar, CentralPanel, ColorImage, TextureHandle, TopBottomPanel, Ui};
 use eframe::App;
+use egui::Vec2;
 use image::{DynamicImage, RgbImage};
 use log::error;
 use std::path::PathBuf;
-use std::str::FromStr;
 use tokio::sync::mpsc::{channel, Receiver};
 use tokio::task::JoinHandle;
 use world_gen::map::Map;
@@ -163,7 +163,12 @@ impl WorldGenApp {
             *texture = Some(ui.ctx().load_texture("map", image));
         }
         if let Some(tex) = &texture {
-            ui.image(tex, tex.size_vec2());
+            let size = ui.ctx().available_rect().size() * 0.8;
+            let tex_size = tex.size_vec2();
+            let x_scale = size.x / tex_size.x;
+            let y_scale = size.y / tex_size.y;
+            let min_scale = x_scale.min(y_scale);
+            ui.image(tex, tex_size * min_scale);
         }
     }
 
@@ -325,7 +330,11 @@ impl App for WorldGenApp {
 
 #[tokio::main]
 async fn main() {
-    let options = eframe::NativeOptions::default();
+    use std::default::Default;
+    let options = eframe::NativeOptions {
+        initial_window_size: Some(Vec2::new(800.0, 600.0)),
+        ..Default::default()
+    };
     eframe::run_native(
         "Hearts of Iron IV Map Editor",
         options,
