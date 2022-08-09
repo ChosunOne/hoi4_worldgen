@@ -56,33 +56,33 @@ enum MapDisplayMode {
 }
 
 impl WorldGenApp {
-    fn create_map_textures(&mut self, ui: &mut Ui) {
-        self.set_map_mode(MapDisplayMode::HeightMap);
-        self.set_map_mode(MapDisplayMode::Terrain);
-        self.set_map_mode(MapDisplayMode::Provinces);
-        self.set_map_mode(MapDisplayMode::Rivers);
-        self.set_map_mode(MapDisplayMode::HeightMap);
-
-        Self::render_map(
-            ui,
-            &mut self.images.heightmap_image,
-            &mut self.textures.heightmap_texture,
-        );
-        Self::render_map(
-            ui,
-            &mut self.images.terrain_image,
-            &mut self.textures.terrain_texture,
-        );
-        Self::render_map(
-            ui,
-            &mut self.images.provinces_image,
-            &mut self.textures.provinces_texture,
-        );
-        Self::render_map(
-            ui,
-            &mut self.images.rivers_image,
-            &mut self.textures.rivers_texture,
-        );
+    fn create_map_textures(&mut self) {
+        if let Some(map) = &self.map {
+            Self::load_image(
+                &map.heightmap,
+                &mut self.textures.heightmap_texture,
+                &mut self.images.heightmap_image_receiver,
+                &mut self.images.heightmap_image_handle,
+            );
+            Self::load_image(
+                &map.terrain,
+                &mut self.textures.terrain_texture,
+                &mut self.images.terrain_image_receiver,
+                &mut self.images.terrain_image_handle,
+            );
+            Self::load_image(
+                &map.provinces,
+                &mut self.textures.provinces_texture,
+                &mut self.images.provinces_image_receiver,
+                &mut self.images.provinces_image_handle,
+            );
+            Self::load_image(
+                &map.rivers,
+                &mut self.textures.rivers_texture,
+                &mut self.images.rivers_image_receiver,
+                &mut self.images.rivers_image_handle,
+            );
+        }
     }
 
     fn load_map_image(image: RgbImage) -> ColorImage {
@@ -92,44 +92,13 @@ impl WorldGenApp {
         ColorImage::from_rgba_unmultiplied(size, pixels.as_slice())
     }
 
-    fn load_map_display(&mut self) {
-        if let Some(map) = &self.map {
-            match self.map_display_mode {
-                MapDisplayMode::HeightMap => Self::load_image(
-                    &map.heightmap,
-                    &mut self.textures.heightmap_texture,
-                    &mut self.images.heightmap_image_receiver,
-                    &mut self.images.heightmap_image_handle,
-                ),
-                MapDisplayMode::Terrain => Self::load_image(
-                    &map.terrain,
-                    &mut self.textures.terrain_texture,
-                    &mut self.images.terrain_image_receiver,
-                    &mut self.images.terrain_image_handle,
-                ),
-                MapDisplayMode::Provinces => Self::load_image(
-                    &map.provinces,
-                    &mut self.textures.provinces_texture,
-                    &mut self.images.provinces_image_receiver,
-                    &mut self.images.provinces_image_handle,
-                ),
-                MapDisplayMode::Rivers => Self::load_image(
-                    &map.rivers,
-                    &mut self.textures.rivers_texture,
-                    &mut self.images.rivers_image_receiver,
-                    &mut self.images.rivers_image_handle,
-                ),
-            };
-        }
-    }
-
     fn load_image(
         map_image: &RgbImage,
         texture: &mut Option<TextureHandle>,
         receiver: &mut Option<Receiver<ColorImage>>,
         handle: &mut Option<JoinHandle<()>>,
     ) {
-        if texture.is_none() {
+        if texture.is_none() && handle.is_none() {
             let (tx, rx) = channel(1);
             *receiver = Some(rx);
             let image = map_image.clone();
@@ -144,7 +113,6 @@ impl WorldGenApp {
 
     fn set_map_mode(&mut self, mode: MapDisplayMode) {
         self.map_display_mode = mode;
-        self.load_map_display();
     }
 
     fn clear_map(&mut self) {
@@ -210,7 +178,7 @@ impl WorldGenApp {
     }
 
     fn load_map_button(&mut self, ui: &mut Ui) {
-        if self.map.is_none() {
+        if self.map.is_none() && self.map_handle.is_none() {
             if ui.button("Load Map").clicked() {
                 let (tx, rx) = channel(1);
                 let path = self.root_path.clone().unwrap();
@@ -231,7 +199,8 @@ impl WorldGenApp {
             if let Some(map_err_text) = &self.map_err_text {
                 ui.label(map_err_text);
             }
-            self.create_map_textures(ui);
+        } else {
+            self.create_map_textures();
         }
     }
 }
