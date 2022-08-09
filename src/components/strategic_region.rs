@@ -184,8 +184,6 @@ impl StrategicRegions {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use jomini::TextDeserializer;
-    use std::fs;
     use std::path::Path;
     use std::str::FromStr;
 

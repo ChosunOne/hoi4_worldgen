@@ -4,6 +4,7 @@ use image::{open, DynamicImage, Pixel, RgbImage};
 use log::{debug, info, warn};
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
+use tokio::try_join;
 
 /// All the components needed to represent a map.
 #[derive(Debug, Clone)]
@@ -67,7 +68,8 @@ impl Map {
     /// * If any of the images are not formatted correctly
     #[inline]
     #[allow(clippy::too_many_lines)]
-    pub fn new(root_path: &Path) -> Result<Self, MapError> {
+    #[allow(clippy::integer_arithmetic)]
+    pub async fn new(root_path: &Path) -> Result<Self, MapError> {
         let default_path = {
             let mut root_path_buf = root_path.to_path_buf();
             root_path_buf.push("map/default.map");
@@ -75,110 +77,226 @@ impl Map {
         };
         let default_map = DefaultMap::load_object(default_path)?;
 
-        let provinces = load_image(root_path, &default_map.provinces)?;
-        let terrain = load_image(root_path, &default_map.terrain)?;
-        let rivers = load_image(root_path, &default_map.rivers)?;
-        let heightmap = load_image(root_path, &default_map.heightmap)?;
-        let trees = load_image(root_path, &default_map.tree_definition)?;
-        let normal_map = load_image(root_path, Path::new("world_normal.bmp"))?;
-        let cities_map = load_image(root_path, Path::new("cities.bmp"))?;
+        let provinces_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, &default_map.provinces) })
+        };
 
-        verify_images(
-            &provinces,
-            &terrain,
-            &rivers,
-            &heightmap,
-            &trees,
-            &normal_map,
-            &cities_map,
+        let terrain_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, &default_map.terrain) })
+        };
+
+        let rivers_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, &default_map.rivers) })
+        };
+
+        let heightmap_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, &default_map.heightmap) })
+        };
+
+        let trees_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, &default_map.tree_definition) })
+        };
+
+        let normal_map_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, Path::new("world_normal.bmp")) })
+        };
+
+        let cities_map_handle = {
+            let path = root_path.to_path_buf();
+            tokio::spawn(async move { load_image(&path, Path::new("cities.bmp")) })
+        };
+
+        let (
+            provinces_result,
+            terrain_result,
+            rivers_result,
+            heightmap_result,
+            trees_result,
+            normal_map_result,
+            cities_map_result,
+        ) = try_join!(
+            provinces_handle,
+            terrain_handle,
+            rivers_handle,
+            heightmap_handle,
+            trees_handle,
+            normal_map_handle,
+            cities_map_handle
         )?;
+        let provinces = provinces_result?;
+        let terrain = terrain_result?;
+        let rivers = rivers_result?;
+        let heightmap = heightmap_result?;
+        let trees = trees_result?;
+        let normal_map = normal_map_result?;
+        let cities_map = cities_map_result?;
 
-        let definitions = {
+        let verify_images_handle = {
+            let provinces_clone = provinces.clone();
+            let terrain_clone = terrain.clone();
+            let rivers_clone = rivers.clone();
+            let heightmap_clone = heightmap.clone();
+            let trees_clone = trees.clone();
+            let normal_map_clone = normal_map.clone();
+            let cities_map_clone = cities_map.clone();
+            tokio::spawn(async move {
+                verify_images(
+                    &provinces_clone,
+                    &terrain_clone,
+                    &rivers_clone,
+                    &heightmap_clone,
+                    &trees_clone,
+                    &normal_map_clone,
+                    &cities_map_clone,
+                )
+            })
+        };
+
+        let definitions_handle = {
             let terrain_path = {
                 let mut root_path_buf = root_path.to_path_buf();
                 root_path_buf.push("common/terrain/00_terrain.txt");
                 root_path_buf
             };
             let definitions_path = map_file(root_path, &default_map.definitions);
-            Definitions::from_files(&definitions_path, &terrain_path)?
+            tokio::spawn(async move { Definitions::from_files(&definitions_path, &terrain_path) })
         };
 
-        let continents = {
+        let continents_handle = {
             let continent_path = map_file(root_path, &default_map.continent);
-            Continents::load_object(&continent_path)?
+            tokio::spawn(async move { Continents::load_object(&continent_path) })
         };
 
-        let adjacency_rules = {
+        let adjacency_rules_handle = {
             let adjacency_rules_path = map_file(root_path, &default_map.adjacency_rules);
-            AdjacencyRules::from_file(&adjacency_rules_path)?
+            tokio::spawn(async move { AdjacencyRules::from_file(&adjacency_rules_path) })
         };
 
-        let adjacencies = {
+        let adjacencies_handle = {
             let adjacencies_path = map_file(root_path, &default_map.adjacencies);
-            Adjacencies::from_file(&adjacencies_path)?
+            tokio::spawn(async move { Adjacencies::from_file(&adjacencies_path) })
         };
 
-        let seasons = {
+        let seasons_handle = {
             let seasons_path = map_file(root_path, &default_map.seasons);
-            Seasons::load_object(&seasons_path)?
+            tokio::spawn(async move { Seasons::load_object(&seasons_path) })
         };
 
         let tree_indices = default_map.tree;
 
-        let strategic_regions = {
+        let strategic_regions_handle = {
             let strategic_regions_path = map_file(root_path, Path::new("strategicregions"));
-            StrategicRegions::from_dir(&strategic_regions_path)?
+            tokio::spawn(async move { StrategicRegions::from_dir(&strategic_regions_path) })
         };
 
-        let supply_nodes = {
+        let supply_nodes_handle = {
             let supply_nodes_path = map_file(root_path, Path::new("supply_nodes.txt"));
-            SupplyNodes::from_file(&supply_nodes_path)?
+            tokio::spawn(async move { SupplyNodes::from_file(&supply_nodes_path) })
         };
 
-        let railways = {
+        let railways_handle = {
             let railways_path = map_file(root_path, Path::new("railways.txt"));
-            Railways::from_file(&railways_path)?
+            tokio::spawn(async move { Railways::from_file(&railways_path) })
         };
 
-        let buildings = {
+        let buildings_handle = {
             let types_path = {
                 let mut root_path_buf = root_path.to_path_buf();
                 root_path_buf.push("common/buildings/00_buildings.txt");
                 root_path_buf
             };
             let buildings_path = map_file(root_path, Path::new("buildings.txt"));
-            Buildings::from_files(&types_path, &buildings_path)?
+            tokio::spawn(async move { Buildings::from_files(&types_path, &buildings_path) })
         };
 
-        let cities = {
+        let cities_handle = {
             let cities_path = map_file(root_path, Path::new("cities.txt"));
-            Cities::load_object(&cities_path)?
+            tokio::spawn(async move { Cities::load_object(&cities_path) })
         };
 
-        let colors = {
+        let colors_handle = {
             let colors_path = map_file(root_path, Path::new("colors.txt"));
-            Colors::load_object(&colors_path)?
+            tokio::spawn(async move { Colors::load_object(&colors_path) })
         };
 
-        let rocket_sites = {
+        let rocket_sites_handle = {
             let rocket_sites_path = map_file(root_path, Path::new("rocketsites.txt"));
-            RocketSites::from_file(&rocket_sites_path)?
+            tokio::spawn(async move { RocketSites::from_file(&rocket_sites_path) })
         };
 
-        let unit_stacks = {
+        let unit_stacks_handle = {
             let unit_stacks_path = map_file(root_path, Path::new("unitstacks.txt"));
-            UnitStacks::from_file(&unit_stacks_path)?
+            tokio::spawn(async move { UnitStacks::from_file(&unit_stacks_path) })
         };
 
-        let weather_positions = {
+        let weather_positions_handle = {
             let weather_positions_path = map_file(root_path, Path::new("weatherpositions.txt"));
-            WeatherPositions::from_file(&weather_positions_path)?
+            tokio::spawn(async move { WeatherPositions::from_file(&weather_positions_path) })
         };
 
-        let airports = {
+        let airports_handle = {
             let airports_path = map_file(root_path, Path::new("airports.txt"));
-            Airports::from_file(&airports_path)?
+            tokio::spawn(async move { Airports::from_file(&airports_path) })
         };
+
+        let (
+            verify_result,
+            definitions_result,
+            continents_result,
+            adjacency_rules_result,
+            adjacencies_result,
+            seasons_result,
+            strategic_regions_result,
+            supply_nodes_result,
+            railways_result,
+            buildings_result,
+            cities_result,
+            colors_result,
+            rocket_sites_result,
+            unit_stacks_result,
+            weather_positions_result,
+            airports_result,
+        ) = try_join!(
+            verify_images_handle,
+            definitions_handle,
+            continents_handle,
+            adjacency_rules_handle,
+            adjacencies_handle,
+            seasons_handle,
+            strategic_regions_handle,
+            supply_nodes_handle,
+            railways_handle,
+            buildings_handle,
+            cities_handle,
+            colors_handle,
+            rocket_sites_handle,
+            unit_stacks_handle,
+            weather_positions_handle,
+            airports_handle
+        )?;
+
+        verify_result?;
+        let definitions = definitions_result?;
+        let continents = continents_result?;
+        let adjacency_rules = adjacency_rules_result?;
+        let adjacencies = adjacencies_result?;
+        let seasons = seasons_result?;
+        let strategic_regions = strategic_regions_result?;
+        let supply_nodes = supply_nodes_result?;
+        let railways = railways_result?;
+        let buildings = buildings_result?;
+        let cities = cities_result?;
+        let colors = colors_result?;
+        let rocket_sites = rocket_sites_result?;
+        let unit_stacks = unit_stacks_result?;
+        let weather_positions = weather_positions_result?;
+        let airports = airports_result?;
 
         Ok(Self {
             provinces,
@@ -330,15 +448,17 @@ fn map_file(root_path: &Path, file_path: &Path) -> PathBuf {
 mod tests {
     use super::*;
 
-    #[test]
-    fn it_loads_a_map() {
-        let map = Map::new(Path::new("./test"));
+    #[tokio::test]
+    async fn it_loads_a_map() {
+        let map = Map::new(Path::new("./test")).await;
         assert!(map.is_ok());
     }
 
-    #[test]
-    fn it_verifies_province_colors() {
-        let map = Map::new(Path::new("./test")).expect("Failed to load map");
+    #[tokio::test]
+    async fn it_verifies_province_colors() {
+        let map = Map::new(Path::new("./test"))
+            .await
+            .expect("Failed to load map");
         map.verify_province_colors()
             .expect("Failed to verify provinces");
     }

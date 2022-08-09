@@ -18,6 +18,7 @@ egui = "0.18.1"
 eframe = "0.18.0"
 rfd = "0.10.0"
 tokio = {version = "1.20.1", features = ["full"] }
+indicatif = "0.17.0"
 
 [profile.release]
 opt-level = 3

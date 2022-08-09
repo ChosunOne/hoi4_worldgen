@@ -50,7 +50,6 @@ impl UnitStacks {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::LoadCsv;
     use std::path::Path;
 
     #[test]

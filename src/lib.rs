@@ -31,6 +31,7 @@ use std::fs;
 use std::hash::Hash;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
+use tokio::task::JoinError;
 
 /// Holds the components of the map
 pub mod components;
@@ -107,6 +108,9 @@ pub enum MapError {
     /// Invalid province terrain
     #[error("{0:?}")]
     InvalidProvinceTerrain(Definition),
+    /// A join error
+    #[error("{0}")]
+    JoinError(#[from] JoinError),
 }
 
 /// Appends a directory to the front of a given path.

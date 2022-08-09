@@ -1,6 +1,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use eframe::egui::{menu::bar, CentralPanel, ColorImage, TextureHandle, TopBottomPanel, Ui};
+use eframe::egui::{
+    menu::bar, CentralPanel, ColorImage, SidePanel, TextureHandle, TopBottomPanel, Ui,
+};
 use eframe::App;
 use egui::Vec2;
 use image::{DynamicImage, RgbImage};
@@ -181,7 +183,7 @@ impl WorldGenApp {
                 let path = self.root_path.clone().unwrap();
                 self.map_receiver = Some(rx);
                 self.map_handle = Some(tokio::spawn(async move {
-                    match Map::new(&path) {
+                    match Map::new(&path).await {
                         Ok(m) => {
                             if let Err(e) = tx.send(m).await {
                                 error!("{}", e);
@@ -217,7 +219,7 @@ impl App for WorldGenApp {
                 })
             })
         });
-        CentralPanel::default().show(ctx, |ui| {
+        TopBottomPanel::top("control_panel").show(ctx, |ui| {
             if self.root_path.is_none() {
                 ui.heading("Please select a root folder");
             }
@@ -260,35 +262,41 @@ impl App for WorldGenApp {
                     }
                 });
             }
-            match self.map_display_mode {
-                MapDisplayMode::HeightMap => {
-                    Self::render_map(
-                        ui,
-                        &mut self.images.heightmap_image,
-                        &mut self.textures.heightmap_texture,
-                    );
-                }
-                MapDisplayMode::Terrain => {
-                    Self::render_map(
-                        ui,
-                        &mut self.images.terrain_image,
-                        &mut self.textures.terrain_texture,
-                    );
-                }
-                MapDisplayMode::Provinces => {
-                    Self::render_map(
-                        ui,
-                        &mut self.images.provinces_image,
-                        &mut self.textures.provinces_texture,
-                    );
-                }
-                MapDisplayMode::Rivers => {
-                    Self::render_map(
-                        ui,
-                        &mut self.images.rivers_image,
-                        &mut self.textures.rivers_texture,
-                    );
-                }
+        });
+        SidePanel::right("info_panel")
+            .resizable(false)
+            .show(ctx, |ui| {
+                ui.label("Info Panel");
+            });
+
+        CentralPanel::default().show(ctx, |ui| match self.map_display_mode {
+            MapDisplayMode::HeightMap => {
+                Self::render_map(
+                    ui,
+                    &mut self.images.heightmap_image,
+                    &mut self.textures.heightmap_texture,
+                );
+            }
+            MapDisplayMode::Terrain => {
+                Self::render_map(
+                    ui,
+                    &mut self.images.terrain_image,
+                    &mut self.textures.terrain_texture,
+                );
+            }
+            MapDisplayMode::Provinces => {
+                Self::render_map(
+                    ui,
+                    &mut self.images.provinces_image,
+                    &mut self.textures.provinces_texture,
+                );
+            }
+            MapDisplayMode::Rivers => {
+                Self::render_map(
+                    ui,
+                    &mut self.images.rivers_image,
+                    &mut self.textures.rivers_texture,
+                );
             }
         });
     }
@@ -297,6 +305,7 @@ impl App for WorldGenApp {
 #[tokio::main]
 async fn main() {
     use std::default::Default;
+    env_logger::init();
     let options = eframe::NativeOptions {
         initial_window_size: Some(Vec2::new(800.0, 600.0)),
         ..Default::default()
