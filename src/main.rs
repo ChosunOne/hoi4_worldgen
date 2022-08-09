@@ -4,18 +4,29 @@ use crate::MapLoadingState::{Loading, ScheduledForLoad};
 use eframe::egui::{menu::bar, CentralPanel, ColorImage, TextureHandle, TopBottomPanel, Ui};
 use eframe::App;
 use image::{DynamicImage, RgbImage};
+use log::error;
 use std::path::PathBuf;
+use tokio::sync::mpsc::{channel, Receiver};
+use tokio::task::JoinHandle;
 use world_gen::map::Map;
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 struct MapImages {
     heightmap_image: Option<ColorImage>,
+    heightmap_image_receiver: Option<Receiver<ColorImage>>,
+    heightmap_image_handle: Option<JoinHandle<()>>,
     terrain_image: Option<ColorImage>,
+    terrain_image_receiver: Option<Receiver<ColorImage>>,
+    terrain_image_handle: Option<JoinHandle<()>>,
     provinces_image: Option<ColorImage>,
+    provinces_image_receiver: Option<Receiver<ColorImage>>,
+    provinces_image_handle: Option<JoinHandle<()>>,
     rivers_image: Option<ColorImage>,
+    rivers_image_receiver: Option<Receiver<ColorImage>>,
+    rivers_image_handle: Option<JoinHandle<()>>,
 }
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 struct MapTextures {
     heightmap_texture: Option<TextureHandle>,
     terrain_texture: Option<TextureHandle>,
@@ -23,7 +34,7 @@ struct MapTextures {
     rivers_texture: Option<TextureHandle>,
 }
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 struct WorldGenApp {
     root_path: Option<PathBuf>,
     map: Option<Map>,
@@ -95,9 +106,9 @@ impl WorldGenApp {
         self.map_loading_state = MapLoadingState::NotLoading;
     }
 
-    fn load_map_image(&self, image: &RgbImage) -> ColorImage {
+    fn load_map_image(image: RgbImage) -> ColorImage {
         let size = [image.width() as _, image.height() as _];
-        let image_buffer = DynamicImage::ImageRgb8(image.clone()).into_rgba8();
+        let image_buffer = DynamicImage::ImageRgb8(image).into_rgba8();
         let pixels = image_buffer.as_flat_samples();
         ColorImage::from_rgba_unmultiplied(size, pixels.as_slice())
     }
@@ -105,31 +116,50 @@ impl WorldGenApp {
     fn load_map_display(&mut self) {
         if let Some(map) = &self.map {
             match self.map_display_mode {
-                MapDisplayMode::HeightMap => {
-                    if self.textures.heightmap_texture.is_none() {
-                        let image = self.load_map_image(&map.heightmap);
-                        self.images.heightmap_image = Some(image);
-                    }
-                }
-                MapDisplayMode::Terrain => {
-                    if self.textures.terrain_texture.is_none() {
-                        let image = self.load_map_image(&map.terrain);
-                        self.images.terrain_image = Some(image);
-                    }
-                }
-                MapDisplayMode::Provinces => {
-                    if self.textures.provinces_texture.is_none() {
-                        let image = self.load_map_image(&map.provinces);
-                        self.images.provinces_image = Some(image);
-                    }
-                }
-                MapDisplayMode::Rivers => {
-                    if self.textures.rivers_texture.is_none() {
-                        let image = self.load_map_image(&map.rivers);
-                        self.images.rivers_image = Some(image);
-                    }
-                }
+                MapDisplayMode::HeightMap => Self::load_image(
+                    &map.heightmap,
+                    &mut self.textures.heightmap_texture,
+                    &mut self.images.heightmap_image_receiver,
+                    &mut self.images.heightmap_image_handle,
+                ),
+                MapDisplayMode::Terrain => Self::load_image(
+                    &map.terrain,
+                    &mut self.textures.terrain_texture,
+                    &mut self.images.terrain_image_receiver,
+                    &mut self.images.terrain_image_handle,
+                ),
+                MapDisplayMode::Provinces => Self::load_image(
+                    &map.provinces,
+                    &mut self.textures.provinces_texture,
+                    &mut self.images.provinces_image_receiver,
+                    &mut self.images.provinces_image_handle,
+                ),
+                MapDisplayMode::Rivers => Self::load_image(
+                    &map.rivers,
+                    &mut self.textures.rivers_texture,
+                    &mut self.images.rivers_image_receiver,
+                    &mut self.images.rivers_image_handle,
+                ),
             };
+        }
+    }
+
+    fn load_image(
+        map_image: &RgbImage,
+        texture: &mut Option<TextureHandle>,
+        receiver: &mut Option<Receiver<ColorImage>>,
+        handle: &mut Option<JoinHandle<()>>,
+    ) {
+        if texture.is_none() {
+            let (tx, rx) = channel(1);
+            *receiver = Some(rx);
+            let image = map_image.clone();
+            let h = tokio::spawn(async move {
+                if let Err(e) = tx.send(Self::load_map_image(image)).await {
+                    error!("{}", e);
+                }
+            });
+            *handle = Some(h);
         }
     }
 
@@ -157,10 +187,49 @@ impl WorldGenApp {
             ui.image(tex, tex.size_vec2());
         }
     }
+
+    fn update_image(
+        receiver: &mut Option<Receiver<ColorImage>>,
+        image: &mut Option<ColorImage>,
+        handle: &mut Option<JoinHandle<()>>,
+    ) {
+        if let Some(r) = receiver {
+            if let Ok(color_image) = r.try_recv() {
+                *image = Some(color_image);
+                handle.take();
+                receiver.take();
+            }
+        }
+    }
+
+    fn update_images(images: &mut MapImages) {
+        Self::update_image(
+            &mut images.heightmap_image_receiver,
+            &mut images.heightmap_image,
+            &mut images.heightmap_image_handle,
+        );
+        Self::update_image(
+            &mut images.terrain_image_receiver,
+            &mut images.terrain_image,
+            &mut images.terrain_image_handle,
+        );
+        Self::update_image(
+            &mut images.provinces_image_receiver,
+            &mut images.provinces_image,
+            &mut images.provinces_image_handle,
+        );
+        Self::update_image(
+            &mut images.rivers_image_receiver,
+            &mut images.rivers_image,
+            &mut images.rivers_image_handle,
+        );
+    }
 }
 
 impl App for WorldGenApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        Self::update_images(&mut self.images);
+
         TopBottomPanel::top("top_panel").show(ctx, |ui| {
             bar(ui, |ui| {
                 ui.menu_button("File", |ui| {
@@ -247,7 +316,8 @@ impl App for WorldGenApp {
     }
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let options = eframe::NativeOptions::default();
     eframe::run_native(
         "Hearts of Iron IV Map Editor",

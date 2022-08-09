@@ -1,9 +1,6 @@
 use crate::components::wrappers::Continent;
-use crate::MapError;
-use jomini::{JominiDeserialize, TextDeserializer};
+use jomini::JominiDeserialize;
 use serde::Serialize;
-use std::fs;
-use std::path::Path;
 
 /// The list of continents
 #[derive(Debug, Clone, JominiDeserialize, Serialize)]
@@ -20,8 +17,6 @@ mod tests {
     use super::*;
     use crate::components::default_map::DefaultMap;
     use crate::{append_dir, LoadObject};
-    use jomini::TextDeserializer;
-    use std::fs;
     use std::path::Path;
 
     #[test]

@@ -1,8 +1,6 @@
-use crate::components::wrappers::{ColorIndex, Distance, MeshId, PixelDensity, PixelStep};
-use crate::MapError;
-use jomini::{JominiDeserialize, TextDeserializer};
+use crate::components::prelude::*;
+use jomini::JominiDeserialize;
 use serde::Serialize;
-use std::fs;
 use std::path::Path;
 
 /// The graphical information for depicting large cities on the map.

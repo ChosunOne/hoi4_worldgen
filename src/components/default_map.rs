@@ -1,6 +1,4 @@
-use jomini::{JominiDeserialize, TextDeserializer};
-use std::error::Error;
-use std::fs;
+use jomini::JominiDeserialize;
 use std::path::Path;
 
 /// The file default.map references the bitmaps and text files that make up the map.  

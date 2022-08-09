@@ -3,8 +3,8 @@ use crate::components::wrappers::{
     ProvinceId, SnowLevel, StrategicRegionId, StrategicRegionName, Temperature, Weight,
 };
 use crate::{LoadObject, MapError};
-use jomini::{JominiDeserialize, TextDeserializer};
-use log::{debug, error, info, warn};
+use jomini::JominiDeserialize;
+use log::{info, warn};
 use serde::Serialize;
 use std::collections::HashMap;
 use std::ffi::OsStr;
