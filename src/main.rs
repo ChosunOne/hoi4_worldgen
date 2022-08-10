@@ -39,6 +39,8 @@ struct MapTextures {
 
 struct WorldGenApp {
     root_path: Option<PathBuf>,
+    root_path_handle: Option<JoinHandle<()>>,
+    root_path_receiver: Option<Receiver<PathBuf>>,
     map_handle: Option<JoinHandle<()>>,
     map_receiver: Option<Receiver<Map>>,
     map: Option<Map>,
@@ -53,6 +55,8 @@ impl Default for WorldGenApp {
     fn default() -> Self {
         Self {
             root_path: None,
+            root_path_receiver: None,
+            root_path_handle: None,
             map_handle: None,
             map_receiver: None,
             map: None,
@@ -60,7 +64,7 @@ impl Default for WorldGenApp {
             map_display_mode: MapDisplayMode::HeightMap,
             images: MapImages::default(),
             textures: MapTextures::default(),
-            terminal: InMemoryTerm::new(16, 120),
+            terminal: InMemoryTerm::new(16, 240),
         }
     }
 }
@@ -226,6 +230,11 @@ impl WorldGenApp {
 impl App for WorldGenApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         Self::update_item(&mut self.map_receiver, &mut self.map, &mut self.map_handle);
+        Self::update_item(
+            &mut self.root_path_receiver,
+            &mut self.root_path,
+            &mut self.root_path_handle,
+        );
         Self::update_images(&mut self.images);
 
         TopBottomPanel::top("top_panel").show(ctx, |ui| {
@@ -233,7 +242,15 @@ impl App for WorldGenApp {
                 ui.menu_button("File", |ui| {
                     if ui.button("Open root folder").clicked() {
                         self.clear_map();
-                        self.root_path = rfd::FileDialog::new().pick_folder();
+                        let (tx, rx) = channel(1);
+                        self.root_path_receiver = Some(rx);
+                        self.root_path_handle = Some(tokio::spawn(async move {
+                            if let Some(p) = rfd::FileDialog::new().pick_folder() {
+                                if let Err(e) = tx.send(p).await {
+                                    error!("{}", e);
+                                }
+                            }
+                        }));
                     }
                 })
             })
@@ -274,13 +291,19 @@ impl App for WorldGenApp {
             .resizable(false)
             .min_width(200.0)
             .show(ctx, |ui| {
-                TopBottomPanel::top("info_panel").show_inside(ui, |ui| {
-                    ui.label("Info Panel");
-                });
+                TopBottomPanel::top("info_panel")
+                    .min_height(200.0)
+                    .show_inside(ui, |ui| {
+                        ui.label("Info Panel");
+                    });
                 TopBottomPanel::bottom("log_panel")
                     .max_height(200.0)
                     .show_inside(ui, |ui| {
                         ui.label("Log Panel");
+                        ui.set_style(egui::Style {
+                            wrap: Some(false),
+                            ..Default::default()
+                        });
                         ui.label(self.terminal.contents());
                     });
                 ctx.request_repaint();
