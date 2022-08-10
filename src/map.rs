@@ -1,9 +1,12 @@
 use crate::components::prelude::*;
 use crate::{LoadObject, MapError};
 use image::{open, DynamicImage, Pixel, RgbImage};
-use log::{debug, info, warn};
+use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle, TermLike};
+use log::{debug, error, info, warn};
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
+use std::time::Duration;
+use tokio::task::JoinHandle;
 use tokio::try_join;
 
 /// All the components needed to represent a map.
@@ -69,7 +72,15 @@ impl Map {
     #[inline]
     #[allow(clippy::too_many_lines)]
     #[allow(clippy::integer_arithmetic)]
-    pub async fn new(root_path: &Path) -> Result<Self, MapError> {
+    pub async fn new<T: TermLike + Clone + 'static>(
+        root_path: &Path,
+        term: &Option<T>,
+    ) -> Result<Self, MapError> {
+        let progress = {
+            let dt = draw_target(term);
+            MultiProgress::with_draw_target(dt)
+        };
+        let progress_style = ProgressStyle::with_template("{wide_msg}")?;
         let default_path = {
             let mut root_path_buf = root_path.to_path_buf();
             root_path_buf.push("map/default.map");
@@ -77,40 +88,61 @@ impl Map {
         };
         let default_map = DefaultMap::load_object(default_path)?;
 
-        let provinces_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, &default_map.provinces) })
-        };
+        let provinces_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            &default_map.provinces,
+            term,
+        );
 
-        let terrain_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, &default_map.terrain) })
-        };
+        let terrain_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            &default_map.terrain,
+            term,
+        );
 
-        let rivers_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, &default_map.rivers) })
-        };
+        let rivers_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            &default_map.rivers,
+            term,
+        );
 
-        let heightmap_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, &default_map.heightmap) })
-        };
+        let heightmap_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            &default_map.heightmap,
+            term,
+        );
 
-        let trees_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, &default_map.tree_definition) })
-        };
+        let trees_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            &default_map.tree_definition,
+            term,
+        );
 
-        let normal_map_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, Path::new("world_normal.bmp")) })
-        };
+        let normal_map_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            Path::new("world_normal.bmp"),
+            term,
+        );
 
-        let cities_map_handle = {
-            let path = root_path.to_path_buf();
-            tokio::spawn(async move { load_image(&path, Path::new("cities.bmp")) })
-        };
+        let cities_map_handle = Self::spawn_image_loading_thread(
+            root_path,
+            &progress,
+            &progress_style,
+            Path::new("cities.bmp"),
+            term,
+        );
 
         let (
             provinces_result,
@@ -145,8 +177,10 @@ impl Map {
             let trees_clone = trees.clone();
             let normal_map_clone = normal_map.clone();
             let cities_map_clone = cities_map.clone();
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             tokio::spawn(async move {
-                verify_images(
+                pb.set_message("Verifying images...");
+                let result = verify_images(
                     &provinces_clone,
                     &terrain_clone,
                     &rivers_clone,
@@ -154,95 +188,302 @@ impl Map {
                     &trees_clone,
                     &normal_map_clone,
                     &cities_map_clone,
-                )
+                );
+                if result.is_err() {
+                    error!("Error verifying images");
+                }
+                pb.finish_with_message("done");
+                result
             })
         };
 
         let definitions_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let terrain_path = {
                 let mut root_path_buf = root_path.to_path_buf();
                 root_path_buf.push("common/terrain/00_terrain.txt");
                 root_path_buf
             };
             let definitions_path = map_file(root_path, &default_map.definitions);
-            tokio::spawn(async move { Definitions::from_files(&definitions_path, &terrain_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading definitions and terrain from {} and {}...",
+                    definitions_path.display(),
+                    terrain_path.display()
+                ));
+                let result = Definitions::from_files(&definitions_path, &terrain_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading definitions and terrain from {} and {}",
+                        definitions_path.display(),
+                        terrain_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let continents_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let continent_path = map_file(root_path, &default_map.continent);
-            tokio::spawn(async move { Continents::load_object(&continent_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading continents from {}...",
+                    continent_path.display()
+                ));
+                let result = Continents::load_object(&continent_path);
+                if result.is_err() {
+                    error!("Error loading continents from {}", continent_path.display());
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let adjacency_rules_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let adjacency_rules_path = map_file(root_path, &default_map.adjacency_rules);
-            tokio::spawn(async move { AdjacencyRules::from_file(&adjacency_rules_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading adjacency rules from {}...",
+                    adjacency_rules_path.display()
+                ));
+                let result = AdjacencyRules::from_file(&adjacency_rules_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading adjacency rules from {}",
+                        adjacency_rules_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let adjacencies_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let adjacencies_path = map_file(root_path, &default_map.adjacencies);
-            tokio::spawn(async move { Adjacencies::from_file(&adjacencies_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading adjacencies from {}...",
+                    adjacencies_path.display()
+                ));
+                let result = Adjacencies::from_file(&adjacencies_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading adjacencies from {}",
+                        adjacencies_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let seasons_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let seasons_path = map_file(root_path, &default_map.seasons);
-            tokio::spawn(async move { Seasons::load_object(&seasons_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading seasons from {}...",
+                    seasons_path.display()
+                ));
+                let result = Seasons::load_object(&seasons_path);
+                if result.is_err() {
+                    error!("Error loading seasons from {}", seasons_path.display());
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let tree_indices = default_map.tree;
 
         let strategic_regions_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let strategic_regions_path = map_file(root_path, Path::new("strategicregions"));
-            tokio::spawn(async move { StrategicRegions::from_dir(&strategic_regions_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading strategic regions from {}...",
+                    strategic_regions_path.display()
+                ));
+                let result = StrategicRegions::from_dir(&strategic_regions_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading strategic regions from {}",
+                        strategic_regions_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let supply_nodes_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let supply_nodes_path = map_file(root_path, Path::new("supply_nodes.txt"));
-            tokio::spawn(async move { SupplyNodes::from_file(&supply_nodes_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading supply nodes from {}...",
+                    supply_nodes_path.display()
+                ));
+                let result = SupplyNodes::from_file(&supply_nodes_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading supply nodes from {}",
+                        supply_nodes_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let railways_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let railways_path = map_file(root_path, Path::new("railways.txt"));
-            tokio::spawn(async move { Railways::from_file(&railways_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading railways from {}...",
+                    railways_path.display()
+                ));
+                let result = Railways::from_file(&railways_path);
+                if result.is_err() {
+                    error!("Error loading railways from {}", railways_path.display());
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let buildings_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let types_path = {
                 let mut root_path_buf = root_path.to_path_buf();
                 root_path_buf.push("common/buildings/00_buildings.txt");
                 root_path_buf
             };
             let buildings_path = map_file(root_path, Path::new("buildings.txt"));
-            tokio::spawn(async move { Buildings::from_files(&types_path, &buildings_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading buildings and building types from {} and {}...",
+                    buildings_path.display(),
+                    types_path.display()
+                ));
+                let result = Buildings::from_files(&types_path, &buildings_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading buildings from {} and {}",
+                        buildings_path.display(),
+                        types_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let cities_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let cities_path = map_file(root_path, Path::new("cities.txt"));
-            tokio::spawn(async move { Cities::load_object(&cities_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!("Loading cities from {}...", cities_path.display()));
+                let result = Cities::load_object(&cities_path);
+                if result.is_err() {
+                    error!("Error loading cities from {}", cities_path.display());
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let colors_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let colors_path = map_file(root_path, Path::new("colors.txt"));
-            tokio::spawn(async move { Colors::load_object(&colors_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!("Loading colors from {}...", colors_path.display()));
+                let result = Colors::load_object(&colors_path);
+                if result.is_err() {
+                    error!("Error loading colors from {}", colors_path.display());
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let rocket_sites_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let rocket_sites_path = map_file(root_path, Path::new("rocketsites.txt"));
-            tokio::spawn(async move { RocketSites::from_file(&rocket_sites_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading rocket sites from {}...",
+                    rocket_sites_path.display()
+                ));
+                let result = RocketSites::from_file(&rocket_sites_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading rocket sites from {}",
+                        rocket_sites_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let unit_stacks_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let unit_stacks_path = map_file(root_path, Path::new("unitstacks.txt"));
-            tokio::spawn(async move { UnitStacks::from_file(&unit_stacks_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading unit stacks from {}...",
+                    unit_stacks_path.display()
+                ));
+                let result = UnitStacks::from_file(&unit_stacks_path);
+                if result.is_err() {
+                    error!(
+                        "Error loading unit stacks from {}",
+                        unit_stacks_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let weather_positions_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let weather_positions_path = map_file(root_path, Path::new("weatherpositions.txt"));
-            tokio::spawn(async move { WeatherPositions::from_file(&weather_positions_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading weather positions from {}...",
+                    weather_positions_path.display()
+                ));
+                let result = WeatherPositions::from_file(&weather_positions_path);
+                if result.is_err() {
+                    error!(
+                        "Failed to load weather positions from {}",
+                        weather_positions_path.display()
+                    );
+                }
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let airports_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style, term);
             let airports_path = map_file(root_path, Path::new("airports.txt"));
-            tokio::spawn(async move { Airports::from_file(&airports_path) })
+            tokio::spawn(async move {
+                pb.set_message(format!(
+                    "Loading airports from {}...",
+                    airports_path.display()
+                ));
+                let result = Airports::from_file(&airports_path);
+                pb.finish_with_message("done");
+                result
+            })
         };
 
         let (
@@ -298,6 +539,8 @@ impl Map {
         let weather_positions = weather_positions_result?;
         let airports = airports_result?;
 
+        progress.clear()?;
+
         Ok(Self {
             provinces,
             terrain,
@@ -323,6 +566,42 @@ impl Map {
             weather_positions,
             airports,
         })
+    }
+
+    /// Spawns a thread to load an image
+    fn spawn_image_loading_thread<T: TermLike + Clone + 'static>(
+        root_path: &Path,
+        progress: &MultiProgress,
+        progress_style: &ProgressStyle,
+        image_path: &Path,
+        term: &Option<T>,
+    ) -> JoinHandle<Result<RgbImage, MapError>> {
+        let path = root_path.to_path_buf();
+        let pb = Self::create_map_progress_indicator(progress, progress_style, term);
+        let ip = image_path.to_path_buf();
+        tokio::spawn(async move {
+            pb.set_message(format!("Loading {}", ip.display()));
+            let image_result = load_image(&path, &ip);
+            if image_result.is_err() {
+                error!("Error loading {}", ip.display());
+            }
+            pb.finish_with_message("done");
+            image_result
+        })
+    }
+
+    /// Creates a map progress indicator
+    fn create_map_progress_indicator<T: TermLike + Clone + 'static>(
+        progress: &MultiProgress,
+        progress_style: &ProgressStyle,
+        term: &Option<T>,
+    ) -> ProgressBar {
+        let dt = draw_target(term);
+        let pb = progress
+            .add(ProgressBar::new(1))
+            .with_style(progress_style.clone());
+        pb.set_draw_target(dt);
+        pb
     }
 
     /// Verifies the province colors against the provinces image
@@ -442,21 +721,31 @@ fn map_file(root_path: &Path, file_path: &Path) -> PathBuf {
     map_path
 }
 
+/// Creates a draw target
+fn draw_target<T: TermLike + Clone + Sized + 'static>(term: &Option<T>) -> ProgressDrawTarget {
+    let draw_target = term.as_ref().map_or_else(ProgressDrawTarget::stdout, |t| {
+        let target: Box<dyn TermLike> = Box::new(t.clone());
+        ProgressDrawTarget::term_like(target)
+    });
+    draw_target
+}
+
 #[allow(clippy::expect_used)]
 #[allow(clippy::panic)]
 #[cfg(test)]
 mod tests {
     use super::*;
+    use indicatif::InMemoryTerm;
 
     #[tokio::test]
     async fn it_loads_a_map() {
-        let map = Map::new(Path::new("./test")).await;
+        let map = Map::new::<InMemoryTerm>(Path::new("./test"), &None).await;
         assert!(map.is_ok());
     }
 
     #[tokio::test]
     async fn it_verifies_province_colors() {
-        let map = Map::new(Path::new("./test"))
+        let map = Map::new::<InMemoryTerm>(Path::new("./test"), &None)
             .await
             .expect("Failed to load map");
         map.verify_province_colors()

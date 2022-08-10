@@ -78,7 +78,7 @@ impl<'de> Visitor<'de> for DayMonthVisitor {
     type Value = DayMonth;
 
     #[inline]
-    fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {
+    fn expecting(&self, formatter: &mut Formatter<'_>) -> std::fmt::Result {
         formatter.write_str(
             "a string of the form `DD.MM`, where DD and MM are zero indexed day and month",
         )

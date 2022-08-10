@@ -24,6 +24,7 @@
 
 use crate::components::prelude::*;
 use image::ImageError;
+use indicatif::style::TemplateError;
 use jomini::{TextDeserializer, TextTape};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
@@ -111,6 +112,9 @@ pub enum MapError {
     /// A join error
     #[error("{0}")]
     JoinError(#[from] JoinError),
+    /// An `indicatif` template error
+    #[error("{0}")]
+    TemplateError(#[from] TemplateError),
 }
 
 /// Appends a directory to the front of a given path.
@@ -238,4 +242,27 @@ pub fn load_state_map<P: AsRef<Path>>(
     }
 
     Ok(state_map)
+}
+
+#[cfg(test)]
+mod tests {
+    use indicatif::{InMemoryTerm, ProgressBar, ProgressDrawTarget, TermLike};
+
+    #[test]
+    fn it_paints_to_an_in_memory_term() {
+        let term = InMemoryTerm::new(64, 120);
+        let mut bar = ProgressBar::new(100);
+        let draw_target =
+            ProgressDrawTarget::term_like(Box::new(term.clone()) as Box<dyn TermLike>);
+        bar.set_draw_target(draw_target);
+        bar.set_style(indicatif::ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} {bytes_per_sec} {msg}").expect("invalid style"));
+        bar.set_message("Loading...");
+        bar.set_position(50);
+        bar.finish_with_message("Done!");
+        let output = term.contents();
+        assert_eq!(
+            output,
+            "Loading... [00:00:00] [====================] 0/100 0.00B Done!\n"
+        );
+    }
 }

@@ -74,7 +74,7 @@ impl Buildings {
         for building in &raw_buildings {
             if !types.contains(&building.building_id) {
                 warn!(
-                    "BuildingId {} is not defined in types",
+                    "BuildingId {:?} is not defined in types",
                     building.building_id
                 );
             }

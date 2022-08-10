@@ -6,6 +6,7 @@ use eframe::egui::{
 use eframe::App;
 use egui::Vec2;
 use image::{DynamicImage, RgbImage};
+use indicatif::InMemoryTerm;
 use log::error;
 use std::path::PathBuf;
 use tokio::sync::mpsc::{channel, Receiver};
@@ -36,7 +37,6 @@ struct MapTextures {
     rivers_texture: Option<TextureHandle>,
 }
 
-#[derive(Default)]
 struct WorldGenApp {
     root_path: Option<PathBuf>,
     map_handle: Option<JoinHandle<()>>,
@@ -46,6 +46,23 @@ struct WorldGenApp {
     map_display_mode: MapDisplayMode,
     images: MapImages,
     textures: MapTextures,
+    terminal: InMemoryTerm,
+}
+
+impl Default for WorldGenApp {
+    fn default() -> Self {
+        Self {
+            root_path: None,
+            map_handle: None,
+            map_receiver: None,
+            map: None,
+            map_err_text: None,
+            map_display_mode: MapDisplayMode::HeightMap,
+            images: MapImages::default(),
+            textures: MapTextures::default(),
+            terminal: InMemoryTerm::new(16, 120),
+        }
+    }
 }
 
 #[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
@@ -182,8 +199,10 @@ impl WorldGenApp {
                 let (tx, rx) = channel(1);
                 let path = self.root_path.clone().unwrap();
                 self.map_receiver = Some(rx);
+                let terminal = self.terminal.clone();
+
                 self.map_handle = Some(tokio::spawn(async move {
-                    match Map::new(&path).await {
+                    match Map::new(&path, &Some(terminal)).await {
                         Ok(m) => {
                             if let Err(e) = tx.send(m).await {
                                 error!("{}", e);
@@ -248,56 +267,57 @@ impl App for WorldGenApp {
                     if ui.button("Rivers").clicked() {
                         self.set_map_mode(MapDisplayMode::Rivers);
                     }
-                    if self.images.heightmap_image_handle.is_some() {
-                        ui.label("Loading heightmap...");
-                    }
-                    if self.images.terrain_image_handle.is_some() {
-                        ui.label("Loading terrain...");
-                    }
-                    if self.images.provinces_image_handle.is_some() {
-                        ui.label("Loading provinces...");
-                    }
-                    if self.images.rivers_image_handle.is_some() {
-                        ui.label("Loading rivers...");
-                    }
                 });
             }
         });
-        SidePanel::right("info_panel")
+        SidePanel::right("right_panel")
             .resizable(false)
+            .min_width(200.0)
             .show(ctx, |ui| {
-                ui.label("Info Panel");
+                TopBottomPanel::top("info_panel").show_inside(ui, |ui| {
+                    ui.label("Info Panel");
+                });
+                TopBottomPanel::bottom("log_panel")
+                    .max_height(200.0)
+                    .show_inside(ui, |ui| {
+                        ui.label("Log Panel");
+                        ui.label(self.terminal.contents());
+                    });
+                ctx.request_repaint();
             });
 
-        CentralPanel::default().show(ctx, |ui| match self.map_display_mode {
-            MapDisplayMode::HeightMap => {
-                Self::render_map(
-                    ui,
-                    &mut self.images.heightmap_image,
-                    &mut self.textures.heightmap_texture,
-                );
+        CentralPanel::default().show(ctx, |ui| {
+            match self.map_display_mode {
+                MapDisplayMode::HeightMap => {
+                    Self::render_map(
+                        ui,
+                        &mut self.images.heightmap_image,
+                        &mut self.textures.heightmap_texture,
+                    );
+                }
+                MapDisplayMode::Terrain => {
+                    Self::render_map(
+                        ui,
+                        &mut self.images.terrain_image,
+                        &mut self.textures.terrain_texture,
+                    );
+                }
+                MapDisplayMode::Provinces => {
+                    Self::render_map(
+                        ui,
+                        &mut self.images.provinces_image,
+                        &mut self.textures.provinces_texture,
+                    );
+                }
+                MapDisplayMode::Rivers => {
+                    Self::render_map(
+                        ui,
+                        &mut self.images.rivers_image,
+                        &mut self.textures.rivers_texture,
+                    );
+                }
             }
-            MapDisplayMode::Terrain => {
-                Self::render_map(
-                    ui,
-                    &mut self.images.terrain_image,
-                    &mut self.textures.terrain_texture,
-                );
-            }
-            MapDisplayMode::Provinces => {
-                Self::render_map(
-                    ui,
-                    &mut self.images.provinces_image,
-                    &mut self.textures.provinces_texture,
-                );
-            }
-            MapDisplayMode::Rivers => {
-                Self::render_map(
-                    ui,
-                    &mut self.images.rivers_image,
-                    &mut self.textures.rivers_texture,
-                );
-            }
+            ctx.request_repaint();
         });
     }
 }
