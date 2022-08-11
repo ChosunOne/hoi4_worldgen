@@ -57,7 +57,6 @@ pub enum WeatherType {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::LoadCsv;
 
     #[test]
     fn it_loads_weather_positions_from_a_file() {

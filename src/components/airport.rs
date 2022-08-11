@@ -1,5 +1,5 @@
 use crate::components::wrappers::{ProvinceId, StateId};
-use crate::{load_state_map, MapError};
+use crate::{load_map, MapError};
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -17,7 +17,7 @@ impl Airports {
     /// If the file cannot be read, or if it is invalid.
     #[inline]
     pub fn from_file(path: &Path) -> Result<Self, MapError> {
-        let airports = load_state_map(path)?;
+        let airports = load_map(path)?;
         Ok(Self { airports })
     }
 }

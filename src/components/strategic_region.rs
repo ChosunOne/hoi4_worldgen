@@ -1,26 +1,18 @@
 use crate::components::day_month::DayMonth;
-use crate::components::wrappers::{
-    ProvinceId, SnowLevel, StrategicRegionId, StrategicRegionName, Temperature, Weight,
-};
-use crate::{LoadObject, MapError};
-use jomini::JominiDeserialize;
+use crate::components::prelude::*;
+use crate::MapError;
+use jomini::text::ObjectReader;
+use jomini::{JominiDeserialize, TextTape, Windows1252Encoding};
 use log::{info, warn};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
-
-/// Defines a raw strategic region
-#[derive(Debug, Clone, JominiDeserialize, Serialize)]
-#[non_exhaustive]
-pub struct RawStrategicRegion {
-    /// The parsed strategic region
-    pub strategic_region: StrategicRegion,
-}
+use std::str::FromStr;
 
 /// Defines a strategic region
-#[derive(Debug, Clone, JominiDeserialize, Serialize, PartialEq)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[non_exhaustive]
 pub struct StrategicRegion {
     /// The id of the region
@@ -33,8 +25,88 @@ pub struct StrategicRegion {
     pub weather: Weather,
 }
 
+impl StrategicRegion {
+    /// Loads the `StrategicRegion` from a given path
+    /// # Errors
+    /// If the file cannot be read, or if it is invalid
+    #[inline]
+    pub fn from_file(path: &Path) -> Result<Self, MapError> {
+        let data = fs::read_to_string(path)?;
+        let tape = TextTape::from_slice(data.as_bytes())?;
+        let reader = tape.windows1252_reader();
+        let raw_fields = {
+            let fields = reader
+                .fields()
+                .filter(|f| {
+                    let (raw_key, _op, _value) = f;
+                    raw_key.read_str() == "strategic_region"
+                })
+                .collect::<Vec<_>>();
+            let (_key, _op, value) = fields
+                .get(0)
+                .ok_or_else(|| MapError::InvalidValue(path.to_string_lossy().to_string()))?;
+            let raw_strategic_region = value.read_object()?;
+            raw_strategic_region.fields().collect::<Vec<_>>()
+        };
+        let mut id = StrategicRegionId(0);
+        let mut name = StrategicRegionName(String::new());
+        let mut provinces = Vec::new();
+        let mut weather = Weather::default();
+        for (key, _op, value) in raw_fields {
+            let key_string = key.read_string();
+            match key_string.as_str() {
+                "id" => {
+                    id = StrategicRegionId(i32::try_from(value.read_scalar()?.to_i64()?)?);
+                }
+                "name" => {
+                    name = StrategicRegionName(value.read_string()?);
+                }
+                "provinces" => {
+                    provinces = value
+                        .read_array()?
+                        .values()
+                        .flat_map(|v| {
+                            v.read_scalar().map(|v| {
+                                v.to_i64().map(|v| i32::try_from(v).map(|v| ProvinceId(v)))
+                            })
+                        })
+                        .flatten()
+                        .flatten()
+                        .collect();
+                }
+                "weather" => {
+                    let raw_periods = value
+                        .read_object()?
+                        .fields()
+                        .filter(|f| {
+                            let (raw_key, _op, _value) = f;
+                            raw_key.read_str() == "period"
+                        })
+                        .collect::<Vec<_>>();
+
+                    for (_key, _op, val) in raw_periods {
+                        let period_reader = val.read_object()?;
+                        let period = Period::from_reader(&period_reader)?;
+                        weather.period.push(period);
+                    }
+                }
+                _ => {
+                    warn!("Unknown key in strategic region: {}", key_string);
+                }
+            }
+        }
+
+        Ok(Self {
+            id,
+            name,
+            provinces,
+            weather,
+        })
+    }
+}
+
 /// Container for the weather periods
-#[derive(Debug, Clone, JominiDeserialize, Serialize, PartialEq)]
+#[derive(Debug, Default, Clone, JominiDeserialize, Serialize, PartialEq)]
 #[non_exhaustive]
 pub struct Weather {
     /// The weather periods
@@ -55,32 +127,99 @@ pub struct Weather {
 /// weather system. Typically only used for areas with year-round snow.  
 /// Each of the weather states are given a weight, determining how likely the state will occur
 /// within the weather system. The weather states can be found in `/Hearts of Iron IV/common/weather.txt`.
-/// TODO: Don't hardcode weather states, instead load them from `weather.txt`
-#[derive(Debug, Clone, JominiDeserialize, Serialize, PartialEq)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[non_exhaustive]
 pub struct Period {
     /// The start and end dates of the period
     pub between: Vec<DayMonth>,
     /// The temperature during the period
     pub temperature: Vec<Temperature>,
-    /// The chance that nothing happens during the period
-    pub no_phenomenon: Weight,
-    /// The chance for light rain
-    pub rain_light: Weight,
-    /// The chance for heavy rain
-    pub rain_heavy: Weight,
-    /// The chance for snow
-    pub snow: Weight,
-    /// The chance for a blizzard
-    pub blizzard: Weight,
-    /// The chance for arctic water
-    pub arctic_water: Weight,
-    /// The chance for mud
-    pub mud: Weight,
-    /// The chance for a sandstorm
-    pub sandstorm: Weight,
+    /// The range of temperatures during the day & night
+    pub temperature_day_night: Option<Vec<Temperature>>,
+    /// The weights for each type of `WeatherEffect`
+    pub weather_effects: HashMap<WeatherEffect, Weight>,
     /// The minimum snow level during the period
     pub min_snow_level: SnowLevel,
+}
+
+impl Period {
+    /// Loads the `Period` from a given reader
+    /// # Errors
+    /// If the given reader is invalid
+    #[inline]
+    pub fn from_reader(reader: &ObjectReader<Windows1252Encoding>) -> Result<Self, MapError> {
+        let fields = reader.fields().collect::<Vec<_>>();
+        let mut between = vec![];
+        let mut temperature = vec![];
+        let mut temperature_day_night: Option<Vec<Temperature>> = None;
+        let mut weather_effects = HashMap::new();
+        let mut min_snow_level = SnowLevel(0.0);
+
+        for (key, _op, value) in fields {
+            let key_string = key.read_string();
+            match key_string.as_str() {
+                "between" => {
+                    let raw_values = value.read_array()?;
+                    for val in raw_values.values() {
+                        let v_string = val.read_string()?;
+                        let day_month = v_string.parse::<DayMonth>()?;
+                        between.push(day_month);
+                    }
+                }
+                "temperature" => {
+                    let raw_values = value.read_array()?;
+                    for val in raw_values.values() {
+                        let v_string = val.read_string()?;
+                        let t = v_string.parse::<Temperature>()?;
+                        temperature.push(t);
+                    }
+                }
+                "temperature_day_night" => {
+                    let raw_values = value.read_array()?;
+                    let mut temps = Vec::new();
+                    for val in raw_values.values() {
+                        let v_string = val.read_string()?;
+                        let t = v_string.parse::<Temperature>()?;
+                        temps.push(t);
+                    }
+                    match temperature_day_night.as_mut() {
+                        Some(v) => v.append(&mut temps),
+                        None => temperature_day_night = Some(temps),
+                    }
+                }
+                "min_snow_level" => {
+                    let raw_value = value.read_string()?;
+                    let snow_level = raw_value.parse::<SnowLevel>()?;
+                    min_snow_level = snow_level;
+                }
+                weather_effect => {
+                    let raw_value = value.read_string()?;
+                    let effect = WeatherEffect(weather_effect.to_owned());
+                    let weight = raw_value.parse::<Weight>()?;
+                    weather_effects.insert(effect, weight);
+                }
+            }
+        }
+
+        Ok(Self {
+            between,
+            temperature,
+            temperature_day_night,
+            weather_effects,
+            min_snow_level,
+        })
+    }
+}
+
+impl FromStr for Period {
+    type Err = MapError;
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let tape = TextTape::from_slice(s.as_bytes())?;
+        let reader = tape.windows1252_reader();
+        Period::from_reader(&reader)
+    }
 }
 
 /// A map of the strategic regions by id
@@ -146,14 +285,12 @@ impl StrategicRegions {
         let mut strategic_regions = HashMap::new();
         for strategic_region_file_result in strategic_region_files {
             let strategic_region_file = strategic_region_file_result?;
-            let strategic_region_path = strategic_region_file.path();
-            // Check if the file looks like a strategic region
+            let strategic_region_path = strategic_region_file.path(); // Check if the file looks like a strategic region
             Self::verify_strategic_region_file_name(&strategic_region_path)?;
             let (filename_id, _) =
                 Self::get_strategic_region_id_and_filename(&strategic_region_file.file_name())?;
 
-            let raw_strategic_region = RawStrategicRegion::load_object(&strategic_region_path)?;
-            let strategic_region = raw_strategic_region.strategic_region;
+            let strategic_region = StrategicRegion::from_file(&strategic_region_path)?;
             let id = strategic_region.id;
 
             if id == StrategicRegionId(0) {
@@ -190,8 +327,8 @@ mod tests {
     #[test]
     fn it_reads_a_strategic_region_from_a_file() {
         let path = Path::new("./test/map/strategicregions/1-StrategicRegion.txt");
-        let raw_strategic_region = RawStrategicRegion::load_object(path).unwrap();
-        let strategic_region = raw_strategic_region.strategic_region;
+        let strategic_region =
+            StrategicRegion::from_file(path).expect("Failed to load strategic region");
         println!("{:?}", strategic_region);
         assert_eq!(
             strategic_region,
@@ -268,14 +405,17 @@ mod tests {
                                 DayMonth::from_str("30.0").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(14.0), Temperature(18.0)],
-                            no_phenomenon: Weight(0.9),
-                            rain_light: Weight(0.05),
-                            rain_heavy: Weight(0.05),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.9)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.05)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.05)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -284,14 +424,17 @@ mod tests {
                                 DayMonth::from_str("27.1").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(15.0), Temperature(19.0)],
-                            no_phenomenon: Weight(0.9),
-                            rain_light: Weight(0.05),
-                            rain_heavy: Weight(0.05),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.9)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.05)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.05)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -300,14 +443,17 @@ mod tests {
                                 DayMonth::from_str("30.2").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(19.0), Temperature(21.0)],
-                            no_phenomenon: Weight(0.8),
-                            rain_light: Weight(0.10),
-                            rain_heavy: Weight(0.10),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.8)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.10)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.10)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -316,14 +462,17 @@ mod tests {
                                 DayMonth::from_str("29.3").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(20.0), Temperature(23.0)],
-                            no_phenomenon: Weight(0.7),
-                            rain_light: Weight(0.4),
-                            rain_heavy: Weight(0.3),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.7)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.4)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.3)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -332,14 +481,17 @@ mod tests {
                                 DayMonth::from_str("30.4").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(20.0), Temperature(23.0)],
-                            no_phenomenon: Weight(0.5),
-                            rain_light: Weight(0.2),
-                            rain_heavy: Weight(0.3),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.5)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.2)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.3)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -348,14 +500,17 @@ mod tests {
                                 DayMonth::from_str("29.5").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(20.0), Temperature(23.0)],
-                            no_phenomenon: Weight(0.4),
-                            rain_light: Weight(0.3),
-                            rain_heavy: Weight(0.3),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.4)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.3)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.3)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -364,14 +519,17 @@ mod tests {
                                 DayMonth::from_str("30.6").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(17.0), Temperature(20.0)],
-                            no_phenomenon: Weight(0.3),
-                            rain_light: Weight(0.4),
-                            rain_heavy: Weight(0.3),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.3)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.4)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.3)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -380,14 +538,17 @@ mod tests {
                                 DayMonth::from_str("30.7").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(17.0), Temperature(20.0)],
-                            no_phenomenon: Weight(0.3),
-                            rain_light: Weight(0.4),
-                            rain_heavy: Weight(0.3),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.3)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.4)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.3)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -396,14 +557,17 @@ mod tests {
                                 DayMonth::from_str("29.8").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(17.0), Temperature(20.0)],
-                            no_phenomenon: Weight(0.4),
-                            rain_light: Weight(0.2),
-                            rain_heavy: Weight(0.2),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.4)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.2)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.2)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -412,14 +576,17 @@ mod tests {
                                 DayMonth::from_str("30.9").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(14.0), Temperature(18.0)],
-                            no_phenomenon: Weight(0.6),
-                            rain_light: Weight(0.2),
-                            rain_heavy: Weight(0.2),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.6)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.2)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.2)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -428,14 +595,17 @@ mod tests {
                                 DayMonth::from_str("29.10").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(12.0), Temperature(18.0)],
-                            no_phenomenon: Weight(0.8),
-                            rain_light: Weight(0.1),
-                            rain_heavy: Weight(0.1),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.8)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.1)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.1)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -444,14 +614,17 @@ mod tests {
                                 DayMonth::from_str("30.11").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(12.0), Temperature(17.0)],
-                            no_phenomenon: Weight(0.9),
-                            rain_light: Weight(0.05),
-                            rain_heavy: Weight(0.05),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(1.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(0.9)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.05)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.05)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(1.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
@@ -460,14 +633,17 @@ mod tests {
                                 DayMonth::from_str("21.11").expect("invalid daymonth")
                             ],
                             temperature: vec![Temperature(-10.0), Temperature(35.0)],
-                            no_phenomenon: Weight(1.5),
-                            rain_light: Weight(0.25),
-                            rain_heavy: Weight(0.1),
-                            snow: Weight(0.0),
-                            blizzard: Weight(0.0),
-                            arctic_water: Weight(0.0),
-                            mud: Weight(0.0),
-                            sandstorm: Weight(0.0),
+                            temperature_day_night: None,
+                            weather_effects: HashMap::from([
+                                (WeatherEffect("no_phenomenon".to_owned()), Weight(1.5)),
+                                (WeatherEffect("rain_light".to_owned()), Weight(0.25)),
+                                (WeatherEffect("rain_heavy".to_owned()), Weight(0.1)),
+                                (WeatherEffect("snow".to_owned()), Weight(0.0)),
+                                (WeatherEffect("blizzard".to_owned()), Weight(0.0)),
+                                (WeatherEffect("arctic_water".to_owned()), Weight(0.0)),
+                                (WeatherEffect("mud".to_owned()), Weight(0.0)),
+                                (WeatherEffect("sandstorm".to_owned()), Weight(0.0)),
+                            ]),
                             min_snow_level: SnowLevel(0.0)
                         },
                     ]
@@ -478,6 +654,7 @@ mod tests {
 
     #[test]
     fn it_reads_strategic_regions_from_a_directory() {
+        env_logger::init();
         let strategicregions_path = Path::new("./test/map/strategicregions");
         let strategicregions = StrategicRegions::from_dir(strategicregions_path)
             .expect("failed to read strategicregions");

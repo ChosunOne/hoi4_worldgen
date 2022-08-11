@@ -171,12 +171,19 @@ pub struct YCoord(pub i32);
 #[non_exhaustive]
 pub struct AdjacencyRuleName(pub String);
 
-/// An adjacency rule name.
+/// A strategic region name.
 #[derive(
     Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
 )]
 #[non_exhaustive]
 pub struct StrategicRegionName(pub String);
+
+/// A weather effect.
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+#[non_exhaustive]
+pub struct WeatherEffect(pub String);
 
 /// The the province on which to show the crossing icon
 #[derive(Clone, Copy, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]

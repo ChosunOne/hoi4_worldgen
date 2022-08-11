@@ -58,7 +58,7 @@ impl Definitions {
     #[inline]
     pub fn from_files(definitions_path: &Path, terrain_path: &Path) -> Result<Self, MapError> {
         let definitions = Definition::load_csv(definitions_path, false)?;
-        let terrain = Terrain::load_keys(terrain_path)?;
+        let terrain = Terrain::load_keys(terrain_path, "categories")?;
         Ok(Self {
             definitions,
             terrain,

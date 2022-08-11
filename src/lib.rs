@@ -25,12 +25,14 @@
 use crate::components::prelude::*;
 use image::ImageError;
 use indicatif::style::TemplateError;
-use jomini::{TextDeserializer, TextTape};
+use jomini::{ScalarError, TextDeserializer, TextTape};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
+use std::fmt::Display;
 use std::fs;
 use std::hash::Hash;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use thiserror::Error;
 use tokio::task::JoinError;
 
@@ -46,9 +48,9 @@ pub enum MapError {
     /// Error while reading/writing to a file on disk.
     #[error("{0}")]
     IOError(#[from] std::io::Error),
-    /// Error parsing a value
+    /// Error loading a value
     #[error("{0}")]
-    ParseError(#[from] jomini::Error),
+    LoadError(#[from] jomini::Error),
     /// Error while parsing a file
     #[error("{0}")]
     DeserializeError(#[from] jomini::DeserializeError),
@@ -115,6 +117,24 @@ pub enum MapError {
     /// An `indicatif` template error
     #[error("{0}")]
     TemplateError(#[from] TemplateError),
+    /// An invalid key type
+    #[error("{0}")]
+    InvalidKey(String),
+    /// An invalid value type
+    #[error("{0}")]
+    InvalidValue(String),
+    /// An invalid `DayMonth`
+    #[error("{0}")]
+    InvalidDayMonth(#[from] DayMonthParseError),
+    /// An invalid float
+    #[error("{0}")]
+    InvalidFloat(#[from] std::num::ParseFloatError),
+    /// An invalid scalar
+    #[error("{0}")]
+    InvalidScalar(#[from] ScalarError),
+    /// An invalid int conversion
+    #[error("{0}")]
+    InvalidInt(#[from] std::num::TryFromIntError),
 }
 
 /// Appends a directory to the front of a given path.
@@ -161,19 +181,25 @@ pub trait LoadKeys
 where
     Self: Sized,
 {
-    /// Returns a set of all the keys in the first object of the file.
+    /// Returns a set of all the keys in the given object of the file.
     /// # Errors
     /// If the file is not found or if the file is empty.
-    fn load_keys(path: &Path) -> Result<HashSet<Self>, MapError>;
+    fn load_keys(path: &Path, object_name: &str) -> Result<HashSet<Self>, MapError>;
 }
 
 impl<T: Sized + From<String> + Eq + Hash> LoadKeys for T {
     #[inline]
-    fn load_keys(path: &Path) -> Result<HashSet<T>, MapError> {
+    fn load_keys(path: &Path, object_name: &str) -> Result<HashSet<T>, MapError> {
         let data = fs::read_to_string(&path)?;
         let tape = TextTape::from_slice(data.as_bytes())?;
         let reader = tape.windows1252_reader();
-        let fields = reader.fields().collect::<Vec<_>>();
+        let fields = reader
+            .fields()
+            .filter(|f| {
+                let (raw_key, _op, _value) = f;
+                raw_key.read_str() == object_name
+            })
+            .collect::<Vec<_>>();
         let (_key, _op, value) = fields
             .get(0)
             .ok_or_else(|| MapError::InvalidKeyFile(path.to_string_lossy().to_string()))?;
@@ -213,56 +239,46 @@ impl<T: Sized + for<'de> Deserialize<'de>> LoadObject for T {
     }
 }
 
-/// Loads a map where the keys are `StateId`s and the values are `Vec<ProvinceId>`s.
+/// Loads a map where the keys and values are deserializable from strings.
 /// # Errors
 /// Returns an error if the file cannot be read.
 #[inline]
-pub fn load_state_map<P: AsRef<Path>>(
+pub fn load_map<
+    P: AsRef<Path>,
+    K: Eq + Hash + FromStr<Err = E>,
+    E: Display,
+    V: FromStr<Err = E2>,
+    E2: Display,
+>(
     path: P,
-) -> Result<HashMap<StateId, Vec<ProvinceId>>, MapError> {
+) -> Result<HashMap<K, Vec<V>>, MapError> {
     let data = fs::read_to_string(path)?;
-    let mut state_map = HashMap::new();
+    let mut map = HashMap::new();
 
     for line in data.lines() {
         let tape = TextTape::from_slice(line.as_bytes())?;
         let reader = tape.windows1252_reader();
         for (key, _op, value) in reader.fields() {
-            let state_id = key.read_str().parse::<StateId>()?;
-            let province_ids = {
+            let id = match key.read_str().parse::<K>() {
+                Ok(i) => i,
+                Err(e) => return Err(MapError::InvalidKey(e.to_string())),
+            };
+            let values = {
                 let array = value.read_array()?;
                 let mut ids = Vec::new();
-                for id in array.values() {
-                    let id_string = id.read_string()?;
-                    ids.push(id_string.parse::<ProvinceId>()?);
+                for val in array.values() {
+                    let v_string = val.read_string()?;
+                    let v = match v_string.parse::<V>() {
+                        Ok(v) => v,
+                        Err(e) => return Err(MapError::InvalidValue(e.to_string())),
+                    };
+                    ids.push(v);
                 }
                 ids
             };
-            state_map.insert(state_id, province_ids);
+            map.insert(id, values);
         }
     }
 
-    Ok(state_map)
-}
-
-#[cfg(test)]
-mod tests {
-    use indicatif::{InMemoryTerm, ProgressBar, ProgressDrawTarget, TermLike};
-
-    #[test]
-    fn it_paints_to_an_in_memory_term() {
-        let term = InMemoryTerm::new(64, 120);
-        let mut bar = ProgressBar::new(100);
-        let draw_target =
-            ProgressDrawTarget::term_like(Box::new(term.clone()) as Box<dyn TermLike>);
-        bar.set_draw_target(draw_target);
-        bar.set_style(indicatif::ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} {bytes_per_sec} {msg}").expect("invalid style"));
-        bar.set_message("Loading...");
-        bar.set_position(50);
-        bar.finish_with_message("Done!");
-        let output = term.contents();
-        assert_eq!(
-            output,
-            "Loading... [00:00:00] [====================] 0/100 0.00B Done!\n"
-        );
-    }
+    Ok(map)
 }

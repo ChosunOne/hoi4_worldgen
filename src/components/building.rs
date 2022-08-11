@@ -67,7 +67,7 @@ impl Buildings {
     /// If the file cannot be read, or if it is invalid, returns an error.
     #[inline]
     pub fn from_files(types_path: &Path, buildings_path: &Path) -> Result<Self, MapError> {
-        let types = BuildingId::load_keys(types_path)?;
+        let types = BuildingId::load_keys(types_path, "buildings")?;
         let raw_buildings = StateBuilding::load_csv(buildings_path, false)?;
 
         // Verify that all building ids are defined in types

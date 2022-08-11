@@ -234,14 +234,18 @@ impl Map {
             tokio::spawn(async move {
                 pb.set_message("Loading adjacency rules...\n");
                 let result = AdjacencyRules::from_file(&adjacency_rules_path);
-                if result.is_err() {
-                    error!(
-                        "Error loading adjacency rules from {}",
-                        adjacency_rules_path.display()
-                    );
-                }
                 pb.finish();
-                result
+                return match result {
+                    Ok(rules) => Ok(rules),
+                    Err(e) => {
+                        error!(
+                            "Error loading adjacency rules from {}: {:?}",
+                            adjacency_rules_path.display(),
+                            e
+                        );
+                        Err(e)
+                    }
+                };
             })
         };
 
@@ -284,14 +288,18 @@ impl Map {
             tokio::spawn(async move {
                 pb.set_message("Loading strategic regions...\n");
                 let result = StrategicRegions::from_dir(&strategic_regions_path);
-                if result.is_err() {
-                    error!(
-                        "Error loading strategic regions from {}",
-                        strategic_regions_path.display()
-                    );
-                }
                 pb.finish();
-                result
+                return match result {
+                    Ok(regions) => Ok(regions),
+                    Err(e) => {
+                        error!(
+                            "Error loading strategic regions from {}: {:?}",
+                            strategic_regions_path.display(),
+                            e
+                        );
+                        Err(e)
+                    }
+                };
             })
         };
 
@@ -548,10 +556,9 @@ impl Map {
         progress: &MultiProgress,
         progress_style: &ProgressStyle,
     ) -> ProgressBar {
-        let pb = progress
+        progress
             .add(ProgressBar::new(1))
-            .with_style(progress_style.clone());
-        pb
+            .with_style(progress_style.clone())
     }
 
     /// Verifies the province colors against the provinces image

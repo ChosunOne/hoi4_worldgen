@@ -1,4 +1,4 @@
-use crate::{load_state_map, MapError, ProvinceId, StateId};
+use crate::{load_map, MapError, ProvinceId, StateId};
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -16,7 +16,7 @@ impl RocketSites {
     /// If the file cannot be read, or if it is invalid.
     #[inline]
     pub fn from_file(path: &Path) -> Result<Self, MapError> {
-        let rocket_sites = load_state_map(path)?;
+        let rocket_sites = load_map(path)?;
         Ok(Self { rocket_sites })
     }
 }

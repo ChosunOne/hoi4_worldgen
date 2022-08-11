@@ -1,5 +1,6 @@
 use crate::components::wrappers::{AdjacencyRuleName, Icon, ProvinceId, XCoord, YCoord};
 use crate::{LoadCsv, LoadObject, MapError};
+use derive_more::Display;
 use jomini::JominiDeserialize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -27,6 +28,8 @@ pub struct AdjacencyRule {
     pub offset: Vec<i32>,
     /// Conditions when the rule can be disabled.
     pub is_disabled: Option<IsDisabled>,
+    /// Applies the rule when a conditions is met.
+    pub is_friend: Option<IsFriend>,
 }
 
 /// An adjacency rule
@@ -45,6 +48,11 @@ pub struct IsDisabled {
     /// The tooltip to display when the rule is disabled.
     pub tooltip: String,
 }
+
+/// Conditions when an adjacency rule can be disabled
+#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[non_exhaustive]
+pub struct IsFriend(String);
 
 /// The logic for the adjacency rule.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, JominiDeserialize, Serialize)]
@@ -235,7 +243,8 @@ mod tests {
                 required_provinces: vec![ProvinceId(10033), ProvinceId(10101)],
                 icon: Icon(ProvinceId(10101)),
                 offset: vec![-3, 0, -6],
-                is_disabled: None
+                is_disabled: None,
+                is_friend: None
             })
         );
     }
