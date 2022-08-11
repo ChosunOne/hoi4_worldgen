@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::path::Path;
 
 /// An adjacency rule
-#[derive(Clone, Debug, JominiDeserialize, Serialize, PartialEq, Eq)]
+#[derive(Clone, Debug, JominiDeserialize, Serialize, PartialEq)]
 #[non_exhaustive]
 pub struct AdjacencyRule {
     /// The name of the adjacency rule.
@@ -25,11 +25,9 @@ pub struct AdjacencyRule {
     /// The icon for the adjacency rule.
     pub icon: Icon,
     /// Graphical offsets
-    pub offset: Vec<i32>,
+    pub offset: Vec<f32>,
     /// Conditions when the rule can be disabled.
     pub is_disabled: Option<IsDisabled>,
-    /// Applies the rule when a conditions is met.
-    pub is_friend: Option<IsFriend>,
 }
 
 /// An adjacency rule
@@ -242,9 +240,8 @@ mod tests {
                 },
                 required_provinces: vec![ProvinceId(10033), ProvinceId(10101)],
                 icon: Icon(ProvinceId(10101)),
-                offset: vec![-3, 0, -6],
+                offset: vec![-3.0, 0.0, -6.0],
                 is_disabled: None,
-                is_friend: None
             })
         );
     }

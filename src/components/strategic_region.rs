@@ -329,7 +329,6 @@ mod tests {
         let path = Path::new("./test/map/strategicregions/1-StrategicRegion.txt");
         let strategic_region =
             StrategicRegion::from_file(path).expect("Failed to load strategic region");
-        println!("{:?}", strategic_region);
         assert_eq!(
             strategic_region,
             StrategicRegion {

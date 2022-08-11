@@ -4,10 +4,11 @@ use eframe::egui::{
     menu::bar, CentralPanel, ColorImage, SidePanel, TextureHandle, TopBottomPanel, Ui,
 };
 use eframe::App;
-use egui::Vec2;
+use egui::{ImageButton, Pos2, Rect, Sense, Vec2};
 use image::{DynamicImage, RgbImage};
 use indicatif::InMemoryTerm;
 use log::error;
+use std::mem::swap;
 use std::path::PathBuf;
 use tokio::sync::mpsc::{channel, Receiver};
 use tokio::task::JoinHandle;
@@ -49,6 +50,8 @@ struct WorldGenApp {
     images: MapImages,
     textures: MapTextures,
     terminal: InMemoryTerm,
+    map_region: Option<Rect>,
+    zoom_level: Option<f32>,
 }
 
 impl Default for WorldGenApp {
@@ -65,6 +68,8 @@ impl Default for WorldGenApp {
             images: MapImages::default(),
             textures: MapTextures::default(),
             terminal: InMemoryTerm::new(16, 240),
+            map_region: None,
+            zoom_level: None,
         }
     }
 }
@@ -146,17 +151,51 @@ impl WorldGenApp {
         ui: &mut Ui,
         image: &mut Option<ColorImage>,
         texture: &mut Option<TextureHandle>,
+        viewport: &Option<Rect>,
     ) {
         if let Some(image) = image.take() {
             *texture = Some(ui.ctx().load_texture("map", image));
         }
         if let Some(tex) = &texture {
+            let mut viewport = viewport.map_or(
+                Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
+                |r| r,
+            );
+            viewport.min.x = viewport.min.x.clamp(0.0, 1.0);
+            viewport.min.y = viewport.min.y.clamp(0.0, 1.0);
+            viewport.max.x = viewport.max.x.clamp(0.0, 1.0);
+            viewport.max.y = viewport.max.y.clamp(0.0, 1.0);
+            if viewport.min.x > viewport.max.x {
+                swap(&mut viewport.min.x, &mut viewport.max.x);
+            }
+            if viewport.min.y > viewport.max.y {
+                swap(&mut viewport.min.y, &mut viewport.max.y);
+            }
+
             let size = ui.ctx().available_rect().size() * 0.8;
             let tex_size = tex.size_vec2();
             let x_scale = size.x / tex_size.x;
             let y_scale = size.y / tex_size.y;
             let min_scale = x_scale.min(y_scale);
-            ui.image(tex, tex_size * min_scale);
+            let image = ImageButton::new(tex, tex_size * min_scale)
+                .uv(viewport)
+                .sense(Sense {
+                    click: true,
+                    drag: true,
+                    focusable: false,
+                });
+            let map = ui.add(image);
+            let mouse_pos = ui.ctx().pointer_latest_pos();
+            if let Some(pos) = mouse_pos {
+                let map_rect = map.rect;
+                if map_rect.contains(pos) {
+                    let map_uv = Pos2::new(
+                        (pos.x - map_rect.min.x).round(),
+                        (pos.y - map_rect.min.y).round(),
+                    );
+                    ui.label(format!("({:?}, {:?})", map_uv.x, map_uv.y));
+                }
+            }
         }
     }
 
@@ -316,6 +355,7 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.heightmap_image,
                         &mut self.textures.heightmap_texture,
+                        &self.map_region,
                     );
                 }
                 MapDisplayMode::Terrain => {
@@ -323,6 +363,7 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.terrain_image,
                         &mut self.textures.terrain_texture,
+                        &self.map_region,
                     );
                 }
                 MapDisplayMode::Provinces => {
@@ -330,6 +371,7 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.provinces_image,
                         &mut self.textures.provinces_texture,
+                        &self.map_region,
                     );
                 }
                 MapDisplayMode::Rivers => {
@@ -337,6 +379,7 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.rivers_image,
                         &mut self.textures.rivers_texture,
+                        &self.map_region,
                     );
                 }
             }
