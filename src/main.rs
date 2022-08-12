@@ -1,4 +1,29 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+//! Map generator for Hearts of Iron IV by Paradox Interactive.
+#![warn(
+    clippy::all,
+    clippy::restriction,
+    clippy::pedantic,
+    clippy::nursery,
+    clippy::cargo,
+    rust_2018_idioms,
+    missing_debug_implementations,
+    missing_docs
+)]
+#![allow(clippy::module_inception)]
+#![allow(clippy::implicit_return)]
+#![allow(clippy::blanket_clippy_restriction_lints)]
+#![allow(clippy::shadow_same)]
+#![allow(clippy::module_name_repetitions)]
+#![allow(clippy::cargo_common_metadata)]
+#![allow(clippy::separated_literal_suffix)]
+#![allow(clippy::float_arithmetic)]
+#![allow(clippy::struct_excessive_bools)]
+#![allow(clippy::use_self)]
+#![allow(clippy::pattern_type_mismatch)]
+#![allow(clippy::pub_use)]
+#![allow(clippy::missing_docs_in_private_items)]
+#![allow(clippy::expect_used)]
 
 use eframe::egui::{
     menu::bar, CentralPanel, ColorImage, SidePanel, TextureHandle, TopBottomPanel, Ui,
@@ -50,7 +75,7 @@ struct WorldGenApp {
     images: MapImages,
     textures: MapTextures,
     terminal: InMemoryTerm,
-    map_region: Option<Rect>,
+    viewport: Option<Rect>,
     zoom_level: Option<f32>,
 }
 
@@ -68,7 +93,7 @@ impl Default for WorldGenApp {
             images: MapImages::default(),
             textures: MapTextures::default(),
             terminal: InMemoryTerm::new(16, 240),
-            map_region: None,
+            viewport: None,
             zoom_level: None,
         }
     }
@@ -113,8 +138,9 @@ impl WorldGenApp {
         }
     }
 
+    #[allow(clippy::as_conversions)]
     fn load_map_image(image: RgbImage) -> ColorImage {
-        let size = [image.width() as _, image.height() as _];
+        let size = [image.width() as usize, image.height() as usize];
         let image_buffer = DynamicImage::ImageRgb8(image).into_rgba8();
         let pixels = image_buffer.as_flat_samples();
         ColorImage::from_rgba_unmultiplied(size, pixels.as_slice())
@@ -147,56 +173,143 @@ impl WorldGenApp {
         *self = WorldGenApp::default();
     }
 
+    #[allow(clippy::too_many_lines)]
+    #[allow(clippy::cast_possible_truncation)]
+    #[allow(clippy::as_conversions)]
     fn render_map(
         ui: &mut Ui,
         image: &mut Option<ColorImage>,
         texture: &mut Option<TextureHandle>,
-        viewport: &Option<Rect>,
+        viewport: &mut Option<Rect>,
+        zoom_level: &mut Option<f32>,
     ) {
-        if let Some(image) = image.take() {
-            *texture = Some(ui.ctx().load_texture("map", image));
+        if let Some(i) = image.take() {
+            *texture = Some(ui.ctx().load_texture("map", i));
         }
         if let Some(tex) = &texture {
-            let mut viewport = viewport.map_or(
+            let tex_size = tex.size_vec2();
+            let mut viewport_rect = viewport.map_or(
                 Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
                 |r| r,
             );
-            viewport.min.x = viewport.min.x.clamp(0.0, 1.0);
-            viewport.min.y = viewport.min.y.clamp(0.0, 1.0);
-            viewport.max.x = viewport.max.x.clamp(0.0, 1.0);
-            viewport.max.y = viewport.max.y.clamp(0.0, 1.0);
-            if viewport.min.x > viewport.max.x {
-                swap(&mut viewport.min.x, &mut viewport.max.x);
-            }
-            if viewport.min.y > viewport.max.y {
-                swap(&mut viewport.min.y, &mut viewport.max.y);
-            }
+            clamp_viewport(&mut viewport_rect);
+            let viewport_center = viewport_rect.min + (viewport_rect.max - viewport_rect.min) / 2.0;
 
             let size = ui.ctx().available_rect().size() * 0.8;
-            let tex_size = tex.size_vec2();
+
             let x_scale = size.x / tex_size.x;
             let y_scale = size.y / tex_size.y;
             let min_scale = x_scale.min(y_scale);
-            let image = ImageButton::new(tex, tex_size * min_scale)
-                .uv(viewport)
-                .sense(Sense {
-                    click: true,
-                    drag: true,
-                    focusable: false,
-                });
-            let map = ui.add(image);
+            let image_button = ImageButton::new(tex, tex_size * min_scale)
+                .uv(viewport_rect)
+                .sense(Sense::click_and_drag());
+
+            let map = ui.add(image_button);
+
+            let map_rect = map.rect;
             let mouse_pos = ui.ctx().pointer_latest_pos();
             if let Some(pos) = mouse_pos {
-                let map_rect = map.rect;
                 if map_rect.contains(pos) {
-                    let map_uv = Pos2::new(
-                        (pos.x - map_rect.min.x).round(),
-                        (pos.y - map_rect.min.y).round(),
+                    let scroll = ui.input().scroll_delta.y;
+                    if scroll > 0.0 {
+                        *zoom_level = zoom_level.map_or(Some(0.01), |z| {
+                            if z < 0.7 {
+                                Some(truncate_to_decimal_places((z + 0.01).min(0.99), 4))
+                            } else {
+                                Some(truncate_to_decimal_places((z + 0.005).min(0.99), 4))
+                            }
+                        });
+                    }
+                    if scroll < 0.0 {
+                        *zoom_level = zoom_level.map_or(Some(0.01), |z| {
+                            if z < 0.7 {
+                                Some(truncate_to_decimal_places((z - 0.01).max(0.0), 4))
+                            } else {
+                                Some(truncate_to_decimal_places((z - 0.005).max(0.0), 4))
+                            }
+                        });
+                    }
+                    let mut zoomed_viewport = Rect::from_min_max(
+                        Pos2::new(
+                            zoom_level.map_or(0.0, |z| z / 2.0),
+                            zoom_level.map_or(0.0, |z| z / 2.0),
+                        ),
+                        Pos2::new(
+                            zoom_level.map_or(1.0, |z| 1.0 - z / 2.0),
+                            zoom_level.map_or(1.0, |z| 1.0 - z / 2.0),
+                        ),
                     );
-                    ui.label(format!("({:?}, {:?})", map_uv.x, map_uv.y));
+                    let zoomed_viewport_center =
+                        zoomed_viewport.min + (zoomed_viewport.max - zoomed_viewport.min) / 2.0;
+
+                    let translate = viewport_center - zoomed_viewport_center;
+
+                    if translate.length() > 0.00001 {
+                        zoomed_viewport.max = (zoomed_viewport.max + translate)
+                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+                        zoomed_viewport.min = (zoomed_viewport.min + translate)
+                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+                    }
+                    if scroll != 0.0 {
+                        viewport_rect = zoomed_viewport;
+                        *viewport = Some(viewport_rect);
+                    }
+                    let mut map_drag = map.drag_delta();
+                    map_drag.x =
+                        map_drag.x / map_rect.width() * zoom_level.map_or(1.0, |z| 1.0 - z);
+                    map_drag.y =
+                        map_drag.y / map_rect.height() * zoom_level.map_or(1.0, |z| 1.0 - z);
+                    if map_drag.x != 0.0 || map_drag.y != 0.0 {
+                        let new_min = (viewport_rect.min - map_drag)
+                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+
+                        let new_max = (viewport_rect.max - map_drag)
+                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+
+                        let new_rect = Rect::from_min_max(new_min, new_max);
+
+                        if (new_rect.width() - viewport_rect.width()).abs() < f32::EPSILON
+                            && (new_rect.height() - viewport_rect.height()).abs() < f32::EPSILON
+                        {
+                            viewport_rect = Rect::from_min_max(new_min, new_max);
+                            *viewport = Some(viewport_rect);
+                        }
+                    }
+                    let tex_uv = Self::project_to_texture(&viewport_rect, tex_size, pos, &map_rect);
+                    ui.label(format!(
+                        "Map Coordinate: ({:?}, {:?})",
+                        tex_uv.x as i32, tex_uv.y as i32
+                    ));
                 }
             }
         }
+    }
+
+    /// Projects a position from the UI space to the texture space.
+    #[allow(clippy::similar_names)]
+    fn project_to_texture(viewport: &Rect, tex_size: Vec2, pos: Pos2, map_rect: &Rect) -> Pos2 {
+        // Get relative position of the map_rect
+        let map_rect_u = pos.x - map_rect.min.x;
+        let map_rect_v = pos.y - map_rect.min.y;
+        // Project map_rect_uv to the viewport uv
+        let map_rect_u_size = map_rect.max.x - map_rect.min.x;
+        let map_rect_v_size = map_rect.max.y - map_rect.min.y;
+
+        // Viewports are clamped to the range [0, 1], so get the size of the viewport in pixels.
+        let viewport_u_size = viewport.max.x * tex_size.x - viewport.min.x * tex_size.x;
+        let viewport_v_size = viewport.max.y * tex_size.y - viewport.min.y * tex_size.y;
+
+        // Get the relative scale of the viewport space and the ui space
+        let viewport_map_u_scale = viewport_u_size / map_rect_u_size;
+        let viewport_map_v_scale = viewport_v_size / map_rect_v_size;
+
+        let viewport_u = viewport_map_u_scale * map_rect_u;
+        let viewport_v = viewport_map_v_scale * map_rect_v;
+
+        // Project viewport uv to texture uv
+        let tex_u = viewport.min.x.mul_add(tex_size.x, viewport_u).round();
+        let tex_v = viewport.min.y.mul_add(tex_size.y, viewport_v).round();
+        Pos2::new(tex_u, tex_v)
     }
 
     fn update_item<T>(
@@ -237,10 +350,13 @@ impl WorldGenApp {
     }
 
     fn load_map_button(&mut self, ui: &mut Ui) {
-        if self.map.is_none() && self.map_handle.is_none() {
+        if self.map.is_none() && self.map_handle.is_none() && self.root_path.is_some() {
             if ui.button("Load Map").clicked() {
                 let (tx, rx) = channel(1);
-                let path = self.root_path.clone().unwrap();
+                let path = self
+                    .root_path
+                    .clone()
+                    .expect("Root path should be defined if `Load Map` is visible.");
                 self.map_receiver = Some(rx);
                 let terminal = self.terminal.clone();
 
@@ -267,6 +383,8 @@ impl WorldGenApp {
 }
 
 impl App for WorldGenApp {
+    #[allow(clippy::too_many_lines)]
+    #[allow(clippy::shadow_unrelated)]
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         Self::update_item(&mut self.map_receiver, &mut self.map, &mut self.map_handle);
         Self::update_item(
@@ -279,7 +397,7 @@ impl App for WorldGenApp {
         TopBottomPanel::top("top_panel").show(ctx, |ui| {
             bar(ui, |ui| {
                 ui.menu_button("File", |ui| {
-                    if ui.button("Open root folder").clicked() {
+                    if ui.button("Open root folder").clicked() && self.root_path_handle.is_none() {
                         self.clear_map();
                         let (tx, rx) = channel(1);
                         self.root_path_receiver = Some(rx);
@@ -355,7 +473,8 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.heightmap_image,
                         &mut self.textures.heightmap_texture,
-                        &self.map_region,
+                        &mut self.viewport,
+                        &mut self.zoom_level,
                     );
                 }
                 MapDisplayMode::Terrain => {
@@ -363,7 +482,8 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.terrain_image,
                         &mut self.textures.terrain_texture,
-                        &self.map_region,
+                        &mut self.viewport,
+                        &mut self.zoom_level,
                     );
                 }
                 MapDisplayMode::Provinces => {
@@ -371,7 +491,8 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.provinces_image,
                         &mut self.textures.provinces_texture,
-                        &self.map_region,
+                        &mut self.viewport,
+                        &mut self.zoom_level,
                     );
                 }
                 MapDisplayMode::Rivers => {
@@ -379,13 +500,40 @@ impl App for WorldGenApp {
                         ui,
                         &mut self.images.rivers_image,
                         &mut self.textures.rivers_texture,
-                        &self.map_region,
+                        &mut self.viewport,
+                        &mut self.zoom_level,
                     );
                 }
             }
             ctx.request_repaint();
         });
     }
+}
+
+fn clamp_viewport(mut viewport: &mut Rect) {
+    viewport.min.x = viewport.min.x.clamp(0.0, 1.0);
+    viewport.min.y = viewport.min.y.clamp(0.0, 1.0);
+    viewport.max.x = viewport.max.x.clamp(0.0, 1.0);
+    viewport.max.y = viewport.max.y.clamp(0.0, 1.0);
+    if viewport.min.x > viewport.max.x {
+        swap(&mut viewport.min.x, &mut viewport.max.x);
+    }
+    if viewport.min.y > viewport.max.y {
+        swap(&mut viewport.min.y, &mut viewport.max.y);
+    }
+}
+
+/// Truncates a floating point number to the specified number of decimal places.
+#[must_use]
+#[inline]
+pub fn truncate_to_decimal_places(num: f32, places: i32) -> f32 {
+    let ten = 10.0_f32.powi(places);
+    // Need to check here because floats will become infinite if they are too large.  We are safe
+    // to return `num` in this case because f64s cannot represent fractional values beyond 2^53.
+    if num > f32::MAX / ten || num < f32::MIN / ten {
+        return num;
+    }
+    (num * ten).floor() / ten
 }
 
 #[tokio::main]
