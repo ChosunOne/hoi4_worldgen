@@ -29,7 +29,7 @@ use eframe::egui::{
     menu::bar, CentralPanel, ColorImage, SidePanel, TextureHandle, TopBottomPanel, Ui,
 };
 use eframe::App;
-use egui::{ImageButton, Pos2, Rect, Sense, Vec2};
+use egui::{ImageButton, Pos2, Rect, Response, Sense, Vec2};
 use image::{DynamicImage, RgbImage};
 use indicatif::InMemoryTerm;
 use log::error;
@@ -173,7 +173,6 @@ impl WorldGenApp {
         *self = WorldGenApp::default();
     }
 
-    #[allow(clippy::too_many_lines)]
     #[allow(clippy::cast_possible_truncation)]
     #[allow(clippy::as_conversions)]
     fn render_map(
@@ -188,93 +187,28 @@ impl WorldGenApp {
         }
         if let Some(tex) = &texture {
             let tex_size = tex.size_vec2();
-            let mut viewport_rect = viewport.map_or(
-                Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
-                |r| r,
-            );
-            clamp_viewport(&mut viewport_rect);
-            let viewport_center = viewport_rect.min + (viewport_rect.max - viewport_rect.min) / 2.0;
-
             let size = ui.ctx().available_rect().size() * 0.8;
 
             let x_scale = size.x / tex_size.x;
             let y_scale = size.y / tex_size.y;
             let min_scale = x_scale.min(y_scale);
+            let mut viewport_rect = viewport.map_or(
+                Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
+                |r| r,
+            );
+            clamp_viewport(&mut viewport_rect);
             let image_button = ImageButton::new(tex, tex_size * min_scale)
                 .uv(viewport_rect)
                 .sense(Sense::click_and_drag());
 
             let map = ui.add(image_button);
-
             let map_rect = map.rect;
             let mouse_pos = ui.ctx().pointer_latest_pos();
             if let Some(pos) = mouse_pos {
                 if map_rect.contains(pos) {
-                    let scroll = ui.input().scroll_delta.y;
-                    if scroll > 0.0 {
-                        *zoom_level = zoom_level.map_or(Some(0.01), |z| {
-                            if z < 0.7 {
-                                Some(truncate_to_decimal_places((z + 0.01).min(0.99), 4))
-                            } else {
-                                Some(truncate_to_decimal_places((z + 0.005).min(0.99), 4))
-                            }
-                        });
-                    }
-                    if scroll < 0.0 {
-                        *zoom_level = zoom_level.map_or(Some(0.01), |z| {
-                            if z < 0.7 {
-                                Some(truncate_to_decimal_places((z - 0.01).max(0.0), 4))
-                            } else {
-                                Some(truncate_to_decimal_places((z - 0.005).max(0.0), 4))
-                            }
-                        });
-                    }
-                    let mut zoomed_viewport = Rect::from_min_max(
-                        Pos2::new(
-                            zoom_level.map_or(0.0, |z| z / 2.0),
-                            zoom_level.map_or(0.0, |z| z / 2.0),
-                        ),
-                        Pos2::new(
-                            zoom_level.map_or(1.0, |z| 1.0 - z / 2.0),
-                            zoom_level.map_or(1.0, |z| 1.0 - z / 2.0),
-                        ),
-                    );
-                    let zoomed_viewport_center =
-                        zoomed_viewport.min + (zoomed_viewport.max - zoomed_viewport.min) / 2.0;
-
-                    let translate = viewport_center - zoomed_viewport_center;
-
-                    if translate.length() > 0.00001 {
-                        zoomed_viewport.max = (zoomed_viewport.max + translate)
-                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
-                        zoomed_viewport.min = (zoomed_viewport.min + translate)
-                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
-                    }
-                    if scroll != 0.0 {
-                        viewport_rect = zoomed_viewport;
-                        *viewport = Some(viewport_rect);
-                    }
-                    let mut map_drag = map.drag_delta();
-                    map_drag.x =
-                        map_drag.x / map_rect.width() * zoom_level.map_or(1.0, |z| 1.0 - z);
-                    map_drag.y =
-                        map_drag.y / map_rect.height() * zoom_level.map_or(1.0, |z| 1.0 - z);
-                    if map_drag.x != 0.0 || map_drag.y != 0.0 {
-                        let new_min = (viewport_rect.min - map_drag)
-                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
-
-                        let new_max = (viewport_rect.max - map_drag)
-                            .clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
-
-                        let new_rect = Rect::from_min_max(new_min, new_max);
-
-                        if (new_rect.width() - viewport_rect.width()).abs() < f32::EPSILON
-                            && (new_rect.height() - viewport_rect.height()).abs() < f32::EPSILON
-                        {
-                            viewport_rect = Rect::from_min_max(new_min, new_max);
-                            *viewport = Some(viewport_rect);
-                        }
-                    }
+                    let scroll = Self::handle_scroll(ui, zoom_level);
+                    Self::handle_zoom(viewport, zoom_level, viewport_rect, scroll);
+                    Self::handle_drag(viewport, zoom_level, viewport_rect, &map);
                     let tex_uv = Self::project_to_texture(&viewport_rect, tex_size, pos, &map_rect);
                     ui.label(format!(
                         "Map Coordinate: ({:?}, {:?})",
@@ -285,23 +219,105 @@ impl WorldGenApp {
         }
     }
 
+    fn handle_drag(
+        viewport: &mut Option<Rect>,
+        zoom_level: &mut Option<f32>,
+        mut viewport_rect: Rect,
+        map: &Response,
+    ) {
+        let map_rect = map.rect;
+        let mut map_drag = map.drag_delta();
+        map_drag.x = map_drag.x / map_rect.width() * zoom_level.map_or(1.0, |z| 1.0 - z);
+        map_drag.y = map_drag.y / map_rect.height() * zoom_level.map_or(1.0, |z| 1.0 - z);
+        if map_drag.x != 0.0 || map_drag.y != 0.0 {
+            let new_min =
+                (viewport_rect.min - map_drag).clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+
+            let new_max =
+                (viewport_rect.max - map_drag).clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+
+            let new_rect = Rect::from_min_max(new_min, new_max);
+
+            if (new_rect.width() - viewport_rect.width()).abs() < f32::EPSILON
+                && (new_rect.height() - viewport_rect.height()).abs() < f32::EPSILON
+            {
+                viewport_rect = Rect::from_min_max(new_min, new_max);
+                *viewport = Some(viewport_rect);
+            }
+        }
+    }
+
+    fn handle_zoom(
+        viewport: &mut Option<Rect>,
+        zoom_level: &mut Option<f32>,
+        mut viewport_rect: Rect,
+        scroll: f32,
+    ) {
+        let mut zoomed_viewport = Rect::from_min_max(
+            Pos2::new(
+                zoom_level.map_or(0.0, |z| z / 2.0),
+                zoom_level.map_or(0.0, |z| z / 2.0),
+            ),
+            Pos2::new(
+                zoom_level.map_or(1.0, |z| 1.0 - z / 2.0),
+                zoom_level.map_or(1.0, |z| 1.0 - z / 2.0),
+            ),
+        );
+        let zoomed_viewport_center =
+            zoomed_viewport.min + (zoomed_viewport.max - zoomed_viewport.min) / 2.0;
+
+        let viewport_center = viewport_rect.min + (viewport_rect.max - viewport_rect.min) / 2.0;
+        let translate = viewport_center - zoomed_viewport_center;
+
+        if translate.length() > 0.00001 {
+            zoomed_viewport.max =
+                (zoomed_viewport.max + translate).clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+            zoomed_viewport.min =
+                (zoomed_viewport.min + translate).clamp(Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0));
+        }
+        if scroll != 0.0 {
+            viewport_rect = zoomed_viewport;
+            *viewport = Some(viewport_rect);
+        }
+    }
+
+    fn handle_scroll(ui: &mut Ui, zoom_level: &mut Option<f32>) -> f32 {
+        let scroll = ui.input().scroll_delta.y;
+        if scroll > 0.0 {
+            *zoom_level = zoom_level.map_or(Some(0.01), |z| {
+                if z < 0.7 {
+                    Some(truncate_to_decimal_places((z + 0.01).min(0.99), 4))
+                } else {
+                    Some(truncate_to_decimal_places((z + 0.005).min(0.99), 4))
+                }
+            });
+        }
+        if scroll < 0.0 {
+            *zoom_level = zoom_level.map_or(Some(0.01), |z| {
+                if z < 0.7 {
+                    Some(truncate_to_decimal_places((z - 0.01).max(0.0), 4))
+                } else {
+                    Some(truncate_to_decimal_places((z - 0.005).max(0.0), 4))
+                }
+            });
+        }
+        scroll
+    }
+
     /// Projects a position from the UI space to the texture space.
     #[allow(clippy::similar_names)]
     fn project_to_texture(viewport: &Rect, tex_size: Vec2, pos: Pos2, map_rect: &Rect) -> Pos2 {
         // Get relative position of the map_rect
         let map_rect_u = pos.x - map_rect.min.x;
         let map_rect_v = pos.y - map_rect.min.y;
-        // Project map_rect_uv to the viewport uv
-        let map_rect_u_size = map_rect.max.x - map_rect.min.x;
-        let map_rect_v_size = map_rect.max.y - map_rect.min.y;
 
         // Viewports are clamped to the range [0, 1], so get the size of the viewport in pixels.
-        let viewport_u_size = viewport.max.x * tex_size.x - viewport.min.x * tex_size.x;
-        let viewport_v_size = viewport.max.y * tex_size.y - viewport.min.y * tex_size.y;
+        let viewport_u_size = viewport.width() * tex_size.x;
+        let viewport_v_size = viewport.height() * tex_size.y;
 
         // Get the relative scale of the viewport space and the ui space
-        let viewport_map_u_scale = viewport_u_size / map_rect_u_size;
-        let viewport_map_v_scale = viewport_v_size / map_rect_v_size;
+        let viewport_map_u_scale = viewport_u_size / map_rect.width();
+        let viewport_map_v_scale = viewport_v_size / map_rect.height();
 
         let viewport_u = viewport_map_u_scale * map_rect_u;
         let viewport_v = viewport_map_v_scale * map_rect_v;
