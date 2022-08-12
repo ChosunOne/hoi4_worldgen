@@ -1,9 +1,9 @@
 use crate::components::prelude::*;
 use crate::{LoadObject, MapError};
-use image::{open, DynamicImage, Pixel, RgbImage};
+use image::{open, DynamicImage, Pixel, Rgb, RgbImage};
 use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle, TermLike};
 use log::{debug, error, info, warn};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use tokio::task::JoinHandle;
 use tokio::try_join;
@@ -59,6 +59,8 @@ pub struct Map {
     pub weather_positions: WeatherPositions,
     /// The airports definitions
     pub airports: Airports,
+    /// The map of colors to province ids
+    pub provinces_by_color: HashMap<Rgb<u8>, ProvinceId>,
 }
 
 impl Map {
@@ -235,7 +237,7 @@ impl Map {
                 pb.set_message("Loading adjacency rules...\n");
                 let result = AdjacencyRules::from_file(&adjacency_rules_path);
                 pb.finish();
-                return match result {
+                match result {
                     Ok(rules) => Ok(rules),
                     Err(e) => {
                         error!(
@@ -245,7 +247,7 @@ impl Map {
                         );
                         Err(e)
                     }
-                };
+                }
             })
         };
 
@@ -289,7 +291,7 @@ impl Map {
                 pb.set_message("Loading strategic regions...\n");
                 let result = StrategicRegions::from_dir(&strategic_regions_path);
                 pb.finish();
-                return match result {
+                match result {
                     Ok(regions) => Ok(regions),
                     Err(e) => {
                         error!(
@@ -299,7 +301,7 @@ impl Map {
                         );
                         Err(e)
                     }
-                };
+                }
             })
         };
 
@@ -500,6 +502,17 @@ impl Map {
         let weather_positions = weather_positions_result?;
         let airports = airports_result?;
 
+        let provinces_by_color = definitions
+            .definitions
+            .iter()
+            .map(|(id, province)| {
+                (
+                    Rgb::from([province.r.into(), province.g.into(), province.b.into()]),
+                    *id,
+                )
+            })
+            .collect();
+
         progress.println("Loading map complete")?;
         progress.clear()?;
 
@@ -527,6 +540,7 @@ impl Map {
             unit_stacks,
             weather_positions,
             airports,
+            provinces_by_color,
         })
     }
 
@@ -577,7 +591,7 @@ impl Map {
             }
         }
         debug!("{} colors found", color_set.len());
-        for definition in &self.definitions.definitions {
+        for definition in self.definitions.definitions.values() {
             let color = (definition.r, definition.g, definition.b);
             if !color_set.contains(&color) {
                 return Err(MapError::InvalidProvinceColor(color));

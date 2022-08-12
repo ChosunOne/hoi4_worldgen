@@ -135,6 +135,9 @@ pub enum MapError {
     /// An invalid int conversion
     #[error("{0}")]
     InvalidInt(#[from] std::num::TryFromIntError),
+    /// An invalid continent index
+    #[error("{0}")]
+    InvalidContinentIndex(ContinentIndex),
 }
 
 /// Appends a directory to the front of a given path.

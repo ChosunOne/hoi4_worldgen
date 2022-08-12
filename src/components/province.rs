@@ -1,7 +1,7 @@
 use crate::components::wrappers::{Blue, Coastal, ContinentIndex, Green, ProvinceId, Red, Terrain};
 use crate::{LoadCsv, LoadKeys, MapError};
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
 /// An entry in the definitions file.
@@ -46,7 +46,7 @@ pub enum ProvinceType {
 #[non_exhaustive]
 pub struct Definitions {
     /// The definitions for the provinces
-    pub definitions: Vec<Definition>,
+    pub definitions: HashMap<ProvinceId, Definition>,
     /// The terrain types
     pub terrain: HashSet<Terrain>,
 }
@@ -57,7 +57,10 @@ impl Definitions {
     /// If the file cannot be read, or if the file is not a valid csv file, then an error is returned.
     #[inline]
     pub fn from_files(definitions_path: &Path, terrain_path: &Path) -> Result<Self, MapError> {
-        let definitions = Definition::load_csv(definitions_path, false)?;
+        let definitions = Definition::load_csv(definitions_path, false)?
+            .into_iter()
+            .map(|definition| (definition.id, definition))
+            .collect();
         let terrain = Terrain::load_keys(terrain_path, "categories")?;
         Ok(Self {
             definitions,
@@ -73,8 +76,8 @@ impl Definitions {
         let errors = self
             .definitions
             .iter()
-            .filter(|def| !self.terrain.contains(&def.terrain))
-            .map(|def| MapError::InvalidProvinceTerrain(def.clone()))
+            .filter(|(_id, def)| !self.terrain.contains(&def.terrain))
+            .map(|(_id, def)| MapError::InvalidProvinceTerrain(def.clone()))
             .collect::<Vec<_>>();
         if !errors.is_empty() {
             return Err(errors);
@@ -105,7 +108,7 @@ mod tests {
             .expect("Failed to read definitions");
         assert_eq!(definitions.definitions.len(), 17007);
         assert_eq!(
-            definitions.definitions[0],
+            definitions.definitions[&ProvinceId(0)].clone(),
             Definition {
                 id: ProvinceId(0),
                 r: Red(0),
@@ -119,7 +122,7 @@ mod tests {
         );
 
         assert_eq!(
-            definitions.definitions[16999],
+            definitions.definitions[&ProvinceId(16999)].clone(),
             Definition {
                 id: ProvinceId(16999),
                 r: Red(189),

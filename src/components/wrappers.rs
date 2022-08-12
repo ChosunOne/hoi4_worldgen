@@ -1,4 +1,4 @@
-use derive_more::{Display, FromStr};
+use derive_more::{Display, From, FromStr, Into};
 use serde::{Deserialize, Serialize};
 
 /// Whether a province is coastal.
@@ -21,9 +21,11 @@ impl From<String> for Terrain {
 }
 
 /// The continent is a 1-based index into the continent list. Sea provinces must have the continent of 0.
-#[derive(Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize)]
+#[derive(
+    Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, From, Into,
+)]
 #[non_exhaustive]
-pub struct ContinentIndex(pub i32);
+pub struct ContinentIndex(pub usize);
 
 /// A continent identifier
 #[derive(
@@ -135,21 +137,57 @@ pub struct RailLevel(pub i32);
 
 /// A red value.
 #[derive(
-    Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash,
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    From,
+    Into,
 )]
 #[non_exhaustive]
 pub struct Red(pub u8);
 
 /// A green value.
 #[derive(
-    Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash,
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    From,
+    Into,
 )]
 #[non_exhaustive]
 pub struct Green(pub u8);
 
 /// A blue value.
 #[derive(
-    Copy, Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash,
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    From,
+    Into,
 )]
 #[non_exhaustive]
 pub struct Blue(pub u8);
