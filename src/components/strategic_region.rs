@@ -66,9 +66,8 @@ impl StrategicRegion {
                         .read_array()?
                         .values()
                         .flat_map(|v| {
-                            v.read_scalar().map(|v| {
-                                v.to_i64().map(|v| i32::try_from(v).map(|v| ProvinceId(v)))
-                            })
+                            v.read_scalar()
+                                .map(|v| v.to_i64().map(|v| i32::try_from(v).map(ProvinceId)))
                         })
                         .flatten()
                         .flatten()
@@ -121,9 +120,9 @@ pub struct Weather {
 /// i.e. 0.0 30.0 means the weather system occurs between the 1st of January and the 31st, including
 /// these days. Note that the first day and the first month are marked as 0, not as 1.
 /// * temperature scope determines the minimum and maximum temperature for the weather system.
-/// * temperature_day_night scope determines the minimum and maximum temperature variability during
+/// * `temperature_day_night` scope determines the minimum and maximum temperature variability during
 /// day and night for the weather system.
-/// * min_snow_level scope determines the minimum amount of snow that is always present in the
+/// * `min_snow_level` scope determines the minimum amount of snow that is always present in the
 /// weather system. Typically only used for areas with year-round snow.  
 /// Each of the weather states are given a weight, determining how likely the state will occur
 /// within the weather system. The weather states can be found in `/Hearts of Iron IV/common/weather.txt`.
@@ -147,7 +146,9 @@ impl Period {
     /// # Errors
     /// If the given reader is invalid
     #[inline]
-    pub fn from_reader(reader: &ObjectReader<Windows1252Encoding>) -> Result<Self, MapError> {
+    pub fn from_reader(
+        reader: &ObjectReader<'_, '_, Windows1252Encoding>,
+    ) -> Result<Self, MapError> {
         let fields = reader.fields().collect::<Vec<_>>();
         let mut between = vec![];
         let mut temperature = vec![];
@@ -264,7 +265,7 @@ impl StrategicRegions {
             .split('-')
             .collect::<Vec<_>>();
         let id = name_parts
-            .get(0)
+            .first()
             .ok_or_else(|| {
                 MapError::InvalidStrategicRegionFileName(filename.to_string_lossy().to_string())
             })?

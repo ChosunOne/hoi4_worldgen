@@ -47,7 +47,7 @@ impl FromStr for SupplyNodes {
         for line in s.lines() {
             let parts = line.trim().split(' ').collect::<Vec<_>>();
             let one = parts
-                .get(0)
+                .first()
                 .ok_or_else(|| MapError::InvalidSupplyNode(line.to_owned()))?;
             if parts.len() != 2 || *one != "1" {
                 return Err(MapError::InvalidSupplyNode(line.to_owned()));
