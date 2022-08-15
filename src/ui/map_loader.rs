@@ -1,3 +1,4 @@
+use crate::ui::map_textures::MapTextures;
 use actix::{Actor, Addr, AsyncContext, Context, Handler, Message};
 use indicatif::InMemoryTerm;
 use log::{debug, error};
@@ -102,15 +103,6 @@ impl Handler<LoadMap> for MapLoader {
             self_addr.do_send(UpdateMap::new(map));
         });
         self.map_handle = Some(map_loading_handle);
-    }
-}
-
-impl Handler<IsMapLoaded> for MapLoader {
-    type Result = bool;
-
-    fn handle(&mut self, _msg: IsMapLoaded, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("IsMapLoaded: {}", self.map.is_some());
-        self.map.is_some()
     }
 }
 

@@ -1,6 +1,6 @@
 use crate::components::prelude::*;
 use crate::{LoadObject, MapDisplayMode, MapError};
-use actix::{Actor, Context, Handler, Message};
+use actix::{Actor, Context, Handler, Message, MessageResult};
 use egui::Pos2;
 use image::{open, DynamicImage, Pixel, Rgb, RgbImage};
 use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle, TermLike};
@@ -665,30 +665,38 @@ impl GetContinentFromIndex {
 }
 
 /// A request to get an `RgbImage` from a supplied `MapDisplayMode`
+#[allow(clippy::exhaustive_enums)]
 #[derive(Message, Debug)]
-#[rtype(result = "Option<RgbImage>")]
-#[non_exhaustive]
-pub struct GetMapImage(pub MapDisplayMode);
+#[rtype(result = "RgbImage")]
+pub enum GetMapImage {
+    HeightMap,
+    Terrain,
+    Provinces,
+    Rivers,
+}
 
-impl GetMapImage {
-    /// Creates a new request for a province id
+impl From<MapDisplayMode> for GetMapImage {
     #[inline]
-    #[must_use]
-    pub const fn new(image: MapDisplayMode) -> Self {
-        Self(image)
+    fn from(mode: MapDisplayMode) -> Self {
+        match mode {
+            MapDisplayMode::HeightMap => Self::HeightMap,
+            MapDisplayMode::Terrain => Self::Terrain,
+            MapDisplayMode::Provinces => Self::Provinces,
+            MapDisplayMode::Rivers => Self::Rivers,
+        }
     }
 }
 
 impl Handler<GetMapImage> for Map {
-    type Result = Option<RgbImage>;
+    type Result = MessageResult<GetMapImage>;
 
     #[inline]
     fn handle(&mut self, msg: GetMapImage, _ctx: &mut Context<Self>) -> Self::Result {
-        match msg.0 {
-            MapDisplayMode::Terrain => Some(self.terrain.clone()),
-            MapDisplayMode::Rivers => Some(self.rivers.clone()),
-            MapDisplayMode::HeightMap => Some(self.heightmap.clone()),
-            _ => None,
+        match msg {
+            GetMapImage::HeightMap => MessageResult(self.heightmap.clone()),
+            GetMapImage::Terrain => MessageResult(self.terrain.clone()),
+            GetMapImage::Provinces => MessageResult(self.provinces.clone()),
+            GetMapImage::Rivers => MessageResult(self.rivers.clone()),
         }
     }
 }

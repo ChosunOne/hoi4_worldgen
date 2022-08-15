@@ -43,8 +43,8 @@ pub mod components;
 pub mod map;
 
 /// The map display mode
+#[allow(clippy::exhaustive_enums)]
 #[derive(Default, Display, Copy, Clone, Debug, PartialEq, Eq)]
-#[non_exhaustive]
 pub enum MapDisplayMode {
     #[default]
     HeightMap,

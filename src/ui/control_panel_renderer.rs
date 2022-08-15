@@ -1,4 +1,4 @@
-use crate::ui::map_loader::{IsMapLoaded, IsMapLoading, LoadMap, MapLoader};
+use crate::ui::map_loader::{GetMap, IsMapLoading, LoadMap, MapLoader};
 use crate::ui::map_mode::{GetMapMode, SetMapMode};
 use crate::ui::root_path::GetRootPath;
 use crate::{MapError, MapMode, RootPath};
@@ -62,14 +62,14 @@ impl Handler<RenderControlPanel> for ControlPanelRenderer {
         let terminal = self.terminal.clone();
         Box::pin(async move {
             let root_path: Option<PathBuf> = root_path_addr.send(GetRootPath).await?;
-            let is_map_loaded = map_loader_addr.send(IsMapLoaded).await?;
+            let map = map_loader_addr.send(GetMap).await?;
             let is_map_loading = map_loader_addr.send(IsMapLoading).await?;
             TopBottomPanel::top("control_panel").show(&msg.context, |ui| {
                 if let Some(pathbuf) = root_path {
                     ui.horizontal(|ui| {
                         ui.label("Root Directory: ");
                         ui.label(pathbuf.display().to_string());
-                        if !is_map_loaded && ui.button("Load Map").clicked() {
+                        if !map.is_some() && ui.button("Load Map").clicked() {
                             if let Err(e) =
                                 map_loader_addr.try_send(LoadMap::new(pathbuf, terminal))
                             {
@@ -83,7 +83,7 @@ impl Handler<RenderControlPanel> for ControlPanelRenderer {
                 } else {
                     ui.heading("Please select a root folder");
                 }
-                if is_map_loaded {
+                if map.is_some() {
                     ui.horizontal(|ui| {
                         if ui.button("Height Map").clicked() {
                             map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::HeightMap));
