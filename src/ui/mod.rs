@@ -1,3 +1,4 @@
+pub mod central_panel_renderer;
 pub mod control_panel_renderer;
 pub mod map_loader;
 pub mod map_mode;
@@ -6,6 +7,7 @@ pub mod root_path;
 pub mod selection;
 pub mod top_menu_renderer;
 
+use crate::ui::central_panel_renderer::CentralPanelRenderer;
 use crate::ui::control_panel_renderer::ControlPanelRenderer;
 use crate::ui::map_mode::MapMode;
 use crate::ui::right_panel_renderer::RightPanelRenderer;
@@ -16,6 +18,7 @@ pub struct UiRenderer {
     pub top_menu_renderer: Addr<TopMenuRenderer>,
     pub control_panel_renderer: Addr<ControlPanelRenderer>,
     pub right_panel_renderer: Addr<RightPanelRenderer>,
+    pub central_panel_renderer: Addr<CentralPanelRenderer>,
     pub map_mode: Addr<MapMode>,
 }
 
@@ -25,12 +28,14 @@ impl UiRenderer {
         top_menu_renderer: Addr<TopMenuRenderer>,
         control_panel_renderer: Addr<ControlPanelRenderer>,
         right_panel_renderer: Addr<RightPanelRenderer>,
+        central_panel_renderer: Addr<CentralPanelRenderer>,
         map_mode: Addr<MapMode>,
     ) -> Self {
         Self {
             top_menu_renderer,
             control_panel_renderer,
             right_panel_renderer,
+            central_panel_renderer,
             map_mode,
         }
     }

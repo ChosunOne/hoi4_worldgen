@@ -27,6 +27,7 @@
 
 mod ui;
 
+use crate::ui::central_panel_renderer::{CentralPanelRenderer, RenderCentralPanel};
 use crate::ui::control_panel_renderer::{ControlPanelRenderer, RenderControlPanel};
 use crate::ui::map_loader::MapLoader;
 use crate::ui::map_mode::MapMode;
@@ -155,10 +156,13 @@ impl WorldGenApp {
                 let right_panel_renderer =
                     RightPanelRenderer::new(map_mode.clone(), selection, map_loader, terminal)
                         .start();
+                debug!("Starting central panel renderer");
+                let central_panel_renderer = CentralPanelRenderer::new(map_mode.clone()).start();
                 let ui_renderer = UiRenderer::new(
                     top_menu_renderer,
                     control_panel_renderer,
                     right_panel_renderer,
+                    central_panel_renderer,
                     map_mode,
                 );
                 debug!("Sending Ui Renderer");
@@ -502,7 +506,6 @@ impl WorldGenApp {
             }
             m => error!("Unknown Mode: {m}"),
         }
-        ctx.request_repaint();
     }
 
     fn render_panels(&mut self, ctx: Context) -> Result<(), MapError> {
@@ -522,20 +525,16 @@ impl WorldGenApp {
                 let render_right_panel = RenderRightPanel::new(ctx.clone());
                 debug!("Block on RightPanel");
                 rt.block_on(ui_renderer.right_panel_renderer.send(render_right_panel))??;
+                let render_central_panel = RenderCentralPanel::new(ctx.clone());
+                rt.block_on(
+                    ui_renderer
+                        .central_panel_renderer
+                        .send(render_central_panel),
+                )??;
                 debug!("Render Loop End");
             }
         }
 
-        // SidePanel::right("right_panel")
-        //     .resizable(false)
-        //     .min_width(200.0)
-        //     .show(ctx, |ui| {
-        //         self.render_info_and_log_panel(ctx, ui);
-        //     });
-        //
-        // CentralPanel::default().show(ctx, |ui| {
-        //     self.render_map_panel(ctx, ui);
-        // });
         Ok(())
     }
 }
