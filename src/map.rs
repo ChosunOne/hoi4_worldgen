@@ -1,5 +1,7 @@
 use crate::components::prelude::*;
-use crate::{LoadObject, MapError};
+use crate::{LoadObject, MapDisplayMode, MapError};
+use actix::{Actor, Context, Handler, Message};
+use egui::Pos2;
 use image::{open, DynamicImage, Pixel, Rgb, RgbImage};
 use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle, TermLike};
 use log::{debug, error, info, warn};
@@ -73,7 +75,7 @@ impl Map {
     #[inline]
     #[allow(clippy::too_many_lines)]
     #[allow(clippy::integer_arithmetic)]
-    pub async fn new<T: TermLike + Clone + 'static>(
+    pub fn new<T: TermLike + Clone + 'static>(
         root_path: &Path,
         term: &Option<T>,
     ) -> Result<Self, MapError> {
@@ -140,6 +142,7 @@ impl Map {
             Path::new("cities.bmp"),
         );
 
+        let rt = tokio::runtime::Handle::current();
         let (
             provinces_result,
             terrain_result,
@@ -148,15 +151,17 @@ impl Map {
             trees_result,
             normal_map_result,
             cities_map_result,
-        ) = try_join!(
-            provinces_handle,
-            terrain_handle,
-            rivers_handle,
-            heightmap_handle,
-            trees_handle,
-            normal_map_handle,
-            cities_map_handle
-        )?;
+        ) = rt.block_on(async move {
+            try_join!(
+                provinces_handle,
+                terrain_handle,
+                rivers_handle,
+                heightmap_handle,
+                trees_handle,
+                normal_map_handle,
+                cities_map_handle
+            )
+        })?;
         let provinces = provinces_result?;
         let terrain = terrain_result?;
         let rivers = rivers_result?;
@@ -174,7 +179,7 @@ impl Map {
             let normal_map_clone = normal_map.clone();
             let cities_map_clone = cities_map.clone();
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Verifying images...\n");
                 let result = verify_images(
                     &provinces_clone,
@@ -466,24 +471,26 @@ impl Map {
             unit_stacks_result,
             weather_positions_result,
             airports_result,
-        ) = try_join!(
-            verify_images_handle,
-            definitions_handle,
-            continents_handle,
-            adjacency_rules_handle,
-            adjacencies_handle,
-            seasons_handle,
-            strategic_regions_handle,
-            supply_nodes_handle,
-            railways_handle,
-            buildings_handle,
-            cities_handle,
-            colors_handle,
-            rocket_sites_handle,
-            unit_stacks_handle,
-            weather_positions_handle,
-            airports_handle
-        )?;
+        ) = rt.block_on(async move {
+            try_join!(
+                verify_images_handle,
+                definitions_handle,
+                continents_handle,
+                adjacency_rules_handle,
+                adjacencies_handle,
+                seasons_handle,
+                strategic_regions_handle,
+                supply_nodes_handle,
+                railways_handle,
+                buildings_handle,
+                cities_handle,
+                colors_handle,
+                rocket_sites_handle,
+                unit_stacks_handle,
+                weather_positions_handle,
+                airports_handle
+            )
+        })?;
 
         verify_result?;
         let definitions = definitions_result?;
@@ -554,7 +561,7 @@ impl Map {
         let path = root_path.to_path_buf();
         let pb = Self::create_map_progress_indicator(progress, progress_style);
         let ip = image_path.to_path_buf();
-        tokio::spawn(async move {
+        tokio::task::spawn_blocking(move || {
             pb.set_message(format!("Loading {} \n", ip.display()));
             let image_result = load_image(&path, &ip);
             if image_result.is_err() {
@@ -605,6 +612,121 @@ impl Map {
         }
 
         Ok(())
+    }
+}
+
+impl Actor for Map {
+    type Context = Context<Self>;
+}
+
+/// A request to get a `ProvinceId` from a supplied texture uv coordinate
+#[derive(Message, Debug)]
+#[rtype(result = "Option<ProvinceId>")]
+#[non_exhaustive]
+pub struct GetProvinceIdFromPoint(pub Pos2);
+
+impl GetProvinceIdFromPoint {
+    /// Creates a new request for a province id
+    #[inline]
+    #[must_use]
+    pub const fn new(pos: Pos2) -> Self {
+        Self(pos)
+    }
+}
+
+/// A request to get a `Definition` from a supplied `ProvinceId`
+#[derive(Message, Debug)]
+#[rtype(result = "Option<Definition>")]
+#[non_exhaustive]
+pub struct GetProvinceDefinitionFromId(pub ProvinceId);
+
+impl GetProvinceDefinitionFromId {
+    /// Creates a new request for a province id
+    #[inline]
+    #[must_use]
+    pub const fn new(id: ProvinceId) -> Self {
+        Self(id)
+    }
+}
+
+/// A request to get a `Continent` from a supplied `ContinentIndex`
+#[derive(Message, Debug)]
+#[rtype(result = "Option<Continent>")]
+#[non_exhaustive]
+pub struct GetContinentFromIndex(pub ContinentIndex);
+
+impl GetContinentFromIndex {
+    /// Creates a new request for a province id
+    #[inline]
+    #[must_use]
+    pub const fn new(index: ContinentIndex) -> Self {
+        Self(index)
+    }
+}
+
+/// A request to get an `RgbImage` from a supplied `MapDisplayMode`
+#[derive(Message, Debug)]
+#[rtype(result = "Option<RgbImage>")]
+#[non_exhaustive]
+pub struct GetMapImage(pub MapDisplayMode);
+
+impl GetMapImage {
+    /// Creates a new request for a province id
+    #[inline]
+    #[must_use]
+    pub const fn new(image: MapDisplayMode) -> Self {
+        Self(image)
+    }
+}
+
+impl Handler<GetMapImage> for Map {
+    type Result = Option<RgbImage>;
+
+    #[inline]
+    fn handle(&mut self, msg: GetMapImage, _ctx: &mut Context<Self>) -> Self::Result {
+        match msg.0 {
+            MapDisplayMode::Terrain => Some(self.terrain.clone()),
+            MapDisplayMode::Rivers => Some(self.rivers.clone()),
+            MapDisplayMode::HeightMap => Some(self.heightmap.clone()),
+            _ => None,
+        }
+    }
+}
+
+impl Handler<GetProvinceIdFromPoint> for Map {
+    type Result = Option<ProvinceId>;
+
+    #[inline]
+    fn handle(&mut self, msg: GetProvinceIdFromPoint, _ctx: &mut Context<Self>) -> Self::Result {
+        let point = msg.0;
+        let color = self.provinces.get_pixel(point.x as u32, point.y as u32);
+        self.provinces_by_color.get(color).copied()
+    }
+}
+
+impl Handler<GetProvinceDefinitionFromId> for Map {
+    type Result = Option<Definition>;
+
+    #[inline]
+    fn handle(
+        &mut self,
+        msg: GetProvinceDefinitionFromId,
+        _ctx: &mut Context<Self>,
+    ) -> Self::Result {
+        self.definitions.definitions.get(&msg.0).cloned()
+    }
+}
+
+impl Handler<GetContinentFromIndex> for Map {
+    type Result = Option<Continent>;
+
+    #[inline]
+    fn handle(&mut self, msg: GetContinentFromIndex, _ctx: &mut Context<Self>) -> Self::Result {
+        let index = msg.0;
+        if index.0 < 1 {
+            return None;
+        }
+        self.continents.continents.get(index.0 - 1).cloned()
     }
 }
 
@@ -703,22 +825,31 @@ fn draw_target<T: TermLike + Clone + Sized + 'static>(term: &Option<T>) -> Progr
 
 #[allow(clippy::expect_used)]
 #[allow(clippy::panic)]
+#[allow(clippy::unwrap_used)]
 #[cfg(test)]
 mod tests {
     use super::*;
     use indicatif::InMemoryTerm;
 
-    #[tokio::test]
-    async fn it_loads_a_map() {
-        let map = Map::new::<InMemoryTerm>(Path::new("./test"), &None).await;
+    #[test]
+    fn it_loads_a_map() {
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .unwrap();
+        let handle = rt.spawn_blocking(|| Map::new::<InMemoryTerm>(Path::new("./test"), &None));
+        let map = rt.block_on(handle).unwrap();
         assert!(map.is_ok());
     }
 
-    #[tokio::test]
-    async fn it_verifies_province_colors() {
-        let map = Map::new::<InMemoryTerm>(Path::new("./test"), &None)
-            .await
-            .expect("Failed to load map");
+    #[test]
+    fn it_verifies_province_colors() {
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .unwrap();
+        let handle = rt.spawn_blocking(|| Map::new::<InMemoryTerm>(Path::new("./test"), &None));
+        let map = rt.block_on(handle).unwrap().expect("Failed to load map");
         map.verify_province_colors()
             .expect("Failed to verify provinces");
     }

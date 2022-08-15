@@ -25,21 +25,35 @@
 #![allow(clippy::missing_docs_in_private_items)]
 #![allow(clippy::expect_used)]
 
-use eframe::egui::{
-    menu::bar, CentralPanel, ColorImage, SidePanel, TextureHandle, TopBottomPanel, Ui,
-};
-use eframe::App;
-use egui::{Context, ImageButton, InnerResponse, Pos2, Rect, Response, Sense, Vec2};
-use image::{DynamicImage, Rgb, RgbImage};
+mod ui;
+
+use crate::ui::control_panel_renderer::{ControlPanelRenderer, RenderControlPanel};
+use crate::ui::map_loader::MapLoader;
+use crate::ui::map_mode::MapMode;
+use crate::ui::right_panel_renderer::{RenderRightPanel, RightPanelRenderer};
+use crate::ui::root_path::RootPath;
+use crate::ui::selection::Selection;
+use crate::ui::top_menu_renderer::{RenderTopMenuBar, TopMenuRenderer};
+use crate::ui::{root_path::SetRootPath, UiRenderer};
+use actix::{Actor, Addr, System, SystemRunner};
+use eframe::egui::{ColorImage, TextureHandle, TopBottomPanel, Ui};
+use eframe::epaint::Rgba;
+use eframe::{App, Storage};
+use egui::{Context, ImageButton, Pos2, Rect, Response, Sense, Vec2, Visuals};
+use image::{DynamicImage, RgbImage};
 use indicatif::InMemoryTerm;
-use log::error;
+use log::{debug, error, info};
 use std::mem::swap;
-use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
+use tokio::runtime::Runtime;
 use tokio::sync::mpsc::{channel, Receiver};
 use tokio::task::JoinHandle;
 use world_gen::components::prelude::*;
-use world_gen::map::Map;
-use world_gen::MapError;
+use world_gen::map::{
+    GetContinentFromIndex, GetMapImage, GetProvinceDefinitionFromId, GetProvinceIdFromPoint, Map,
+};
+use world_gen::{MapDisplayMode, MapError};
 
 #[derive(Default)]
 struct MapImages {
@@ -66,12 +80,8 @@ struct MapTextures {
 }
 
 struct WorldGenApp {
-    root_path: Option<PathBuf>,
-    root_path_handle: Option<JoinHandle<()>>,
-    root_path_receiver: Option<Receiver<PathBuf>>,
-    map_handle: Option<JoinHandle<()>>,
-    map_receiver: Option<Receiver<Map>>,
-    map: Option<Map>,
+    system: Option<System>,
+    map: Option<Addr<Map>>,
     map_err_text: Option<String>,
     map_display_mode: MapDisplayMode,
     images: MapImages,
@@ -81,16 +91,14 @@ struct WorldGenApp {
     zoom_level: Option<f32>,
     selected_point: Option<Pos2>,
     selected_province: Option<Definition>,
+    ui_renderer: Option<UiRenderer>,
+    runtime: Option<Runtime>,
+    system_thread: Option<JoinHandle<Result<(), MapError>>>,
 }
 
 impl Default for WorldGenApp {
     fn default() -> Self {
         Self {
-            root_path: None,
-            root_path_receiver: None,
-            root_path_handle: None,
-            map_handle: None,
-            map_receiver: None,
             map: None,
             map_err_text: None,
             map_display_mode: MapDisplayMode::HeightMap,
@@ -101,46 +109,116 @@ impl Default for WorldGenApp {
             zoom_level: None,
             selected_point: None,
             selected_province: None,
+            ui_renderer: None,
+            runtime: None,
+            system_thread: None,
+            system: None,
         }
     }
 }
 
-#[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
-enum MapDisplayMode {
-    #[default]
-    HeightMap,
-    Terrain,
-    Provinces,
-    Rivers,
-}
-
 impl WorldGenApp {
-    fn create_map_textures(&mut self) {
+    fn initialize_renderer(&mut self) -> Result<(), MapError> {
+        if self.runtime.is_some() {
+            return Ok(());
+        }
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()?;
+        let (tx, rx) = std::sync::mpsc::channel();
+        let terminal = self.terminal.clone();
+        let (system_tx, system_rx) = std::sync::mpsc::channel();
+        let system_thread = rt.spawn_blocking(move || {
+            debug!("Spawning system");
+            let system = System::new();
+
+            system.block_on(async {
+                debug!("Starting root path");
+                let root_path = RootPath::default().start();
+                debug!("Starting top menu renderer");
+                let top_menu_renderer = TopMenuRenderer::new(root_path.clone()).start();
+                debug!("Starting map loader");
+                let map_loader = MapLoader::default().start();
+                debug!("Starting map mode");
+                let map_mode = MapMode::default().start();
+                debug!("Starting control panel renderer");
+                let control_panel_renderer = ControlPanelRenderer::new(
+                    root_path,
+                    map_loader.clone(),
+                    map_mode.clone(),
+                    terminal.clone(),
+                )
+                .start();
+                debug!("Starting selection");
+                let selection = Selection::default().start();
+                debug!("Starting right panel renderer");
+                let right_panel_renderer =
+                    RightPanelRenderer::new(map_mode.clone(), selection, map_loader, terminal)
+                        .start();
+                let ui_renderer = UiRenderer::new(
+                    top_menu_renderer,
+                    control_panel_renderer,
+                    right_panel_renderer,
+                    map_mode,
+                );
+                debug!("Sending Ui Renderer");
+                tx.send(ui_renderer).unwrap();
+            });
+
+            system_tx.send(System::current()).unwrap();
+
+            debug!("Running system");
+            system.run()?;
+            info!("System stopped");
+            Ok(())
+        });
+        let renderer = rx.recv()?;
+        let system = system_rx.recv()?;
+        self.runtime = Some(rt);
+        self.ui_renderer = Some(renderer);
+        self.system_thread = Some(system_thread);
+        self.system = Some(system);
+        Ok(())
+    }
+
+    async fn create_map_textures(&mut self) {
         if let Some(map) = &self.map {
-            Self::load_image(
-                &map.heightmap,
-                &mut self.textures.heightmap_texture,
-                &mut self.images.heightmap_image_receiver,
-                &mut self.images.heightmap_image_handle,
-            );
-            Self::load_image(
-                &map.terrain,
-                &mut self.textures.terrain_texture,
-                &mut self.images.terrain_image_receiver,
-                &mut self.images.terrain_image_handle,
-            );
-            Self::load_image(
-                &map.provinces,
-                &mut self.textures.provinces_texture,
-                &mut self.images.provinces_image_receiver,
-                &mut self.images.provinces_image_handle,
-            );
-            Self::load_image(
-                &map.rivers,
-                &mut self.textures.rivers_texture,
-                &mut self.images.rivers_image_receiver,
-                &mut self.images.rivers_image_handle,
-            );
+            if let Ok(Some(heightmap)) = map.send(GetMapImage::new(MapDisplayMode::HeightMap)).await
+            {
+                Self::load_image(
+                    heightmap,
+                    &mut self.textures.heightmap_texture,
+                    &mut self.images.heightmap_image_receiver,
+                    &mut self.images.heightmap_image_handle,
+                );
+            }
+
+            if let Ok(Some(terrain)) = map.send(GetMapImage::new(MapDisplayMode::Terrain)).await {
+                Self::load_image(
+                    terrain,
+                    &mut self.textures.terrain_texture,
+                    &mut self.images.terrain_image_receiver,
+                    &mut self.images.terrain_image_handle,
+                );
+            }
+            if let Ok(Some(provinces)) = map.send(GetMapImage::new(MapDisplayMode::Provinces)).await
+            {
+                Self::load_image(
+                    provinces,
+                    &mut self.textures.provinces_texture,
+                    &mut self.images.provinces_image_receiver,
+                    &mut self.images.provinces_image_handle,
+                );
+            }
+
+            if let Ok(Some(rivers)) = map.send(GetMapImage::new(MapDisplayMode::Rivers)).await {
+                Self::load_image(
+                    rivers,
+                    &mut self.textures.rivers_texture,
+                    &mut self.images.rivers_image_receiver,
+                    &mut self.images.rivers_image_handle,
+                );
+            }
         }
     }
 
@@ -153,7 +231,7 @@ impl WorldGenApp {
     }
 
     fn load_image(
-        map_image: &RgbImage,
+        image: RgbImage,
         texture: &mut Option<TextureHandle>,
         receiver: &mut Option<Receiver<ColorImage>>,
         handle: &mut Option<JoinHandle<()>>,
@@ -161,7 +239,6 @@ impl WorldGenApp {
         if texture.is_none() && handle.is_none() {
             let (tx, rx) = channel(1);
             *receiver = Some(rx);
-            let image = map_image.clone();
             let h = tokio::spawn(async move {
                 if let Err(e) = tx.send(Self::load_map_image(image)).await {
                     error!("{}", e);
@@ -377,179 +454,6 @@ impl WorldGenApp {
         );
     }
 
-    fn load_map_button(&mut self, ui: &mut Ui) {
-        if self.map.is_none() && self.map_handle.is_none() && self.root_path.is_some() {
-            if ui.button("Load Map").clicked() {
-                let (tx, rx) = channel(1);
-                let path = self
-                    .root_path
-                    .clone()
-                    .expect("Root path should be defined if `Load Map` is visible.");
-                self.map_receiver = Some(rx);
-                let terminal = self.terminal.clone();
-
-                self.map_handle = Some(tokio::spawn(async move {
-                    match Map::new(&path, &Some(terminal)).await {
-                        Ok(m) => {
-                            if let Err(e) = tx.send(m).await {
-                                error!("{}", e);
-                            }
-                        }
-                        Err(e) => {
-                            error!("{:?}", e);
-                        }
-                    }
-                }));
-            }
-            if let Some(map_err_text) = &self.map_err_text {
-                ui.label(map_err_text);
-            }
-        } else {
-            self.create_map_textures();
-        }
-    }
-
-    fn render_menu_bar(&mut self, ui: &mut Ui) -> InnerResponse<InnerResponse<Option<()>>> {
-        bar(ui, |ui| {
-            ui.menu_button("File", |ui| {
-                if ui.button("Open root folder").clicked() && self.root_path_handle.is_none() {
-                    self.clear_map();
-                    let (tx, rx) = channel(1);
-                    self.root_path_receiver = Some(rx);
-                    self.root_path_handle = Some(tokio::spawn(async move {
-                        if let Some(p) = rfd::FileDialog::new().pick_folder() {
-                            if let Err(e) = tx.send(p).await {
-                                error!("{}", e);
-                            }
-                        }
-                    }));
-                }
-            })
-        })
-    }
-
-    fn render_control_panel(&mut self, ui: &mut Ui) {
-        if self.root_path.is_none() {
-            ui.heading("Please select a root folder");
-        }
-        if let Some(path) = self.root_path.as_ref().map(|p| p.display().to_string()) {
-            ui.horizontal(|ui| {
-                ui.label("Root Directory: ");
-                ui.label(path);
-                self.load_map_button(ui);
-            });
-        }
-        if self.map_handle.is_some() {
-            ui.label("Loading map...");
-        }
-
-        if self.map.is_some() {
-            ui.horizontal(|ui| {
-                if ui.button("Height Map").clicked() {
-                    self.set_map_mode(MapDisplayMode::HeightMap);
-                }
-                if ui.button("Terrain").clicked() {
-                    self.set_map_mode(MapDisplayMode::Terrain);
-                }
-                if ui.button("Provinces").clicked() {
-                    self.set_map_mode(MapDisplayMode::Provinces);
-                }
-                if ui.button("Rivers").clicked() {
-                    self.set_map_mode(MapDisplayMode::Rivers);
-                }
-            });
-        }
-    }
-
-    fn render_info_and_log_panel(&mut self, ctx: &Context, ui: &mut Ui) {
-        TopBottomPanel::top("info_panel")
-            .min_height(200.0)
-            .show_inside(ui, |ui| {
-                if let Err(e) = self.render_info_panel(ui) {
-                    ui.label(format!("Error: {:?}", e));
-                }
-            });
-        TopBottomPanel::bottom("log_panel")
-            .max_height(200.0)
-            .show_inside(ui, |ui| {
-                self.render_log_panel(ui);
-            });
-        ctx.request_repaint();
-    }
-
-    fn render_info_panel(&mut self, ui: &mut Ui) -> Result<(), MapError> {
-        match self.map_display_mode {
-            MapDisplayMode::HeightMap => {}
-            MapDisplayMode::Terrain => {}
-            MapDisplayMode::Provinces => {
-                ui.label("Province Information");
-                if let Some(map) = &self.map {
-                    if let Some(point) = self.selected_point {
-                        if let Some(definition) = &self.selected_province {
-                            ui.label(format!("Id: {:?}", definition.id.0));
-                            ui.label(format!(
-                                "Color: ({:?}, {:?}, {:?})",
-                                definition.r.0, definition.g.0, definition.b.0,
-                            ));
-                            ui.label(format!("Type: {:?}", definition.province_type));
-                            ui.label(format!("Coastal: {:?}", definition.coastal.0));
-                            ui.label(format!("Terrain: {:?}", definition.terrain.0));
-                            if definition.continent == 0.into() {
-                                ui.label("Continent: None");
-                            } else {
-                                debug_assert!(definition.continent.0 > 0);
-                                let continent = map
-                                    .continents
-                                    .continents
-                                    .get(definition.continent.0 - 1)
-                                    .ok_or(MapError::InvalidContinentIndex(definition.continent))?;
-                                ui.label(format!("Continent: {:?}", continent.0));
-                            }
-                        } else {
-                            let selected_province_id = {
-                                let point_index = (point.y as u32 * map.provinces.width()
-                                    + point.x as u32)
-                                    as usize;
-                                let color = map
-                                    .provinces
-                                    .pixels()
-                                    .skip(point_index)
-                                    .take(1)
-                                    .collect::<Vec<_>>()
-                                    .get(0)
-                                    .map_or(Rgb::from([0_u8, 0_u8, 0_u8]), |c| **c);
-                                map.provinces_by_color.get(&color).ok_or_else(|| {
-                                    MapError::InvalidProvinceColor((
-                                        color.0[0].into(),
-                                        color.0[1].into(),
-                                        color.0[2].into(),
-                                    ))
-                                })?
-                            };
-                            self.selected_province = map
-                                .definitions
-                                .definitions
-                                .get(selected_province_id)
-                                .cloned();
-                        }
-                    }
-                }
-            }
-            MapDisplayMode::Rivers => {}
-        }
-
-        Ok(())
-    }
-
-    fn render_log_panel(&mut self, ui: &mut Ui) {
-        ui.label("Log Panel");
-        ui.set_style(egui::Style {
-            wrap: Some(false),
-            ..Default::default()
-        });
-        ui.label(self.terminal.contents());
-    }
-
     fn render_map_panel(&mut self, ctx: &Context, ui: &mut Ui) {
         match self.map_display_mode {
             MapDisplayMode::HeightMap => {
@@ -596,39 +500,71 @@ impl WorldGenApp {
                     &mut self.selected_province,
                 );
             }
+            m => error!("Unknown Mode: {m}"),
         }
         ctx.request_repaint();
     }
 
-    fn render_panels(&mut self, ctx: &Context) {
-        TopBottomPanel::top("top_panel").show(ctx, |ui| self.render_menu_bar(ui));
-        TopBottomPanel::top("control_panel").show(ctx, |ui| self.render_control_panel(ui));
-        SidePanel::right("right_panel")
-            .resizable(false)
-            .min_width(200.0)
-            .show(ctx, |ui| {
-                self.render_info_and_log_panel(ctx, ui);
-            });
+    fn render_panels(&mut self, ctx: Context) -> Result<(), MapError> {
+        if let Some(ui_renderer) = &self.ui_renderer {
+            if let Some(rt) = &self.runtime {
+                debug!("Render Loop start");
+                let render_top_menu_bar = RenderTopMenuBar::new(ctx.clone());
+                debug!("Block on TopMenubar");
+                rt.block_on(ui_renderer.top_menu_renderer.send(render_top_menu_bar))??;
+                let render_control_panel = RenderControlPanel::new(ctx.clone());
+                debug!("Block on ControlPanel");
+                rt.block_on(
+                    ui_renderer
+                        .control_panel_renderer
+                        .send(render_control_panel),
+                )??;
+                let render_right_panel = RenderRightPanel::new(ctx.clone());
+                debug!("Block on RightPanel");
+                rt.block_on(ui_renderer.right_panel_renderer.send(render_right_panel))??;
+                debug!("Render Loop End");
+            }
+        }
 
-        CentralPanel::default().show(ctx, |ui| {
-            self.render_map_panel(ctx, ui);
-        });
+        // SidePanel::right("right_panel")
+        //     .resizable(false)
+        //     .min_width(200.0)
+        //     .show(ctx, |ui| {
+        //         self.render_info_and_log_panel(ctx, ui);
+        //     });
+        //
+        // CentralPanel::default().show(ctx, |ui| {
+        //     self.render_map_panel(ctx, ui);
+        // });
+        Ok(())
     }
 }
 
 impl App for WorldGenApp {
-    #[allow(clippy::too_many_lines)]
-    #[allow(clippy::shadow_unrelated)]
     fn update(&mut self, ctx: &Context, _frame: &mut eframe::Frame) {
-        Self::update_item(&mut self.map_receiver, &mut self.map, &mut self.map_handle);
-        Self::update_item(
-            &mut self.root_path_receiver,
-            &mut self.root_path,
-            &mut self.root_path_handle,
-        );
-        Self::update_images(&mut self.images);
+        self.initialize_renderer()
+            .expect("Failed to initialize renderer");
+        // Self::update_item(&mut self.map_receiver, &mut self.map, &mut self.map_handle);
+        // Self::update_item(
+        //     &mut self.root_path_receiver,
+        //     &mut self.root_path,
+        //     &mut self.root_path_handle,
+        // );
+        // Self::update_images(&mut self.images);
 
-        self.render_panels(ctx);
+        let context = ctx.clone();
+        let render_result = self.render_panels(context);
+        if let Err(e) = render_result {
+            error!("{:?}", e);
+        }
+        ctx.request_repaint();
+    }
+
+    fn on_exit(&mut self, _gl: &eframe::glow::Context) {
+        debug!("on_exit");
+        if let Some(s) = &self.system {
+            s.stop();
+        }
     }
 }
 
@@ -658,17 +594,18 @@ pub fn truncate_to_decimal_places(num: f32, places: i32) -> f32 {
     (num * ten).floor() / ten
 }
 
-#[tokio::main]
-async fn main() {
-    use std::default::Default;
+fn main() {
     env_logger::init();
     let options = eframe::NativeOptions {
         initial_window_size: Some(Vec2::new(800.0, 600.0)),
         ..Default::default()
     };
+
+    let app = WorldGenApp::default();
+
     eframe::run_native(
         "Hearts of Iron IV Map Editor",
         options,
-        Box::new(|_cc| Box::new(WorldGenApp::default())),
+        Box::new(|_cc| Box::new(app)),
     );
 }

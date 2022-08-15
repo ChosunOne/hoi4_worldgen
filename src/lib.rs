@@ -23,6 +23,7 @@
 #![allow(clippy::pub_use)]
 
 use crate::components::prelude::*;
+use derive_more::Display;
 use image::ImageError;
 use indicatif::style::TemplateError;
 use jomini::{ScalarError, TextDeserializer, TextTape};
@@ -40,6 +41,17 @@ use tokio::task::JoinError;
 pub mod components;
 /// Holds the components together into one struct
 pub mod map;
+
+/// The map display mode
+#[derive(Default, Display, Copy, Clone, Debug, PartialEq, Eq)]
+#[non_exhaustive]
+pub enum MapDisplayMode {
+    #[default]
+    HeightMap,
+    Terrain,
+    Provinces,
+    Rivers,
+}
 
 /// Errors that may occur when loading/verifying/creating a map.
 #[derive(Error, Debug)]
@@ -138,6 +150,14 @@ pub enum MapError {
     /// An invalid continent index
     #[error("{0}")]
     InvalidContinentIndex(ContinentIndex),
+    /// An `actix` `MailBoxError`
+    #[error("{0}")]
+    MailBoxError(#[from] actix::MailboxError),
+    /// The `UiRenderer` is not initialized
+    #[error("The UI Renderer is not initialized")]
+    UiRendererNotInitialized,
+    #[error("{0}")]
+    RecvError(#[from] std::sync::mpsc::RecvError),
 }
 
 /// Appends a directory to the front of a given path.
