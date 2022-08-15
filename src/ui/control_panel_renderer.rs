@@ -5,7 +5,7 @@ use crate::{MapError, MapMode, RootPath};
 use actix::{Actor, Addr, Context as ActixContext, Handler, Message, ResponseFuture};
 use egui::{Context, TopBottomPanel};
 use indicatif::InMemoryTerm;
-use log::{debug, error};
+use log::{debug, error, trace};
 use std::path::PathBuf;
 use world_gen::MapDisplayMode;
 
@@ -55,7 +55,7 @@ impl Handler<RenderControlPanel> for ControlPanelRenderer {
     type Result = ResponseFuture<Result<(), MapError>>;
 
     fn handle(&mut self, msg: RenderControlPanel, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("RenderControlPanel");
+        trace!("RenderControlPanel");
         let root_path_addr = self.root_path.clone();
         let map_loader_addr = self.map_loader.clone();
         let map_mode_addr = self.map_mode.clone();

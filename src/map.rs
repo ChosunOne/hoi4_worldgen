@@ -4,7 +4,7 @@ use actix::{Actor, Context, Handler, Message, MessageResult};
 use egui::Pos2;
 use image::{open, DynamicImage, Pixel, Rgb, RgbImage};
 use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle, TermLike};
-use log::{debug, error, info, warn};
+use log::{debug, error, info, trace, warn};
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use tokio::task::JoinHandle;
@@ -597,7 +597,7 @@ impl Map {
                 color_set.insert((red, green, blue));
             }
         }
-        debug!("{} colors found", color_set.len());
+        trace!("{} colors found", color_set.len());
         for definition in self.definitions.definitions.values() {
             let color = (definition.r, definition.g, definition.b);
             if !color_set.contains(&color) {

@@ -1,5 +1,5 @@
 use actix::{Actor, AsyncContext, Context, Handler, Message};
-use log::debug;
+use log::{debug, trace};
 use std::path::PathBuf;
 use tokio::task::JoinHandle;
 
@@ -41,7 +41,7 @@ impl Handler<SetRootPath> for RootPath {
     type Result = ();
 
     fn handle(&mut self, _msg: SetRootPath, ctx: &mut Self::Context) -> Self::Result {
-        debug!("SetRootPath");
+        trace!("SetRootPath");
         if self.root_path_handle.is_some() {
             return;
         }
@@ -58,7 +58,7 @@ impl Handler<GetRootPath> for RootPath {
     type Result = Option<PathBuf>;
 
     fn handle(&mut self, _msg: GetRootPath, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("GetRootPath");
+        trace!("GetRootPath");
         self.root_path.clone()
     }
 }
@@ -67,7 +67,7 @@ impl Handler<UpdateRootPath> for RootPath {
     type Result = ();
 
     fn handle(&mut self, msg: UpdateRootPath, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("UpdateRootPath");
+        trace!("UpdateRootPath");
         self.root_path = msg.0;
         self.root_path_handle.take();
     }

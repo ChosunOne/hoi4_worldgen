@@ -61,6 +61,7 @@ impl Handler<SetSelectedPoint> for Selection {
 
     fn handle(&mut self, msg: SetSelectedPoint, _ctx: &mut Self::Context) -> Self::Result {
         self.selected_point = Some(msg.0);
+        self.selected_province.take();
     }
 }
 

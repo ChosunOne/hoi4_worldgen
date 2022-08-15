@@ -5,7 +5,7 @@ use crate::{MapError, MapLoader, MapMode};
 use actix::{Actor, Addr, Context as ActixContext, Handler, Message, ResponseFuture};
 use egui::{Context, Pos2, SidePanel, TopBottomPanel};
 use indicatif::InMemoryTerm;
-use log::debug;
+use log::{debug, trace};
 use world_gen::components::prelude::{Definition, ProvinceId};
 use world_gen::components::wrappers::Continent;
 use world_gen::map::{
@@ -60,7 +60,7 @@ impl Handler<RenderRightPanel> for RightPanelRenderer {
     type Result = ResponseFuture<Result<(), MapError>>;
 
     fn handle(&mut self, msg: RenderRightPanel, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("RenderRightPanel");
+        trace!("RenderRightPanel");
         let context = msg.context;
         let map_mode_addr = self.map_mode.clone();
         let map_loader_addr = self.map_loader.clone();

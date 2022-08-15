@@ -2,7 +2,7 @@ use crate::{RootPath, SetRootPath};
 use actix::{Actor, Addr, Context as ActixContext, Handler, Message, ResponseFuture};
 use egui::menu::bar;
 use egui::{Context, TopBottomPanel};
-use log::{debug, error};
+use log::{debug, error, trace};
 use world_gen::MapError;
 
 /// A request to render the top menu bar.
@@ -38,7 +38,7 @@ impl Handler<RenderTopMenuBar> for TopMenuRenderer {
     type Result = ResponseFuture<Result<(), MapError>>;
 
     fn handle(&mut self, msg: RenderTopMenuBar, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("RenderTopMenuBar");
+        trace!("RenderTopMenuBar");
         let context = msg.context;
         let root_path = self.root_path.clone();
         Box::pin(async move {

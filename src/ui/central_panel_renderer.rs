@@ -1,9 +1,10 @@
+use crate::ui::map_loader::GetMap;
 use crate::ui::map_mode::GetMapMode;
 use crate::ui::map_textures::{GetTexture, LoadImage};
 use crate::ui::selection::SetSelectedPoint;
 use crate::ui::viewport::{GetViewportArea, GetZoomLevel, Scroll, SetViewportArea};
 use crate::{MapError, MapLoader, MapMode, MapTextures, Selection, Viewport};
-use actix::{Actor, Addr, Context as ActixContext, Handler, Message, ResponseFuture};
+use actix::{Actor, Addr, AsyncContext, Context as ActixContext, Handler, Message, ResponseFuture};
 use egui::{
     CentralPanel, Context, ImageButton, Pos2, Rect, Response, Sense, TextureHandle, Ui, Vec2,
 };
@@ -76,10 +77,17 @@ impl Handler<RenderCentralPanel> for CentralPanelRenderer {
         let map_textures_addr = self.map_textures.clone();
         let selection_addr = self.selection.clone();
         let viewport_addr = self.viewport.clone();
+        let self_addr = ctx.address();
         Box::pin(async move {
             let map_mode: MapDisplayMode = map_mode_addr.send(GetMapMode).await?;
             let texture: Option<TextureHandle> =
                 map_textures_addr.send(GetTexture::from(map_mode)).await?;
+            if map_addr.is_none() {
+                let addr = map_loader_addr.send(GetMap).await?;
+                if let Some(m) = addr {
+                    self_addr.do_send(SetMap(m));
+                }
+            }
             if let (Some(map), None) = (map_addr, texture.clone()) {
                 let image = map.send(GetMapImage::from(map_mode)).await?;
                 map_textures_addr

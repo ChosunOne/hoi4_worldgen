@@ -1,7 +1,6 @@
-use crate::ui::map_textures::MapTextures;
 use actix::{Actor, Addr, AsyncContext, Context, Handler, Message};
 use indicatif::InMemoryTerm;
-use log::{debug, error};
+use log::{debug, error, trace};
 use std::path::PathBuf;
 use tokio::task::JoinHandle;
 use world_gen::map::Map;
@@ -69,7 +68,7 @@ impl Handler<GetMap> for MapLoader {
     type Result = Option<Addr<Map>>;
 
     fn handle(&mut self, _msg: GetMap, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("GetMap");
+        trace!("GetMap");
         self.map.as_ref().cloned()
     }
 }
@@ -78,7 +77,7 @@ impl Handler<UpdateMap> for MapLoader {
     type Result = ();
 
     fn handle(&mut self, msg: UpdateMap, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("UpdateMap");
+        trace!("UpdateMap");
         match msg.0 {
             Ok(m) => {
                 self.map = Some(m.start());
@@ -93,7 +92,7 @@ impl Handler<LoadMap> for MapLoader {
     type Result = ();
 
     fn handle(&mut self, msg: LoadMap, ctx: &mut Self::Context) -> Self::Result {
-        debug!("LoadMap");
+        trace!("LoadMap");
         if self.map_handle.is_some() {
             return;
         }
@@ -110,7 +109,7 @@ impl Handler<IsMapLoading> for MapLoader {
     type Result = bool;
 
     fn handle(&mut self, _msg: IsMapLoading, _ctx: &mut Self::Context) -> Self::Result {
-        debug!("IsMapLoading: {}", self.map_handle.is_some());
+        trace!("IsMapLoading: {}", self.map_handle.is_some());
         self.map_handle.is_some()
     }
 }
