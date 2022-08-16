@@ -88,15 +88,16 @@ impl Handler<RenderCentralPanel> for CentralPanelRenderer {
                     self_addr.do_send(SetMap(m));
                 }
             }
-            if let (Some(map), None) = (map_addr, texture.clone()) {
-                let image = map.send(GetMapImage::from(map_mode)).await?;
-                map_textures_addr
-                    .send(LoadImage::from_display_mode(
-                        map_mode,
-                        image,
-                        context.clone(),
-                    ))
-                    .await?;
+            if let (Some(map), None) = (map_addr.clone(), texture.clone()) {
+                if let Some(image) = map.send(GetMapImage::from(map_mode)).await? {
+                    map_textures_addr
+                        .send(LoadImage::from_display_mode(
+                            map_mode,
+                            image,
+                            context.clone(),
+                        ))
+                        .await?;
+                }
             }
             let viewport_rect: Rect = viewport_addr.send(GetViewportArea).await?.map_or(
                 Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
@@ -134,6 +135,8 @@ impl Handler<RenderCentralPanel> for CentralPanelRenderer {
                             }
                         }
                     }
+                } else if map_addr.is_some() {
+                    ui.label("Loading...");
                 }
             });
             if let Some(point) = selected_point {
@@ -147,7 +150,7 @@ impl Handler<RenderCentralPanel> for CentralPanelRenderer {
 impl Handler<SetMap> for CentralPanelRenderer {
     type Result = ();
 
-    fn handle(&mut self, msg: SetMap, ctx: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: SetMap, _ctx: &mut Self::Context) -> Self::Result {
         self.map = Some(msg.0);
     }
 }

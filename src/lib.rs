@@ -51,6 +51,7 @@ pub enum MapDisplayMode {
     Terrain,
     Provinces,
     Rivers,
+    StrategicRegions,
 }
 
 /// Errors that may occur when loading/verifying/creating a map.
@@ -81,6 +82,9 @@ pub enum MapError {
     /// An invalid strategic region file name
     #[error("{0}")]
     InvalidStrategicRegionFileName(String),
+    /// A definition could be found with the given province id
+    #[error("{0}")]
+    DefinitionNotFound(ProvinceId),
     /// An invalid supply node
     #[error("{0}")]
     InvalidSupplyNode(String),
@@ -156,8 +160,11 @@ pub enum MapError {
     /// The `UiRenderer` is not initialized
     #[error("The UI Renderer is not initialized")]
     UiRendererNotInitialized,
+    /// An error receiving data from a channel
     #[error("{0}")]
     RecvError(#[from] std::sync::mpsc::RecvError),
+    #[error("{0}")]
+    StrategicRegionNotFoundForProvince(ProvinceId),
 }
 
 /// Appends a directory to the front of a given path.

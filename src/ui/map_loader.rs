@@ -3,7 +3,7 @@ use indicatif::InMemoryTerm;
 use log::{debug, error, trace};
 use std::path::PathBuf;
 use tokio::task::JoinHandle;
-use world_gen::map::Map;
+use world_gen::map::{GenerateStrategicRegionMap, Map};
 use world_gen::MapError;
 
 /// A request to load the map
@@ -80,7 +80,9 @@ impl Handler<UpdateMap> for MapLoader {
         trace!("UpdateMap");
         match msg.0 {
             Ok(m) => {
-                self.map = Some(m.start());
+                let map_addr = m.start();
+                map_addr.do_send(GenerateStrategicRegionMap);
+                self.map = Some(map_addr);
                 self.map_handle.take();
             }
             Err(e) => error!("{e:?}"),

@@ -5,7 +5,7 @@ use jomini::text::ObjectReader;
 use jomini::{JominiDeserialize, TextTape, Windows1252Encoding};
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
@@ -20,7 +20,7 @@ pub struct StrategicRegion {
     /// The logical name of the region
     pub name: StrategicRegionName,
     /// The provinces in the region
-    pub provinces: Vec<ProvinceId>,
+    pub provinces: HashSet<ProvinceId>,
     /// The weather for the region
     pub weather: Weather,
 }
@@ -50,7 +50,7 @@ impl StrategicRegion {
         };
         let mut id = StrategicRegionId(0);
         let mut name = StrategicRegionName(String::new());
-        let mut provinces = Vec::new();
+        let mut provinces = HashSet::new();
         let mut weather = Weather::default();
         for (key, _op, value) in raw_fields {
             let key_string = key.read_string();

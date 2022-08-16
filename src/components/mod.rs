@@ -24,6 +24,8 @@ pub mod railway;
 pub mod rocket_site;
 /// Holds the seasons
 pub mod season;
+/// Holds the states
+pub mod state;
 /// Holds the strategic regions
 pub mod strategic_region;
 /// Holds the supply nodes

@@ -20,6 +20,7 @@ rfd = "0.10.0"
 tokio = {version = "1.20.1", features = ["full"] }
 indicatif = {version = "0.17.0", features = ["in_memory"]}
 actix = "0.13.0"
+rand = "0.8.5"
 
 [profile.release]
 opt-level = 3

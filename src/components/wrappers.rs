@@ -209,12 +209,33 @@ pub struct YCoord(pub i32);
 #[non_exhaustive]
 pub struct AdjacencyRuleName(pub String);
 
+/// A state name.
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+#[non_exhaustive]
+pub struct StateName(pub String);
+
+/// A state category name.
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+#[non_exhaustive]
+pub struct StateCategoryName(pub String);
+
 /// A strategic region name.
 #[derive(
     Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
 )]
 #[non_exhaustive]
 pub struct StrategicRegionName(pub String);
+
+/// A country tag
+#[derive(
+    Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Hash, FromStr,
+)]
+#[non_exhaustive]
+pub struct CountryTag(pub String);
 
 /// A weather effect.
 #[derive(
@@ -284,6 +305,11 @@ pub struct Distance(pub f32);
 #[non_exhaustive]
 pub struct PixelDensity(pub f32);
 
+/// A local supplies value
+#[derive(Copy, Clone, Debug, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr)]
+#[non_exhaustive]
+pub struct LocalSupplies(pub f32);
+
 /// The color index in bmp palette
 #[derive(
     Copy,
@@ -320,3 +346,39 @@ pub struct ColorIndex(pub u32);
 )]
 #[non_exhaustive]
 pub struct ModelIndex(pub u32);
+
+/// The amount of manpower in a state
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    FromStr,
+)]
+#[non_exhaustive]
+pub struct Manpower(pub u32);
+
+/// The amount of victory points in a province
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Display,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Deserialize,
+    Serialize,
+    Hash,
+    FromStr,
+)]
+#[non_exhaustive]
+pub struct VictoryPoints(pub u32);

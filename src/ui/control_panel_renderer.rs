@@ -97,6 +97,10 @@ impl Handler<RenderControlPanel> for ControlPanelRenderer {
                         if ui.button("Rivers").clicked() {
                             map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::Rivers));
                         }
+                        if ui.button("Strategic Regions").clicked() {
+                            map_mode_addr
+                                .do_send(SetMapMode::new(MapDisplayMode::StrategicRegions));
+                        }
                     });
                 }
             });
