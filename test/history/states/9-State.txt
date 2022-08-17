@@ -1,0 +1,33 @@
+state = {
+	id = 9
+	manpower = 6212
+	state_category = large_town
+	name = "STATE_9"
+
+	resources = {
+		water = 4
+		metal = 11
+		composites = 2
+	}
+
+	history = {
+		owner = HAI
+		add_core_of = HAI
+		victory_points = {
+			5125 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			dockyard = 1
+			air_base = 1
+			5123 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		5125 5123 5128 5126 5121 5118 5116
+	}
+}

@@ -1,0 +1,28 @@
+state = {
+	id = 352
+	name = "STATE_352"
+	resources={
+		metal = 12
+	}
+
+	history={
+		owner = NCN
+		add_core_of = NCN
+		add_core_of = BRI
+		victory_points = {
+			7441 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		1267 2182 2183 6296 6297 6501 6503 7441 8223 8224 8225 8226 8244 8245 8246 8250 8251
+	}
+	manpower=6872
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

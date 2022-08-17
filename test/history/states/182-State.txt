@@ -1,0 +1,29 @@
+state = {
+	id = 182
+	name = "STATE_182"
+	manpower = 11000
+	state_category = town
+
+	resources = {
+		water = 7
+		metal = 7
+		energy = 2
+	}
+
+	history = {
+		owner = PAC
+		add_core_of = PAC
+		victory_points = {
+			4906 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		2066 2174 2173 2172 4905 4907 4906 4999 4997 5000 4812 4908 4909 7053 7054 7061 7154 4998 4992
+	}
+}

@@ -1,0 +1,23 @@
+state = {
+	id = 104
+	name = "STATE_104"
+	resources={
+		water = 3
+		metal = 4
+	}
+
+	history={
+		owner = NCR
+		add_core_of = RDS
+		buildings = {
+			infrastructure = 0
+		}
+	}
+	provinces={
+		8742
+	}
+	manpower=861
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+	impassable = yes
+}

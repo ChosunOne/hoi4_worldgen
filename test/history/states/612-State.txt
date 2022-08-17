@@ -1,0 +1,31 @@
+state = {
+	id = 612
+	name = "STATE_612"
+
+	resources = {
+		metal = 8
+		circuitry=4
+		energy=4
+	}
+
+	history={
+		owner = CYC
+		add_core_of = CYC
+		victory_points = {
+			3548 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 2
+			air_base = 1
+		}
+
+	}
+
+	provinces={
+		1214 3330 3350 3395 3530 3531 3532 3535 3536 3548 3549 3553 3582 3583 6602
+	}
+	manpower=6000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

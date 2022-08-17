@@ -1,0 +1,25 @@
+state = {
+	id = 569
+	name = "STATE_569"
+
+	history={
+		owner = UIN
+		add_core_of = UIN
+		victory_points = {
+			1160 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+
+		}
+
+	}
+
+	provinces={
+		1160 2499 6493 7450 7451
+	}
+	manpower=9000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

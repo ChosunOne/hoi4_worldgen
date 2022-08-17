@@ -1,0 +1,25 @@
+state={
+	id=1189
+	name="STATE_1189"
+	provinces={
+		14301 14302 14325 14537 14548 14549 14550
+	}
+	resources = {
+		circuitry = 3
+	}
+	history = {
+		owner = STN
+		add_core_of = STN
+		victory_points = {
+			14550 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+	state_category = town
+	manpower = 7800
+	buildings_max_level_factor=1.000
+}

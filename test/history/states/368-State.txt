@@ -1,0 +1,29 @@
+state = {
+	id = 368
+	name = "STATE_368"
+	resources={
+		water = 4
+		metal = 4
+	}
+
+	history={
+		owner = UIN
+		add_core_of = UIN
+		victory_points = {
+			6481 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+
+		}
+
+	}
+
+	provinces={
+		1131 3094 6470 6474 6480 6481 6484 9138
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

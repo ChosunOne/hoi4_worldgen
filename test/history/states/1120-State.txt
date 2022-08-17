@@ -1,0 +1,24 @@
+state={
+	id=1120
+	name="STATE_1120"
+	provinces={
+		14097 14098 14107 14109 14112
+	}
+	resources = {
+		composites = 2
+		circuitry = 2
+	}
+	history = {
+		owner = STC
+		add_core_of = STC
+		victory_points = {
+			14098 3
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = rural
+	manpower = 3600
+	buildings_max_level_factor=1.000
+}

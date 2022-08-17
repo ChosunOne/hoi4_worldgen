@@ -1,0 +1,21 @@
+state={
+	id=1359
+	name="STATE_1359"
+	provinces={
+		14645 14646 14792 14806 14807 14808 14809
+	}
+	history = {
+		owner = HBC
+		add_core_of = HBC
+		victory_points = {
+			14646 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 3400
+	buildings_max_level_factor=1.000
+}

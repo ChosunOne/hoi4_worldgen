@@ -1,0 +1,25 @@
+state={
+	id=1038
+	name="STATE_1038"
+	resources = {
+		water = 16
+		metal = 8
+	}
+
+	history={
+		owner = SIE
+		add_core_of = SIE
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces={
+		12506 12502 12498 12904 12496 12490 12493 12489 12501
+	}
+	manpower = 3523
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

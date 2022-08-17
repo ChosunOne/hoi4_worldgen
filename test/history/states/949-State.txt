@@ -1,0 +1,19 @@
+
+state={
+	id=949
+	name="STATE_949"
+	history={
+		owner = BDT
+		add_core_of = BDT
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		1434
+	}
+	manpower=951
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

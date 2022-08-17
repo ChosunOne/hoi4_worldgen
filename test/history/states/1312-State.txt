@@ -1,0 +1,25 @@
+state={
+	id=1312
+	name="STATE_1312"
+	provinces={
+		15069 15077 15078 15079 15080 15089 15090
+	}
+	resources = {
+		water = 5
+		circuitry = 5
+	}
+	history = {
+		owner = ROL
+		add_core_of = ROL
+		victory_points = {
+			15077 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = town
+	manpower = 6800
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,26 @@
+
+state={
+	id=1305
+	name="STATE_1305"
+
+	history={
+		owner = RCK
+		add_core_of = RCK
+		victory_points = {
+			13434 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		13421 13431 13432 13434 13452 13453 13454 13465 13466 13467 13475
+	}
+	manpower= 3100
+	buildings_max_level_factor=1.000
+	state_category = town
+	local_supplies=0.000
+}

@@ -1,0 +1,30 @@
+state={
+	id=1002
+	name="STATE_1002"
+
+	resources = {
+		metal = 6
+	}
+
+	history={
+		owner = RAD
+		add_core_of = RAD
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			3042 = {
+				bunker = 1
+			}
+		}
+		victory_points = {
+			3042 20
+		}
+	}
+
+	provinces={
+		2479 7377 3709 3042 7361 3728 4421 1261 7360
+	}
+	manpower = 26510
+	state_category = city
+	buildings_max_level_factor=1.000
+}

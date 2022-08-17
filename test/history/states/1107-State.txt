@@ -1,0 +1,31 @@
+state={
+	id=1107
+	name="STATE_1107"
+	provinces={
+		14483 14657 14658 14659 14661 14662 14663 15023 15024 15025
+	}
+	resources = {
+		water = 8
+		energy = 3
+		metal = 3
+		circuitry = 8
+		advanced = 2
+	}
+	history = {
+		owner = NEU
+		add_core_of = NEU
+		add_core_of = BRA
+		add_core_of = WPG
+		victory_points = {
+			14483 30
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 3
+			arms_factory = 3
+		}
+	}
+	state_category = city
+	manpower = 21400
+	buildings_max_level_factor=1.000
+}

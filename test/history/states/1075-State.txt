@@ -1,0 +1,26 @@
+state={
+	id=1075
+	name="STATE_1075"
+	resources = {
+		water = 2
+		metal = 2
+	}
+	history={
+		owner = BIS
+		add_core_of = BIS
+		victory_points = {
+			13032 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		13036 13033 13032 13045 13048 13050 13063 13066 13062 13072
+	}
+	manpower = 2800
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

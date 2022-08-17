@@ -1,0 +1,27 @@
+state = {
+	id = 366
+	name = "STATE_366"
+	resources={
+		metal=14.000
+	}
+
+	history={
+		owner = SUN
+		add_core_of = SUN
+		victory_points = {
+			7035 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		6769 6770 6771 6772 7028 7029 7030 7034 7035 7036 7038 7040 7041
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

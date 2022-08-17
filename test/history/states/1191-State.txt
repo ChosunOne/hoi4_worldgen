@@ -1,0 +1,29 @@
+state={
+	id=1191
+	name="STATE_1192"
+	provinces={
+		12875 12877 12878 12880 12881
+	}
+	resources = {
+		water = 12
+		energy = 12
+		metal = 12
+		composites = 2
+	}
+	history = {
+		owner = PAP
+		add_core_of = PAP
+		victory_points = {
+			12880 25
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+			dockyard = 3
+		}
+	}
+	state_category = large_city
+	manpower = 21700
+	buildings_max_level_factor=1.000
+}

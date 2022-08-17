@@ -1,0 +1,24 @@
+state = {
+	id = 443
+	name = "STATE_443"
+
+	history={
+		owner = BAG
+		add_core_of = BAG
+		victory_points = {
+			8154 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		6921 6878 8162 8153 6867 8154 1222 8160
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,24 @@
+state = {
+	id = 387
+	name = "STATE_387"
+
+	history={
+		owner = WBH
+		add_core_of = WBH
+		victory_points = {
+			2496 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		1926 1943 2496 7121 7120 3857 1930 3654
+	}
+	manpower=6102
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

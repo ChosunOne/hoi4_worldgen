@@ -1,0 +1,21 @@
+state = {
+	id = 587
+	name = "STATE_587"
+	manpower = 1000
+	state_category = rural
+
+	history = {
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			1462 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		8569 5753 5737 1462 8572 5752 1474 8571 5738 5739 8570 5741
+	}
+}

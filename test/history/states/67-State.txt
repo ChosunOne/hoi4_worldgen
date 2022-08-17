@@ -1,0 +1,35 @@
+state = {
+	id = 67
+	name = "STATE_67"
+
+	history={
+		owner = MOT
+		add_core_of = MRA
+		victory_points = {
+			2316 5
+		}
+		victory_points = {
+			965 10
+		}
+		victory_points = {
+			3204 2
+		}
+		buildings = {
+			2316 = {
+				bunker = 1
+			}
+			2316 = {
+				naval_base = 1
+			}
+			arms_factory = 1
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		5761 952 965 2316 3213 9064 3204
+	}
+	manpower=14242
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

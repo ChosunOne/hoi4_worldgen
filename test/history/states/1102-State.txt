@@ -1,0 +1,28 @@
+state={
+	id=1102
+	name="STATE_1102"
+	provinces={
+		14709 14710 14711 14712 15050 15051 15052 15053
+	}
+	resources = {
+		water = 6
+		circuitry = 2
+	}
+	history = {
+		owner = WPG
+		add_core_of = WPG
+		victory_points = {
+			15051 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			14712 = {
+				naval_base = 1
+			}
+		}
+	}
+	state_category = rural
+	manpower = 2200
+	buildings_max_level_factor=1.000
+}

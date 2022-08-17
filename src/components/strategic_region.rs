@@ -284,8 +284,7 @@ impl StrategicRegions {
     pub fn from_dir(path: &Path) -> Result<Self, MapError> {
         let strategic_region_files = fs::read_dir(path)?;
         let mut strategic_regions = HashMap::new();
-        for strategic_region_file_result in strategic_region_files {
-            let strategic_region_file = strategic_region_file_result?;
+        for strategic_region_file in strategic_region_files.flatten() {
             let strategic_region_path = strategic_region_file.path(); // Check if the file looks like a strategic region
             Self::verify_strategic_region_file_name(&strategic_region_path)?;
             let (filename_id, _) =

@@ -1,0 +1,31 @@
+state = {
+	id = 868
+	name = "STATE_868"
+	history={
+		owner = CMC
+		add_core_of = CMC
+		victory_points = {
+			12168 20
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		2752 12149 12168 12173 12174 12179 12186 12188 12190 12194 12203 12208
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=town
+
+	resources = {
+		water = 3
+		energy = 8
+		metal = 10
+		composites = 5
+	}
+}

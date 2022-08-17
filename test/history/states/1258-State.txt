@@ -1,0 +1,21 @@
+state={
+	id=1258
+	name="STATE_1258"
+	provinces={
+		14343 14348 14392 14396 14399 14401 14402 14403 14405
+	}
+	history={
+		owner =  STA
+		add_core_of =  STA
+		victory_points = {
+			14403 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+		}
+	}
+	state_category = town
+	manpower = 7700
+	buildings_max_level_factor=1.000
+}

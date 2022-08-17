@@ -1,0 +1,25 @@
+state={
+	id=1220
+	name="STATE_1220"
+	provinces={
+		13878 13881 13882 13888 13889 13894 13895 13896 13899
+	}
+	history={
+		owner =  MSQ
+		add_core_of =  MSQ
+		victory_points = {
+			13888 5
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+	resources = {
+		water = 2
+		energy = 4
+	}
+	state_category = rural
+	manpower = 4100
+	buildings_max_level_factor=1.000
+}

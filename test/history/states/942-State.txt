@@ -1,0 +1,26 @@
+
+state={
+	id=942
+	name="STATE_942"
+	resources={
+		water = 3
+		metal = 4
+	}
+	history={
+		owner = SOK
+		add_core_of = SOK
+		victory_points = {
+			5140 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+
+	}
+	provinces={
+		8843 5140 3283
+	}
+	manpower=826
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

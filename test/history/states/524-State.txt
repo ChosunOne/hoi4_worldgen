@@ -1,0 +1,35 @@
+state = {
+	id = 524
+	name = "STATE_524"
+	manpower = 28500
+	state_category = large_city
+
+	resources = {
+		energy = 8
+		metal = 12
+		advanced = 6
+		circuitry = 10
+		composites = 8
+	}
+
+	history = {
+		owner = ROB
+		add_core_of = ROB
+		victory_points = {
+			9002 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 5
+			anti_air_building = 2
+			radar_station = 2
+			air_base = 2
+
+		}
+	}
+
+	provinces = {
+		1829 1837 7848 7849 7850 7851 9002 9003 9004 9005 9006
+	}
+}

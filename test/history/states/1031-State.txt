@@ -1,0 +1,23 @@
+state={
+	id=1031
+	name="STATE_1031"
+
+	history={
+		owner = KHA
+		add_core_of = KHA
+		victory_points = {
+			1736 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		1247 696 12599 1734 1256 1405 1709 12569 1736 8628 8629 13118
+	}
+	manpower = 1648
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

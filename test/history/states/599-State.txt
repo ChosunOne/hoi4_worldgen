@@ -1,0 +1,34 @@
+state = {
+	id = 599
+	name = "STATE_599"
+	manpower = 1000
+	state_category = shanty
+
+	history = {
+		owner = YAK
+		add_core_of = YAK
+		victory_points = {
+			4325 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+		2275.1.1 = {
+			WBH = {
+				set_province_controller = 1495
+				set_province_controller = 1505
+				set_province_controller = 2525
+				set_province_controller = 3652
+				set_province_controller = 3898
+				set_province_controller = 4325
+				set_province_controller = 3905
+				set_province_controller = 3906
+				set_province_controller = 3899
+			}
+		}
+	}
+
+	provinces = {
+		1495 1505 3652 3898 3899 3905 3906 4325
+	}
+}

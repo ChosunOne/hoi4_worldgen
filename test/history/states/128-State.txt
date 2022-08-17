@@ -1,0 +1,27 @@
+state = {
+	id = 128
+	name = "STATE_128"
+	resources={
+		metal = 16
+	}
+
+	history={
+		owner = NCN
+		add_core_of = NCN
+		add_core_of = BRI
+		victory_points = {
+			8272 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces={
+		1255 1715 1716 1717 8253 8254 8262 8270 8271 8272
+	}
+	manpower=5860
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

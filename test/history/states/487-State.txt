@@ -1,0 +1,26 @@
+state = {
+	id = 487
+	name = "STATE_487"
+	manpower = 2000
+	state_category = rural
+	resources = {
+		water = 10
+		energy = 4
+	}
+
+	history = {
+		owner = GLC
+		add_core_of = GLC
+		victory_points = {
+			3804 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		3821 7304 3948 3949 3986 3804 3822 3805 3807 456
+	}
+}

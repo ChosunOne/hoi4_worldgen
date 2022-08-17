@@ -1,0 +1,24 @@
+state = {
+	id = 115
+	name = "STATE_115"
+
+	history={
+		owner = YMP
+		add_core_of = YMP
+		victory_points = {
+			6831 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+
+	}
+
+	provinces={
+		6827 6831 6834 6830 6829 12900 12901
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=pastoral
+}

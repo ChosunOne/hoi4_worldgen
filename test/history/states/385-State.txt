@@ -1,0 +1,26 @@
+state = {
+	id = 385
+	name = "STATE_385"
+	manpower = 1200
+	state_category = shanty
+
+	history = {
+		owner = WHD
+		add_core_of = WHD
+		victory_points = {
+			6918 5
+		}
+		buildings = {
+			infrastructure = 2
+			6918 = {
+				naval_base = 2
+				bunker = 2
+				coastal_bunker = 2
+			}
+		}
+	}
+
+	provinces = {
+		6918 8158 6917 6916 6915 6913 8149
+	}
+}

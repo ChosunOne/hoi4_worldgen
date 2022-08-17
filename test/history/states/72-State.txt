@@ -1,0 +1,29 @@
+state = {
+	id = 72
+	name = "STATE_72"
+	resources={
+		metal = 8
+	}
+
+	history={
+		owner = WHT
+		add_core_of = WHT
+		add_core_of = FRI
+		victory_points = {
+			1008 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		1004 1008 1531 2639 3412 6365
+	}
+	manpower=9000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

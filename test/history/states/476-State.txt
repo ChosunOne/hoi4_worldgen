@@ -1,0 +1,28 @@
+state = {
+	id = 476
+	name = "STATE_476"
+	manpower = 1000
+	state_category = large_town
+
+	resources = {
+		circuitry = 9
+		composites = 3
+	}
+
+	history = {
+		owner = PSH
+		add_core_of = PSH
+		victory_points = {
+			1074 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		8458 8459 8454 8457 1074 8916 8918 8921
+	}
+}

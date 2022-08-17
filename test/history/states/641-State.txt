@@ -1,0 +1,31 @@
+
+state={
+	id=641
+	name="STATE_641"
+	resources={
+		circuitry=4.000
+		composites=2.000
+	}
+
+	history={
+		owner = ASF
+		add_core_of = ASF
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+
+		}
+		victory_points = {
+			1815 5
+		}
+
+	}
+
+	provinces={
+		1565 1814 1815 2975 3036 3037 5686 6583 15674
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+	local_supplies=0.000
+}

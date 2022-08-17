@@ -1,0 +1,17 @@
+state={
+	id=1088
+	name="STATE_1088"
+
+	history={
+		owner = NUN
+		add_core_of = NUN
+	}
+
+	provinces={
+		7434
+	}
+	impassable = yes
+	manpower = 84
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

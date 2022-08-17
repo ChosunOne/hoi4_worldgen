@@ -1,0 +1,26 @@
+state = {
+	id = 552
+	name = "STATE_552"
+
+	history={
+		owner = MOT
+		add_core_of = MRA
+		victory_points = {
+			3200 5
+		}
+		victory_points = {
+			9067 2
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		3228 6988 9067 3200 3226
+	}
+	manpower=4850
+	buildings_max_level_factor=1.000
+	state_category=town
+}

@@ -1,0 +1,28 @@
+state={
+	id=992
+	name="STATE_992"
+
+	resources = {
+		circuitry = 4
+		advanced = 3
+	}
+
+	history={
+		owner = REH
+		add_core_of = REH
+		victory_points = {
+			3722 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+
+	provinces={
+		3722  7350 3748 3729 257 3985 7278 7275 8483 3768 7266 7283 7288
+	}
+	manpower = 1000
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,30 @@
+
+state={
+	id=638
+	name="STATE_638"
+	resources={
+		metal=3.000
+	}
+
+	history={
+		owner = TTM
+		add_core_of = TTM
+		victory_points = {
+			5588 1
+		}
+		buildings = {
+			infrastructure = 1
+			dockyard = 1
+
+		}
+
+	}
+
+	provinces={
+		966 5588 5589 5591 5681 5682 5683 6767 6768 15498 15504
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=pastoral
+	local_supplies=0.000
+}

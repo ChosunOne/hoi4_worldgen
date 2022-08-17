@@ -1,0 +1,24 @@
+state={
+	id=1264
+	name="STATE_1264"
+	resources = {
+		water = 2
+	}
+	provinces={
+		14311 14312 14313 14314 14382 14421 14422
+	}
+	history={
+		owner =  STA
+		add_core_of =  STA
+		victory_points = {
+			14313 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 2100
+	buildings_max_level_factor=1.000
+}

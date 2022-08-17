@@ -1,0 +1,31 @@
+state = {
+	id = 808
+	name = "STATE_808"
+	resources={
+		composites = 8
+		metal = 4
+	}
+
+	history={
+		owner = ATE
+		add_core_of = ATE
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			10149 = {
+				naval_base = 6
+			}
+		}
+		victory_points = {
+			10149 10
+		}
+
+	}
+
+	provinces={
+		10070 10093 10126 10143 10149 10187 10211 10231 10862 10876 10883
+	}
+	manpower=35214
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

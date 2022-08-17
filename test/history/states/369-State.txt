@@ -1,0 +1,29 @@
+state = {
+	id = 369
+	name = "STATE_369"
+	resources = {
+		metal = 6
+		water = 6
+		energy = 4
+	}
+
+	history={
+		owner = FOU
+		add_core_of = FOU
+		victory_points = {
+			4936 5
+		}
+		buildings = {
+			industrial_complex = 1 #it was dockyards but this state is landlocked so i guess its meant to be civ and mils
+			arms_factory = 1
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		1232 5026 4994 4995 4996 4936 4993 2600 5022
+	}
+	manpower=8000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

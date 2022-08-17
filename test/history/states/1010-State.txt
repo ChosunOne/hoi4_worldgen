@@ -1,0 +1,23 @@
+state={
+	id=1010
+	name="STATE_1010"
+	resources = {
+		water = 2
+		metal = 6
+	}
+	history={
+		owner = MET
+		add_core_of = MET
+
+		victory_points = {
+			12752 10
+		}
+	}
+
+	provinces={
+		12752 12746 12741 12755 12764 12769 12747 12758 12735 12724 12723
+	}
+	manpower = 1400
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

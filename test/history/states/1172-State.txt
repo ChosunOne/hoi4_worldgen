@@ -1,0 +1,28 @@
+state={
+	id=1172
+	name="STATE_1172"
+	provinces={
+		13263 13264 16324 16325 16328 16329
+	}
+	resources = {
+		water = 8
+		energy = 6
+		metal = 8
+	}
+	history = {
+		owner = GIM
+		add_core_of = GIM
+		victory_points = {
+			16328 20
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 2
+			dockyard = 1
+		}
+	}
+	state_category = large_town
+	manpower = 17500
+	buildings_max_level_factor=1.000
+}

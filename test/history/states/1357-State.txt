@@ -1,0 +1,24 @@
+state={
+	id=1357
+	name="STATE_1357"
+	provinces={
+		14796 14797 14800 14801 14802 14803 14804 14805
+	}
+	resources = {
+		water = 6
+	}
+	history = {
+		owner = RRR
+		add_core_of = RRR
+		victory_points = {
+			14802 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 2400
+	buildings_max_level_factor=1.000
+}

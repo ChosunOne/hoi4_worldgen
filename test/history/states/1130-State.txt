@@ -1,0 +1,24 @@
+state={
+	id=1130
+	name="STATE_1130"
+	provinces={
+		13698 13699 13700 13701 13702 13708 13709 13727 13730
+	}
+	resources = {
+		energy = 6
+	}
+	history={
+		owner =  BGR
+		add_core_of =  BGR
+		victory_points = {
+			13702 5
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+	state_category = shanty
+	manpower = 1300
+	buildings_max_level_factor=1.000
+}

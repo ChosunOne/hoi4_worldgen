@@ -1,0 +1,31 @@
+state = {
+	id = 884
+	name = "STATE_884"
+	resources = {
+		energy = 25
+		metal = 4
+		circuitry = 12
+	}
+	history={
+		owner = CAR
+		add_core_of = CAR
+		victory_points = {
+			803 10
+		}
+		buildings = {
+			infrastructure = 5
+			arms_factory = 2
+			industrial_complex = 2
+			dockyard = 2
+			803 = {
+				naval_base = 2
+			}
+		}
+	}
+	provinces={
+		803 11904 11905 11909 11911 11915 11919 11920 11923 11928 11929 11933 11940 11944 11950
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=large_city
+}

@@ -1,0 +1,21 @@
+state = {
+	id = 459
+	name = "STATE_459"
+	impassable = yes
+
+	history={
+		owner = EHT
+		add_core_of = EHT
+		add_core_of = WEN #A country that can appear through revolts or liberation/puppeting
+		buildings = {
+		}
+
+	}
+
+	provinces={
+		6340
+	}
+	manpower=45
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

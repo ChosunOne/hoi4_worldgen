@@ -1,0 +1,25 @@
+state = {
+	id = 498
+	name = "STATE_498"
+
+	history={
+		owner = CES
+		add_core_of = CES
+		add_core_of = BLK
+		victory_points = {
+			6578 10
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		6577 6578 6962 6963 6964 8362 8363 8364 997 8087 8085 8086
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

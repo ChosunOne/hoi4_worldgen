@@ -1,0 +1,24 @@
+state={
+	id=1217
+	name="STATE_1217"
+	provinces={
+		13958 13965 13966 13967 13968 13969 13970 13971 13972 13993 13998 13999
+	}
+	resources = {
+		metal = 6
+	}
+	history={
+		owner =  WHC
+		add_core_of =  WHC
+		victory_points = {
+			13970 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 3
+		}
+	}
+	state_category = town
+	manpower = 5100
+	buildings_max_level_factor=1.000
+}

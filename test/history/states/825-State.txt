@@ -1,0 +1,19 @@
+state = {
+	id = 825
+	name = "STATE_825"
+	impassable = yes
+	history={
+		owner = ITZ
+		add_core_of = ITZ
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		9994 10008 10077 10091 10102 10844 10848 10849 10852 10855 10859 10861 10865 10866 10872 10875 10882 10887
+	}
+	manpower=5761
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

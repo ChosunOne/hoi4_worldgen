@@ -1,0 +1,31 @@
+state = {
+	id = 57
+	name = "STATE_57"
+	manpower = 12000
+	state_category = large_town
+
+	resources = {
+		water = 4
+		metal = 4
+		circuitry = 2
+		composites = 2
+		advanced = 2
+	}
+
+	history = {
+		owner = TDN
+		add_core_of = TDN
+		victory_points = {
+			5067 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 2
+		}
+	}
+
+	provinces = {
+		3413 3468 3469 3471 5067 5030 5068 5024 5025 5029 2599 2598 1859 5069 5054 2176 2177 3472 2508 1529
+	}
+}

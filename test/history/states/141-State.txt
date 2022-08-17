@@ -1,0 +1,28 @@
+state = {
+	id = 141
+	name = "STATE_141"
+	manpower = 25000
+	state_category = large_city
+
+	resources = {
+		water = 2
+		metal = 6
+	}
+
+	history = {
+		owner = NCR
+		add_core_of = RDS
+		victory_points = {
+			4933 25
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 3
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		4933 4932 4991 4931 1756 4935 2175 1199 5063 5028 5062 4809 4808 5027 7165 4990
+	}
+}

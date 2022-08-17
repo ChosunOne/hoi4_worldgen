@@ -1,0 +1,26 @@
+state = {
+	id = 123
+	name = "STATE_123"
+	resources = {
+		water = 5
+		metal = 5
+	}
+	history={
+		owner = SCO
+		add_core_of = SCO
+		victory_points = {
+			7872 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+
+	}
+
+	provinces={
+		1033 5283 5284 5285 5674 7027 7872 7873 7874 7875 7876 7877 7879
+	}
+	manpower= 6500
+	buildings_max_level_factor=1.000
+	state_category=city
+}

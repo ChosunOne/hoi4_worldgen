@@ -1,0 +1,24 @@
+
+state={
+	id=1381
+	name="STATE_1381"
+	provinces={
+		13267 16347 16348 16350 16351 16354 16356 16358 16359
+	}
+	history = {
+		owner = RMM
+		add_core_of = RMM
+		victory_points = {
+			13267 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			16356 = { #it was 16536 and thats no mans land so i guess the coder meant 16356 -ahmex
+				naval_base = 1
+			}
+		}
+	}
+	state_category = rural
+	manpower = 3700
+}

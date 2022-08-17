@@ -1,0 +1,21 @@
+state = {
+	id = 108
+	name = "STATE_108"
+	history={
+		owner = CWB
+		add_core_of = CWB
+		victory_points = {
+			5268 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+	provinces={
+		2841 2970 5267 5268 5269 5270 5273 5274 5561 5562 5563 6671 7007 7008 7012 7013
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

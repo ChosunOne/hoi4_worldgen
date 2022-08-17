@@ -1,0 +1,28 @@
+state = {
+	id = 27
+	name = "STATE_27"
+	manpower = 7000
+	state_category = town
+
+	resources = {
+		water = 4
+	}
+
+	history = {
+		owner = KAM
+		add_core_of = KAM
+		add_claim_by = SYN
+		victory_points = {
+			3825 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		3790 2154 3788 3789 2094 3825 3824 3826 2091 2117 7212 7523
+	}
+}

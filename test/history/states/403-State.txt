@@ -1,0 +1,22 @@
+state = {
+	id = 403
+	name = "STATE_403"
+	manpower = 3000
+	state_category = rural
+
+	history = {
+		owner = LON
+		add_core_of = LON
+		victory_points = {
+			8332 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+	}
+
+	provinces = {
+		1286 8322 8324 8325 8331 8332 8333 8341 8353 8355 8357 8343
+	}
+}

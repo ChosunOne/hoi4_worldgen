@@ -1,0 +1,27 @@
+state = {
+	id = 221
+	name = "STATE_221"
+	manpower = 8000
+	state_category = city
+
+	history = {
+		owner = PMR
+		add_core_of = PMR
+		victory_points = {
+			7075 15
+		}
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 4
+			air_base = 1
+			dockyard = 2
+			7075 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		7075 7093 7076 7077 7079 7080 7081 7092 7094 7096 7078 7091 7084 4023 7085
+	}
+}

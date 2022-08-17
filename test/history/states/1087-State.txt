@@ -1,0 +1,17 @@
+state={
+	id=1087
+	name="STATE_1087"
+
+	history={
+		owner =  IRC
+		add_core_of =  IRC
+	}
+
+	provinces={
+		7346
+	}
+	impassable = yes
+	manpower = 44
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

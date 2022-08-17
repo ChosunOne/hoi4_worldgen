@@ -1,0 +1,25 @@
+state = {
+	id = 467
+	name = "STATE_467"
+	manpower = 4500
+	state_category = town
+	resources = {
+		metal = 8
+		water = 4
+	}
+	history = {
+		owner = MXS
+		add_core_of = MXS
+		victory_points = {
+			4365 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 3
+			arms_factory = 1
+		}
+	}
+	provinces = {
+		2352 4188 4365 4366 4367 5032 5033 5053 5064 7136 2353 1257
+	}
+}

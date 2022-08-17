@@ -1,0 +1,36 @@
+state = {
+	id = 122
+	name = "STATE_122"
+	manpower = 30000
+	state_category = city
+
+	resources = {
+		water = 4
+		advanced = 2
+		energy = 5
+	}
+
+	history = {
+		owner = LGS
+		add_core_of = LGS
+		victory_points = {
+			780 30
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 2
+			anti_air_building = 3
+			radar_station = 1
+			air_base = 1
+			7796 = {
+				naval_base = 2
+			}
+
+		}
+	}
+
+	provinces = {
+		780 3016 3136 7641 7645 7646 7647 7648 7672 7680 7744 7789 7796 7797 7798
+	}
+}

@@ -1,0 +1,21 @@
+state={
+	id=1128
+	name="STATE_1128"
+	provinces={
+		13685 13686 13687 13688 13689 13690 13732 13733
+	}
+	history={
+		owner =  BGR
+		add_core_of =  BGR
+		victory_points = {
+			13688 5
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 2
+		}
+	}
+	state_category = town
+	manpower = 1400
+	buildings_max_level_factor=1.000
+}

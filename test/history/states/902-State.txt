@@ -1,0 +1,26 @@
+state = {
+	id = 902
+	name = "STATE_902"
+	resources = {
+		water = 4
+		metal = 4
+	}
+	history={
+		owner = TLL
+		add_core_of = TLL
+		victory_points = {
+			12046 15
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			industrial_complex = 2
+		}
+	}
+	provinces={
+		874 2865 2866 12001 12002 12007 12015 12027 12033 12034 12044 12046 12048 12063 12066 12070
+	}
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

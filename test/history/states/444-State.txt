@@ -1,0 +1,33 @@
+state = {
+	id = 444
+	name = "STATE_444"
+
+	history={
+		owner = COW
+		add_core_of = COW
+		victory_points = {
+			5301 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 2
+			industrial_complex = 1
+			dockyard = 1
+			anti_air_building = 1
+			radar_station = 1
+			air_base = 1
+			5310 = {
+				naval_base = 4
+
+			}
+
+		}
+	}
+
+	provinces={
+		808 830 1675 2060 2061 3145 3172 5298 5299 5300 5301 5302 5303 5304 5305 5306 5307 5308 5309 5310 5345 5346 5375 5376
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

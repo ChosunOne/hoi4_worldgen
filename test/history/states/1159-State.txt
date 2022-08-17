@@ -1,0 +1,25 @@
+state={
+	id=1159
+	name="STATE_1159"
+	provinces={
+		14015 14016 14017 14018 14054 14058 14061 14062 14065 14072
+	}
+	resources = {
+		water = 2
+		metal = 4
+	}
+	history={
+		owner =  WHC
+		add_core_of =  WHC
+		victory_points = {
+			14054 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = shanty
+	manpower = 2300
+	buildings_max_level_factor=1.000
+}

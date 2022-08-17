@@ -1,0 +1,25 @@
+state={
+	id=1174
+	name="STATE_1174"
+	provinces={
+		13266 13270 16339 16343 16345 16346 16349 16352 16353 16355
+	}
+	resources = {
+		composites = 2
+	}
+	history = {
+		owner = ARB
+		add_core_of = ARB
+		victory_points = {
+			16343 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+	state_category = shanty
+	manpower = 2300
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

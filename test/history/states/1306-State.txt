@@ -1,0 +1,23 @@
+state={
+	id=1306
+	name="STATE_1306"
+	provinces={
+		13388 13403 13405 13407 13409 13417 13418 13419 13433 13435 13436
+	}
+	resources = {
+		energy = 2
+	}
+	history = {
+		owner = ATM
+		add_core_of = ATM
+		victory_points = {
+			13407 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = rural
+	manpower = 1100
+	buildings_max_level_factor=1.000
+}

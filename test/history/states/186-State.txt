@@ -1,0 +1,21 @@
+state = {
+	id = 186
+	name = "STATE_186"
+	manpower = 2500
+	state_category = rural
+
+	history = {
+		owner = PMR
+		add_core_of = PMR
+		victory_points = {
+			7101 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		4340 3873 2523 4341 3876 3875 3874 7103 7104 7102 7101 8574 1981 3877 1980 1982 4202
+	}
+}

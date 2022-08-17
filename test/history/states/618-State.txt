@@ -1,0 +1,30 @@
+state = {
+	id = 618
+	name = "STATE_618"
+	history={
+		owner = CHR
+		add_core_of = CHR
+		victory_points = {
+			12258 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			12254 = {
+				naval_base = 1
+			}
+		}
+
+	}
+	provinces={
+		959 12247 12248 12249 12250 12251 12252 12254 12255 12258 12264 12265 12273 12281 12291 12296
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+
+	resources = {
+		water = 8
+		metal = 3
+	}
+}

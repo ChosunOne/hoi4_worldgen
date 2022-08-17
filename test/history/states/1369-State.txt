@@ -1,0 +1,23 @@
+state={
+	id=1369
+	name="STATE_1369"
+	provinces={
+		14958 14960 14963 15107 15118 15119 15120 15121 15122 15123
+	}
+	resources = {
+		water = 12
+	}
+	history={
+		owner = DLN
+		add_core_of = DLN
+		victory_points = {
+			15120 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = shanty
+	manpower = 2200
+	buildings_max_level_factor=1.000
+}

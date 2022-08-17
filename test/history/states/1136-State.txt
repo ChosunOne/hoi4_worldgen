@@ -1,0 +1,22 @@
+state={
+	id=1136
+	name="STATE_1136"
+	provinces={
+		14194 14195 14197 14218 14219 14220 14221 14222
+	}
+	resources = {
+	}
+	history = {
+		owner = VER
+		add_core_of = VER
+		victory_points = {
+			14221 2
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	state_category = shanty
+	manpower = 1100
+	buildings_max_level_factor=1.000
+}

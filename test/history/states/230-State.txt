@@ -1,0 +1,39 @@
+state = {
+	id = 230
+	name = "STATE_230"
+	manpower = 2000
+	state_category = rural
+
+	history = {
+		owner = YAK
+		add_core_of = YAK
+		victory_points = {
+			4017 5
+		}
+		buildings = {
+			infrastructure = 2
+			3896 = {
+				naval_base = 1
+			}
+		}
+		2275.1.1 = {
+			WBH = {
+				set_province_controller = 1490
+				set_province_controller = 3892
+				set_province_controller = 3893
+				set_province_controller = 3894
+				set_province_controller = 3896
+				set_province_controller = 3904
+				set_province_controller = 4016
+				set_province_controller = 4017
+				set_province_controller = 4018
+				set_province_controller = 4020
+				set_province_controller = 4021
+			}
+		}
+	}
+
+	provinces = {
+		1490 3892 3893 3894 3896 3904 4016 4017 4018 4020 4021
+	}
+}

@@ -1,0 +1,32 @@
+state = {
+	id = 154
+	name = "STATE_154"
+	resources={
+		composites = 6
+		metal = 6
+	}
+
+	history={
+		owner = VEG
+		add_core_of = VEG
+		victory_points = {
+			8856 15
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 2
+			air_base = 3
+			8856 = {
+				bunker = 1
+			}
+		}
+	}
+
+	provinces={
+		1622 3194 8856 3198
+	}
+	manpower=7876
+	buildings_max_level_factor=1.000
+	state_category=large_city
+}

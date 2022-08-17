@@ -1,0 +1,27 @@
+state = {
+	id = 372
+	name = "STATE_372"
+	manpower = 10000
+	state_category = town
+
+	resources = {
+		water = 2
+	}
+
+	history = {
+		owner = UMB
+		add_core_of = UMB
+		add_core_of = EMB
+		victory_points = {
+			5003 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		4919 7059 4911 7060 5001 7153 5003 5002 2171 4910 1755
+	}
+}

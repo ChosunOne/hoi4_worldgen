@@ -1,0 +1,30 @@
+state = {
+	id = 282
+	name = "STATE_282"
+	manpower = 7000
+	state_category = rural
+
+	history = {
+		owner = RES
+		add_core_of = RES
+		add_core_of = WAP
+		victory_points = {
+			1580 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+	}
+	resources={
+		metal = 6
+		water = 3
+		composites = 2
+		circuitry = 2
+		advanced = 3
+	}
+
+	provinces = {
+		1580 2747 2763 2771 3038 3040 5653 5655 8096 8097
+	}
+}

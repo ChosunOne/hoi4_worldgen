@@ -1,0 +1,25 @@
+state = {
+	id = 74
+	name = "STATE_74"
+	manpower = 9000
+	state_category = town
+
+	history = {
+		owner = MUR
+		add_core_of = MUR
+		#add_claim_by = ANO: AI will declare war by Sep 2275 if you do this
+		victory_points = {
+			7520 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+			dockyard = 2
+		}
+	}
+
+	provinces = {
+		7520 2504 4474 4477 1343 4471 4473 4472
+	}
+}

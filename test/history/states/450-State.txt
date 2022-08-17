@@ -1,0 +1,22 @@
+state = {
+	id = 450
+	name = "STATE_450"
+	manpower = 3000
+	state_category = town
+
+
+	history = {
+		owner = RBT
+		add_core_of = RBT
+		victory_points = {
+			4102 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		4102 4293 1423 4115 1416 4294 2735
+	}
+}

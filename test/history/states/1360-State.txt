@@ -1,0 +1,27 @@
+state={
+	id=1360
+	name="STATE_1360"
+	provinces={
+		13301 13306 13308 13313 13314 13317 14842
+	}
+	resources = {
+		water = 12
+		energy = 8
+	}
+	history = {
+		owner = DUK
+		add_core_of = DUK
+		victory_points = {
+			15116 5
+		}
+		buildings = {
+			infrastructure = 2
+			13314 = {
+				naval_base = 1
+			}
+		}
+	}
+	state_category = rural
+	manpower = 3500
+	buildings_max_level_factor=1.000
+}

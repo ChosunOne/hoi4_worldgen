@@ -1,0 +1,25 @@
+state={
+	id=1011
+	name="STATE_1011"
+	resources = {
+		metal = 4
+		energy = 4
+	}
+	history={
+		owner = MET
+		add_core_of = MET
+		victory_points = {
+			673 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		434 2518 2464 673 2466 671 433 2227
+	}
+	manpower = 1300
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

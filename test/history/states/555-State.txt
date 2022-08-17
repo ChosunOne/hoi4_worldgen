@@ -1,0 +1,33 @@
+state = {
+	id = 555
+	name = "STATE_555"
+	resources={
+		energy = 4
+		metal = 8
+	}
+
+	history={
+		owner = GDH
+		add_core_of = GDH
+		victory_points = {
+			7553 5
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 2
+			7553 = {
+				naval_base = 1
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		790 2072 6972 7551 7552 7553 7584 7585 7586 7593 7769 7778
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

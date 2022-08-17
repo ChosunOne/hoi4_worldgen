@@ -1,0 +1,21 @@
+state = {
+	id = 55
+	name = "STATE_55"
+	manpower = 6000
+	state_category = rural
+
+	history = {
+		owner = YMP
+		add_core_of = YMP
+		victory_points = {
+			6810 5
+		}
+		buildings = {
+		infrastructure = 3
+		}
+	}
+
+	provinces = {
+		9170 6812 6820 9168 6819 6810 9172 6811 9173
+	}
+}

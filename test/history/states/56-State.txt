@@ -1,0 +1,27 @@
+state = {
+	id = 56
+	name = "STATE_56"
+	manpower = 15000
+	state_category = town
+
+	history = {
+		owner = NAT
+		add_core_of = NAT
+		victory_points = {
+			4899 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 2
+		}
+	}
+	resources={
+		metal = 3
+		composites = 4
+	}
+
+	provinces = {
+		1766 1173 4899 4900 4929 6661 4928 4927 3439 2612 1115 4810 4814 7155 1625 4811 4934 1624 4930
+	}
+}

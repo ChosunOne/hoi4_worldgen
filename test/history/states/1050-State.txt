@@ -1,0 +1,19 @@
+state={
+	id=1050
+	name="STATE_1050"
+	resources = {
+		metal = 4
+	}
+
+	history={
+		owner = JCK
+		add_core_of = JCK
+	}
+
+	provinces={
+		12751 12737 12733 12719 12710 12702 12705 12690 12687 12684 12697 12683
+	}
+	manpower = 100
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

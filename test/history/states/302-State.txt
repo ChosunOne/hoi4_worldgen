@@ -1,0 +1,29 @@
+state = {
+	id = 302
+	name = "STATE_302"
+	manpower = 2000
+	state_category = rural
+
+	resources = {
+		energy = 5
+	}
+
+	history = {
+		owner = TOB
+		add_core_of = TOB
+		victory_points = {
+			7459 5
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+			7459 = {
+				naval_base = 2
+			}
+		}
+	}
+
+	provinces = {
+		1726 3091 7459 7460 7461 7469 7465
+	}
+}

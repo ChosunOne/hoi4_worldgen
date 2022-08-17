@@ -1,0 +1,28 @@
+state = {
+	id = 238
+	name = "STATE_238"
+	resources={
+		metal=4.000
+		water = 14
+	}
+
+	history={
+		owner = SYN
+		add_core_of = SYN
+		victory_points = {
+			7409 10
+		}
+		buildings = {
+			infrastructure = 3
+
+		}
+
+	}
+
+	provinces={
+		7409 4396 262 7408 2124 4395 4391 4393 2149 3830 3829 7491 3046 2532 3831 12405 445 12403 681 3832 2125 3944 8504
+	}
+	manpower=2065
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,22 @@
+state = {
+	id = 348
+	name = "STATE_348"
+	impassable = yes
+
+	history={
+		owner = DEA
+		add_core_of = DEA
+
+		buildings = {
+
+		}
+
+	}
+
+	provinces={
+		6450
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

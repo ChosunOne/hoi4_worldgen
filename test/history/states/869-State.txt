@@ -1,0 +1,41 @@
+state = {
+	id = 869
+	name = "STATE_869"
+	history={
+		owner = CHO
+		add_core_of = CHO
+		victory_points = {
+			12127 20
+		}
+		victory_points = {
+			12110 5
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			industrial_complex = 1
+			dockyard = 1
+			12140 = {
+				naval_base = 1
+			}
+		}
+
+	}
+
+
+
+	provinces={
+		937 12106 12110 12113 12115 12119 12124 12125 12126 12127 12130 12140 12141 12145 12146 12152
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+
+	resources = {
+		water = 8
+		energy = 7
+		metal = 6
+		composites = 4
+		advanced = 3
+	}
+}

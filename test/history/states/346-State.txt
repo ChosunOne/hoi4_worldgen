@@ -1,0 +1,25 @@
+state = {
+	id = 346
+	name = "STATE_346"
+
+	history={
+		owner = ROT
+		add_core_of = ROT
+		victory_points = {
+			7174 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		7202 4052 7204 4050 7169 4054 4055 7174 7173 4505 1507 4503 8488 8489 8535 8490 8496 8491 4053 7171 1944 7170 7172
+	}
+	manpower=6240
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

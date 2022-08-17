@@ -1,0 +1,33 @@
+state = {
+	id = 337
+	name = "STATE_337"
+	resources={
+		metal = 10
+		water = 6
+		composites = 4
+		circuitry = 4
+		advanced = 2
+	}
+
+	history={
+		owner = ARR
+		add_core_of = ARR
+		victory_points = {
+			2722 25
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+
+	}
+
+	provinces={
+		2724 2726 5034 2723 1750 1752 2722
+	}
+	manpower= 25000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

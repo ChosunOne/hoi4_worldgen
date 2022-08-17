@@ -1,0 +1,29 @@
+state={
+	id=1181
+	name="STATE_1181"
+	provinces={
+		13280 13286 13298 13307
+	}
+	resources = {
+		water = 6
+		metal = 8
+	}
+	history = {
+		owner = DMM
+		add_core_of = DMM
+		victory_points = {
+			13298 8
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 1
+			13298 = {
+				naval_base = 1
+			}
+		}
+	}
+	state_category = town
+	manpower = 5500
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,23 @@
+state={
+	id=1112
+	name="STATE_1112"
+	resources = {
+		metal = 2
+	}
+	provinces={
+		13156 13160 13162 13163 13168 13169 13170
+	}
+	history={
+		owner = TPL
+		add_core_of = TPL
+		victory_points = {
+			13163 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = rural
+	manpower = 1500
+	buildings_max_level_factor=1.000
+}

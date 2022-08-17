@@ -1,0 +1,25 @@
+
+state={
+	id=946
+	name="STATE_946"
+	resources = {
+		energy = 7
+	}
+	history={
+		owner = DES
+		add_core_of = DES
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+		victory_points = {
+			8743 5
+		}
+	}
+	provinces={
+		1071 8743 8810 5057
+	}
+	manpower=1795
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

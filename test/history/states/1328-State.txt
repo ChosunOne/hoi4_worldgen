@@ -1,0 +1,33 @@
+state={
+	id=1328
+	name="STATE_1328"
+	provinces={
+		14680 14681 14682 14923 15207 15208
+	}
+	resources = {
+		water = 12
+		energy = 4
+		metal = 12
+		composites = 2
+		circuitry = 2
+	}
+	history={
+		owner = DLN
+		add_core_of = DLN
+		add_core_of =  YRK
+		victory_points = {
+			14923 25
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 3
+			arms_factory = 3
+			14682 = {
+				naval_base = 2
+			}
+		}
+	}
+	state_category = city
+	manpower = 15080
+	buildings_max_level_factor=1.000
+}

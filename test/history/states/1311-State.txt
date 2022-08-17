@@ -1,0 +1,23 @@
+state={
+	id=1311
+	name="STATE_1311"
+	provinces={
+		13483 13484 13488 13489 13490 15066 15075 15076
+	}
+	resources = {
+		energy = 3
+	}
+	history = {
+		owner = ROL
+		add_core_of = ROL
+		victory_points = {
+			13489 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = shanty
+	manpower = 2300
+	buildings_max_level_factor=1.000
+}

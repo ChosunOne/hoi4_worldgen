@@ -1,0 +1,20 @@
+state={
+	id=1262
+	name="STATE_1262"
+	provinces={
+		14315 14316 14317 14410 14416 14417 14420 14423
+	}
+	history={
+		owner =  STA
+		add_core_of =  STA
+		victory_points = {
+			14410 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = rural
+	manpower = 3900
+	buildings_max_level_factor=1.000
+}

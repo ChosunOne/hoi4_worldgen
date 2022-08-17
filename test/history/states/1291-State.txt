@@ -1,0 +1,30 @@
+
+state={
+	id=1291
+	name="STATE_1291"
+	resources={
+		water=20.000
+	}
+
+	history={
+		owner = SNO
+		add_core_of = SNO
+		victory_points = {
+			16410 8
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+
+		}
+
+	}
+
+	provinces={
+		13516 13519 13520 13521 13522 13581 13582 16410
+	}
+	manpower=5500
+	buildings_max_level_factor=1.000
+	state_category=town
+	local_supplies=0.000
+}

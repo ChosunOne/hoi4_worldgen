@@ -1,0 +1,19 @@
+
+state={
+	id=947
+	name="STATE_947"
+	history={
+		owner = VIP
+		add_core_of = VIP
+		buildings = {
+			infrastructure = 1
+		}
+
+	}
+	provinces={
+		8790 8796 8792 8797 8795
+	}
+	manpower=712
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

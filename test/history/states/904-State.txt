@@ -1,0 +1,27 @@
+state = {
+	id = 904
+	name = "STATE_904"
+	resources = {
+		circuitry = 2
+		composites = 1
+		advanced = 1
+	}
+	history={
+		owner = TBH
+		add_core_of = TBH
+		victory_points = {
+			11442 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+
+	}
+	provinces={
+		8590 9688 11386 11392 11397 11403 11408 11415 11417 11425 11426 11430 11431 11435 11436 11441 11442 11448 11459 11465
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

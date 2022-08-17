@@ -1,0 +1,25 @@
+state = {
+	id = 192
+	name = "STATE_192"
+	manpower = 3500
+	state_category = shanty
+
+	history = {
+		owner = PMR
+		add_core_of = PMR
+		victory_points = {
+			7066 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			7066 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		3872 2737 1469 4339 7068 7067 7066 3871 7069 4338 2736 3870
+	}
+}

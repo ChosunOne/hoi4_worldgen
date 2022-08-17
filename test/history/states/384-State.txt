@@ -1,0 +1,27 @@
+state = {
+	id = 384
+	name = "STATE_384"
+	resources={
+		water = 4
+		metal = 4
+	}
+
+	history={
+		owner = ANO
+		add_core_of = ANO
+		victory_points = {
+			8258 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces={
+		8257 1292 8255 8256 8258 8323 8356 8349 1557 2583 8222 8261 8252
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

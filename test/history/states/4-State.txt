@@ -1,0 +1,25 @@
+state = {
+	id = 4
+	name = "STATE_4"
+
+	history={
+		owner = RAP
+		add_core_of = RAP
+		victory_points = {
+			4642 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		4641 4642 4821 5790 9176 3107 5314
+	}
+	manpower=8401
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

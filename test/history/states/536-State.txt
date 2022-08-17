@@ -1,0 +1,27 @@
+state = {
+	id = 536
+	name = "STATE_536"
+	manpower = 4800
+	state_category = shanty
+
+	resources = {
+		water = 4
+		metal = 4
+	}
+
+	history = {
+		owner = CHE
+		add_core_of = CHE
+		victory_points = {
+			4262 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		2217 3388 4145 4146 4147 4149 4260 4262 1313 4144 4261
+	}
+}

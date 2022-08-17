@@ -1,0 +1,38 @@
+state = {
+	id = 274
+	name = "STATE_274"
+	manpower = 10000
+	state_category = city
+
+	resources = {
+		water = 4
+		metal = 16
+		energy = 4
+		composites = 8
+		advanced = 8
+		circuitry = 12
+	}
+
+	history = {
+		owner = PMR
+		add_core_of = PMR
+		victory_points = {
+			7097 25
+		}
+		buildings = {
+			dockyard = 2
+			industrial_complex = 1
+			arms_factory = 1
+			infrastructure = 4
+			7097 = {
+				naval_base = 5
+				bunker = 2
+				coastal_bunker = 2
+			}
+		}
+	}
+
+	provinces = {
+		2524 3866 4031 7072 7090 7097 7098 7099 4024 3865 7105
+	}
+}

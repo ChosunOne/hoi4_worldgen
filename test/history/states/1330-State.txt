@@ -1,0 +1,25 @@
+state={
+	id=1330
+	name="STATE_1330"
+	provinces={
+		14679 15210 15211 15212 15213 15214 15215
+	}
+	resources = {
+		energy = 4
+	}
+	history={
+		owner = DLN
+		add_core_of = DLN
+		add_core_of =  YRK
+		victory_points = {
+			15210 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 4600
+	buildings_max_level_factor=1.000
+}

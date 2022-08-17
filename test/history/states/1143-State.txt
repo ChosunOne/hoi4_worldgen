@@ -1,0 +1,27 @@
+state={
+	id=1143
+	name="STATE_1143"
+	provinces={
+		14119 14121 14135 14136 14145 14148
+	}
+	resources = {
+		water = 8
+		energy = 8
+		metal = 8
+	}
+	history = {
+		owner = IRC
+		add_core_of = IRC
+		victory_points = {
+			14119 20
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 3
+			arms_factory = 1
+		}
+	}
+	state_category = town
+	manpower = 15500
+	buildings_max_level_factor=1.000
+}

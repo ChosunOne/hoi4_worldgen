@@ -1,0 +1,18 @@
+state={
+	id=963
+	name="STATE_963"
+	history={
+		owner = ROS
+		add_core_of = ROS
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		4241 4243 4239
+	}
+	manpower=542
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,26 @@
+state = {
+	id = 246
+	name = "STATE_246"
+	resources={
+		metal = 12
+	}
+
+	history={
+		owner = TAR
+		add_core_of = TAR
+		victory_points = {
+			6360 10
+		}
+		buildings = {
+			infrastructure = 3
+		}
+
+	}
+
+	provinces={
+		6358 6359 6360 6580 6324 9087 6357
+	}
+	manpower=8963
+	buildings_max_level_factor=1.000
+	state_category=town
+}

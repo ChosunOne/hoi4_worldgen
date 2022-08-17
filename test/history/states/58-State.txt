@@ -1,0 +1,19 @@
+state = {
+	id = 58
+	name = "STATE_58"
+	impassable = yes
+
+	history={
+		owner = UIN
+		add_core_of = UIN
+		buildings = {
+		}
+	}
+
+	provinces={
+		6334
+	}
+	manpower=231
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

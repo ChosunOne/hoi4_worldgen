@@ -1,0 +1,26 @@
+state = {
+	id = 570
+	name = "STATE_570"
+	manpower = 7000
+	state_category = town
+
+	resources = {
+		water = 7
+		metal = 2
+	}
+
+	history = {
+		owner = TTM
+		add_core_of = TTM
+		victory_points = {
+			9085 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		6724 6722 6725 9088 9093 9085 2781 1817 1788 1575 6758 5582 5725
+	}
+}

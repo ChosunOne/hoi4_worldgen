@@ -1,0 +1,35 @@
+
+state={
+	id=408
+	name="STATE_408"
+	resources={
+		advanced=1.000
+		metal=2.000
+		circuitry=6.000
+		energy=6.000
+	}
+
+	history={
+		owner = TTM
+		add_core_of = TTM
+		victory_points = {
+			6627 2
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			radar_station = 1
+
+		}
+
+	}
+
+	provinces={
+		1570 5590 5724 6627 6759 9083 9089 9091 9092 15514
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+	local_supplies=0.000
+}

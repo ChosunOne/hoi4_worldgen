@@ -1,0 +1,28 @@
+state = {
+	id = 395
+	name = "STATE_395"
+	resources={
+		water = 4
+		metal = 2
+	}
+
+	history={
+		owner = TON
+		add_core_of = TON
+		victory_points = {
+			2046 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		853 2046 2329 2330 2894 3170 5312 5367 5368 5369 5371 5388 5389 5390 6631
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

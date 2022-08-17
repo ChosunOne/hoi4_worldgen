@@ -1,0 +1,52 @@
+state = {
+	id = 291
+	name = "STATE_291"
+
+	history={
+		owner = VLT
+		add_core_of = VLT
+		victory_points = {
+			9197 30
+		}
+		buildings = {
+			infrastructure = 5
+			arms_factory = 2
+			industrial_complex = 5
+			electricity_generator = 2
+			9197 = {
+				bunker = 2
+				bunker2 = 0
+			}
+			2667 = {
+				bunker = 1
+			}
+			2714 = {
+				bunker = 1
+			}
+			3465 = {
+				bunker = 1
+			}
+			3538 = {
+				bunker = 1
+			}
+			3541 = {
+				bunker = 1
+			}
+		}
+	}
+
+	provinces={
+		3465 3541 2714 3538 2667 9197
+	}
+	manpower=27500
+	buildings_max_level_factor=1.000
+	state_category= megalopolis
+	resources = {
+		water = 8
+		metal = 4
+		composites = 4
+		energy = 2
+		circuitry = 16
+		advanced = 16
+	}
+}

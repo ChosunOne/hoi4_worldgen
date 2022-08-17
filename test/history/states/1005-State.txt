@@ -1,0 +1,45 @@
+state={
+	id=1005
+	name="STATE_1005"
+
+	history={
+		owner = SAN
+		add_core_of = SAN
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 2
+			3946 = {
+				bunker = 2
+			}
+			7329 = {
+				bunker = 2
+			}
+			4 = {
+				bunker = 2
+			}
+			2099 = {
+				bunker = 2
+			}
+			3808 = {
+				bunker = 2
+			}
+			3766 = {
+				bunker = 2
+			}
+			3756 = {
+				bunker = 2
+			}
+		}
+		victory_points = {
+			2113 10
+		}
+	}
+
+	provinces={
+		4 2099 3808 2113 7329 7332 3946 5120 3756 3766
+	}
+	manpower = 11800
+	state_category = city
+	buildings_max_level_factor=1.000
+}

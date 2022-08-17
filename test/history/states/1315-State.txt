@@ -1,0 +1,25 @@
+
+state={
+	id=1315
+	name="STATE_1315"
+	provinces={
+		15182 15183 15184 15185 15191 15194 15196 15198 15199
+	}
+	resources = {
+		water = 2
+		energy = 2
+	}
+	history = {
+		owner = MTC
+		add_core_of = MTC
+		victory_points = {
+			15199 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 3400
+}

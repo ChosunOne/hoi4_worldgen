@@ -1,0 +1,34 @@
+state = {
+	id = 417
+	name = "STATE_417"
+	resources={
+		composites = 4
+		energy = 30
+		advanced = 2
+	}
+
+	history={
+		owner = MOJ
+		add_core_of = MOJ
+		victory_points = {
+			5764 15
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			6992 = {
+				bunker = 2
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		972 6992 5764
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

@@ -1,0 +1,27 @@
+state = {
+	id = 226
+	name = "STATE_226"
+	manpower = 5000
+	state_category = rural
+
+	resources = {
+		water = 4
+		metal = 10
+	}
+
+	history = {
+		owner = VIP
+		add_core_of = VIP
+		victory_points = {
+			3456 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		1533 3392 1536 3456 8919 8920
+	}
+}

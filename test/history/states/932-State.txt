@@ -1,0 +1,28 @@
+state = {
+	id = 932
+	name = "STATE_932"
+	resources = {
+		metal = 6
+		energy = 4
+		water = 2
+	}
+	history={
+		owner = SHA
+		add_core_of = SHA
+		victory_points = {
+			11531 15
+		}
+		buildings = {
+			infrastructure = 7
+			arms_factory = 4
+			industrial_complex = 1
+		}
+
+	}
+	provinces={
+		822 2280 2281 2963 5699 7005 7746 7747 11531 11559 11565 11569 11580 11582 11585 11587 11598 11618 11729
+	}
+	manpower=23000
+	buildings_max_level_factor=1.000
+	state_category=city #Mostly for balance purposes, lots of military buildup here
+}

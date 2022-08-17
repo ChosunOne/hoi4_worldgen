@@ -1,0 +1,21 @@
+state = {
+	id = 625
+	name = "STATE_625"
+	manpower = 54
+	state_category = wasteland
+	impassable = yes
+	resources = {
+	}
+
+	history = {
+		owner = CLK
+		add_core_of = CLK
+		buildings = {
+
+		}
+	}
+
+	provinces = {
+		6331
+	}
+}

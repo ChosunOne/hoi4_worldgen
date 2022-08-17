@@ -1,0 +1,34 @@
+state = {
+	id = 835
+	name = "STATE_835"
+
+	history={
+		owner = GRH
+		add_core_of = GRH
+			buildings = {
+			infrastructure = 2
+			arms_factory = 2
+			9762 = {
+				naval_base = 3
+			}
+			9831 = {
+				naval_base = 2
+			}
+		}
+		victory_points = {
+			9762 10
+		}
+	}
+
+	provinces={
+		9762 9763 9764 9788 9800 9831
+	}
+
+	resources = {
+		metal = 8
+	}
+
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

@@ -1,0 +1,22 @@
+state = {
+	id = 567
+	name = "STATE_567"
+	manpower = 4000
+	state_category = shanty
+
+	history = {
+		owner = EAS
+		add_core_of = EAS
+		victory_points = {
+			8431 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 2
+		}
+	}
+
+	provinces = {
+		8433 8431 8435 8434 8430 8436 8432 8429
+	}
+}

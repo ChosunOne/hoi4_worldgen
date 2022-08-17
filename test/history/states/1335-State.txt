@@ -1,0 +1,27 @@
+state={
+	id=1335
+	name="STATE_1335"
+	provinces={
+		14484 14613 14614 14615 14768 14769
+	}
+	resources = {
+		water = 12
+		circuitry = 5
+		advanced = 5
+	}
+	history = {
+		owner = WAK
+		add_core_of = WAK
+		victory_points = {
+			14484 20
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 4
+			arms_factory = 2
+			air_base = 2
+		}
+	}
+	state_category = city
+	manpower = 13090
+}

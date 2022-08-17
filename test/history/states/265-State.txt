@@ -1,0 +1,34 @@
+state = {
+	id = 265
+	name = "STATE_265"
+	resources={
+		energy=2.000
+		metal=9.000
+	}
+
+	history={
+		owner = EXE
+		add_core_of = EXE
+		#Removed to allow LAC or SUF to annex EXE quicker
+		#victory_points = {
+		#	2957 10
+		#}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			2792 = {
+				naval_base = 1
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		2792 2953 2954 2956 2957 2990 5599 5600 5601 5602 5603 5650 6983 11527 11535 11588 11649
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

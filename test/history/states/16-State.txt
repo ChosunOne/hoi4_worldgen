@@ -1,0 +1,21 @@
+state = {
+	id = 16
+	name = "STATE_16"
+	manpower = 1000
+	state_category = rural
+
+	history = {
+		owner = DRE
+		add_core_of = DRE
+		victory_points = {
+			7328 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces = {
+		7333 7359 7328 7347 7330 7302 7282 7280 7284 7286 7293 7327 7331 7294 7287
+	}
+}

@@ -1,0 +1,29 @@
+state = {
+	id = 325
+	name = "STATE_325"
+	manpower = 11000
+	state_category = rural
+
+	resources = {
+		water = 4
+		composites = 4
+		metal = 8
+	}
+
+	history = {
+		owner = BLP
+		add_core_of = BLP
+		victory_points = {
+			4687 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+
+		}
+	}
+
+	provinces = {
+		2058 2057 744 4681 4680 4685 4683 4684 4682 4688 4686 4687 8557 8556
+	}
+}

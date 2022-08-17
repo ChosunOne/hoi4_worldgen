@@ -1,0 +1,24 @@
+state = {
+	id = 486
+	name = "STATE_486"
+
+	history={
+		owner = CBN
+		add_core_of = CBN
+		victory_points = {
+			11528 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		5609 11672 2842 11528 11601
+	}
+	manpower=8500
+	buildings_max_level_factor=1.000
+	state_category=town
+}

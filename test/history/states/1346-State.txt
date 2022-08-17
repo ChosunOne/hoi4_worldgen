@@ -1,0 +1,25 @@
+state={
+	id=1346
+	name="STATE_1346"
+	provinces={
+		14909 14910 14918 14919 14920
+	}
+	resources = {
+		energy = 2
+		metal = 12
+	}
+	history = {
+		owner = SBR
+		add_core_of = SBR
+		victory_points = {
+			14920 15
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+		}
+	}
+	state_category = town
+	manpower = 7800
+}

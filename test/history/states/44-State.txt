@@ -1,0 +1,30 @@
+state = {
+	id = 44
+	name = "STATE_44"
+
+	history={
+		owner = ASF
+		add_core_of = ASF
+		victory_points = {
+			8981 5
+		}
+		buildings = {
+			infrastructure = 5
+			8985 = {
+				naval_base = 7
+			}
+			industrial_complex = 2
+		}
+	}
+	resources = {
+		water = 5
+		metal = 4
+	}
+
+	provinces={
+		928 2983 5679 7031 8981 8982 8983 8984 8985 8991 8992 6760 5688 2854 9081
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

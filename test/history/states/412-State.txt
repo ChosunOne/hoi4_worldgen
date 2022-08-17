@@ -1,0 +1,33 @@
+state = {
+	id = 412
+	name = "STATE_412"
+	resources = {
+		water = 8
+		energy = 6
+		metal = 8
+		circuitry = 6
+		composites = 4
+		advanced = 4
+	}
+
+	history={
+		owner = MXC
+		add_core_of = MXC
+		victory_points = {
+			3110 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 5
+			industrial_complex = 3
+		}
+		add_extra_state_shared_building_slots = 4 #So that a player has a few buildable slots at the start of the game
+	}
+
+	provinces={
+		1014 1809 1810 2863 3110 5672 5673 5676 5677 5678 7859 7867 7868 7869 7870 7871 7878 7854 1057
+	}
+	manpower=16000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

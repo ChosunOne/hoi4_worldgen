@@ -1,0 +1,21 @@
+state={
+	id=1337#lol
+	name="STATE_1337"
+	provinces={
+		14616 14617 14618 14619 14620 14762 14763 14764 14770
+	}
+	history = {
+		owner = WAK
+		add_core_of = WAK
+		victory_points = {
+			14767 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = town
+	manpower = 4700
+	buildings_max_level_factor=1.000
+}

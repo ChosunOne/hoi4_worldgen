@@ -1,0 +1,27 @@
+state = {
+	id = 320
+	name = "STATE_320"
+	manpower = 3000
+	state_category = rural
+
+	resources={
+		energy = 2
+		water = 4
+	}
+
+	history = {
+		owner = DEA
+		add_core_of = DEA
+		victory_points = {
+			6434 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+	}
+
+	provinces = {
+		6436 6454 6434 6435 6437
+	}
+}

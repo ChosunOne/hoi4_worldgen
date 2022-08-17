@@ -1,0 +1,26 @@
+state = {
+	id = 344
+	name = "STATE_344"
+	manpower = 4301
+	state_category = shanty
+	impassable = yes
+
+	resources = {
+		water = 2
+		metal = 4
+	}
+
+	history = {
+		owner = VEG
+		add_core_of = VEG
+		add_core_of = JCT
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces = {
+		8850 3224
+	}
+}
+# vim: set ft=pdx ts=2 sw=2 tw=79 :

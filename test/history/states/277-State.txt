@@ -1,0 +1,27 @@
+state = {
+	id = 277
+	name = "STATE_277"
+	manpower = 5000
+	state_category = town
+
+	resources = {
+		metal = 4
+		water = 4
+	}
+
+	history = {
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			5746 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		5758 4041 1491 5742 5743 5746 1970 4056 5745 5744 1487 5740
+	}
+}

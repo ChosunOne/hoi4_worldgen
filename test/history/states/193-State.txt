@@ -1,0 +1,32 @@
+
+state={
+	id=193
+	name="STATE_193"
+	resources={
+		metal=8.000
+		circuitry=4.000
+	}
+
+	history={
+		owner = YMP
+		add_core_of = YMP
+		victory_points = {
+			1561 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 2
+
+		}
+
+	}
+
+	provinces={
+		1561 6653 6678 6683 6693 6698 6702 6703 9158 15425 15433 15438 15441 15447
+	}
+	manpower=2000
+	buildings_max_level_factor=1.000
+	state_category=town
+	local_supplies=0.000
+}

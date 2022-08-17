@@ -1,0 +1,21 @@
+
+state={
+	id=1370
+	name="STATE_1370"
+	provinces={
+		14957 14967 14968 14969 15108 15109
+	}
+	history = {
+		owner = HBC
+		add_core_of = HBC
+		victory_points = {
+			14825 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = pastoral
+	manpower = 2200
+}

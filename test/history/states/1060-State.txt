@@ -1,0 +1,21 @@
+state={
+	id=1060
+	name="STATE_1060"
+	resources = {
+		water = 4
+	}
+	history={
+		owner = MRR
+		add_core_of = MRR
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces={
+		12620 13116 12627 12908 12910 12914 12913 12916 12918 12923
+	}
+	manpower = 1100
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

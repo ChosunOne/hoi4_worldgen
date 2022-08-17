@@ -1,0 +1,27 @@
+state = {
+	id = 595
+	name = "STATE_595"
+
+	history={
+		owner = ROS
+		add_core_of = ROS
+		victory_points = {
+			4521 10
+		}
+		buildings = {
+			infrastructure = 1
+			4512 = {
+				naval_base = 1
+			}
+			air_base = 1
+		}
+
+	}
+
+	provinces={
+		4520 4528 4521 2187 2184 8327 4512 4527 2507 7195 4570 4222 2188 4529 1402 1407 1436 4532
+	}
+	manpower=4000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

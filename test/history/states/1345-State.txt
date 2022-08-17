@@ -1,0 +1,20 @@
+
+state={
+	id=1345
+	name="STATE_1345"
+	provinces={
+		14905 14906 14907 14908 14911 14912 14913 14914 14915
+	}
+	history = {
+		owner = SBR
+		add_core_of = SBR
+		victory_points = {
+			14914 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = shanty
+	manpower = 3400
+}

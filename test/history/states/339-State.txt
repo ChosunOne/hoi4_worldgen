@@ -1,0 +1,27 @@
+state = {
+	id = 339
+	name = "STATE_339"
+	manpower = 20150
+	state_category = city
+
+	history = {
+		owner = VLT
+		add_core_of = VLT
+		victory_points = {
+			2713 10
+		}
+		buildings = {
+		arms_factory = 1
+		industrial_complex = 1
+		infrastructure = 3
+		}
+	}
+
+	provinces = {
+		2713 3537 3539 3540
+	}
+	resources = {
+		energy = 10
+		metal = 8
+	}
+}

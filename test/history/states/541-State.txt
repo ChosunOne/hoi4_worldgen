@@ -1,0 +1,26 @@
+state = {
+	id = 541
+	name = "STATE_541"
+
+	history={
+		owner = EXE
+		add_core_of = EXE
+		victory_points = {
+			5623 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+
+		}
+
+	}
+
+	provinces={
+		1819 2845 5618 5619 5620 5622 5623 5624 5629 5702 5705
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

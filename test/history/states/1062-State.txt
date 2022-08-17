@@ -1,0 +1,27 @@
+state={
+	id=1062
+	name="STATE_1062"
+	resources = {
+		water = 5
+		metal = 4
+	}
+
+	history={
+		owner = JCK
+		add_core_of = JCK
+		victory_points = {
+			12639 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		12641 12639 12642 12649 12618 12935 12652 12936 12951
+	}
+	manpower = 3250
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

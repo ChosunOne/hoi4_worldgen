@@ -1,0 +1,26 @@
+state={
+	id=1046
+	name="STATE_1046"
+	resources = {
+		water = 2
+	}
+	history={
+		owner = BTH
+		add_core_of = BTH
+		victory_points = {
+			12677 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		12677 12685 12695 12707 12726 12715 12725 12704 12691 12679
+	}
+	manpower = 2300
+	state_category = shanty
+	buildings_max_level_factor=1.000
+}

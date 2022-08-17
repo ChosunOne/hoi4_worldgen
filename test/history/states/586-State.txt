@@ -1,0 +1,25 @@
+state = {
+	id = 586
+	name = "STATE_586"
+	manpower = 21000
+	state_category = town
+
+	history = {
+		owner = SCO
+		add_core_of = SCO
+		victory_points = {
+			8999 20
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			anti_air_building = 2
+			radar_station = 2
+			air_base = 2
+		}
+	}
+
+	provinces = {
+		5571 1055 2252 1818 5573 6791 6790 1572 6960 1571 8999 310 2249 6780 6779
+	}
+}

@@ -1,0 +1,30 @@
+state = {
+	id = 330
+	name = "STATE_330"
+	resources={
+		energy = 2
+		metal = 4
+		composites = 8
+		advanced = 4
+	}
+
+	history={
+		owner = COW
+		add_core_of = COW
+		victory_points = {
+			5325 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		837 841 858 1673 2327 2328 2888 2889 2890 5325 5326 5330 5331 5360 5361 5362 5382
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

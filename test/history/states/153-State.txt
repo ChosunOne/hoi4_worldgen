@@ -1,0 +1,25 @@
+state = {
+	id = 153
+	name = "STATE_153"
+	resources={
+		water=6.000
+		energy=2.000
+		metal=1.000
+	}
+
+	history={
+		owner = NCR
+		add_core_of = NCR
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces={
+		1778 9639
+	}
+	manpower=281
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+	impassable = yes
+}

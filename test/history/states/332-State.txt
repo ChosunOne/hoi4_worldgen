@@ -1,0 +1,29 @@
+state = {
+	id = 332
+	name = "STATE_332"
+	resources={
+		metal = 16
+		circuitry = 6
+	}
+
+	history={
+		owner = TOC
+		add_core_of = TOC
+		victory_points = {
+			3916 20
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 2
+			arms_factory = 2
+			air_base = 2
+		}
+	}
+
+	provinces={
+		3998 3997 3999 2089 3996 2088 4004 442 8515 8517 2086 8518 4002 2530 2528 3916 8514 3941
+	}
+	manpower=21976
+	buildings_max_level_factor=1.000
+	state_category=large_city
+}

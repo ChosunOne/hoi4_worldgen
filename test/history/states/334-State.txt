@@ -1,0 +1,26 @@
+state = {
+	id = 334
+	name = "STATE_334"
+	manpower = 11000
+	state_category = rural
+
+	resources = {
+		metal = 6
+	}
+
+	history = {
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			3290 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		4951 1582 4591 3290 4826
+	}
+}

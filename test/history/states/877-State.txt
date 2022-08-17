@@ -1,0 +1,27 @@
+state = {
+	id = 877
+	name = "STATE_877"
+	history={
+		owner = CHO
+		add_core_of = CHO
+		victory_points = {
+			12076 15
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+
+	}
+	provinces={
+		12076 12077 12081 12082 12084 12087 12089 12093 12094 12095 12097 12100 12101 12102 12109
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=town
+
+	resources = {
+		water = 10
+		circuitry = 10
+	}
+}

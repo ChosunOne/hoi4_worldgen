@@ -1,0 +1,27 @@
+state = {
+	id = 86
+	name = "STATE_86"
+	manpower = 3000
+	state_category = rural
+
+	resources = {
+		composites = 5
+		water = 5
+	}
+
+	history = {
+		owner = DIS
+		add_core_of = DIS
+		victory_points = {
+			4198 5
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+		}
+	}
+
+	provinces = {
+		1300 1747 1748 1749 4192 4193 4194 4198 5007 5008 7130
+	}
+}

@@ -1,0 +1,22 @@
+state = {
+	id = 87
+	name = "STATE_87"
+	manpower = 2000
+	state_category = pastoral
+
+	history = {
+		owner = FOR
+		add_core_of = FOR
+		victory_points = {
+			6695 10
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+	}
+
+	provinces = {
+		6695 6696 6697 9127 9134 9177 9107 6743 6744 6745 6746 9113
+	}
+}

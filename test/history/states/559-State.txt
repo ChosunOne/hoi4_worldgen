@@ -1,0 +1,24 @@
+state = {
+	id = 559
+	name = "STATE_559"
+	manpower = 7000
+	state_category = large_town
+
+	history = {
+		owner = RBD
+		add_core_of = RBD
+		victory_points = {
+			3116 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+
+		}
+	}
+
+	provinces = {
+		2336 2629 3015 3116 3117 5509 5541 5542 5543 5544 5545 7665 7701 7715 7716 7738 7739 7740 7749 7750
+	}
+}

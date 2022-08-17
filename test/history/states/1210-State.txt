@@ -1,0 +1,20 @@
+state={
+	id=1210
+	name="STATE_1210"
+	provinces={
+		13900 13901 13902 13903 13904 13905 13933
+	}
+	history = {
+		owner = COM
+		add_core_of = COM
+		victory_points = {
+			13904 3
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = shanty
+	manpower = 2200
+	buildings_max_level_factor=1.000
+}

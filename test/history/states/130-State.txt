@@ -1,0 +1,20 @@
+state = {
+	id = 130
+	name = "STATE_130"
+	manpower = 7000
+	state_category = rural
+
+	history = {
+		owner = CES
+		add_core_of = CES
+		add_core_of = TWI
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+		}
+	}
+
+	provinces = {
+		942 1863 1864 1865 3221 5648 913 920 5646 5649
+	}
+}

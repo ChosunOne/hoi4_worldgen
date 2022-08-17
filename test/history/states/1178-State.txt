@@ -1,0 +1,26 @@
+state={
+	id=1178
+	name="STATE_1178"
+	provinces={
+		13311 13312 13316 13318 13319 13320 13322
+	}
+	resources = {
+		energy = 32
+	}
+	history = {
+		owner = DMM
+		add_core_of = DMM
+		victory_points = {
+			13322 4
+		}
+		buildings = {
+			infrastructure = 2
+			13311 = {
+				naval_base = 1
+			}
+		}
+	}
+	state_category = enclave
+	manpower = 3200
+	buildings_max_level_factor=1.000
+}

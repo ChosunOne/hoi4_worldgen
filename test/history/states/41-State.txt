@@ -1,0 +1,34 @@
+state = {
+	id = 41
+	name = "STATE_41"
+	resources={
+		water = 6
+		composites = 12
+		circuitry = 12
+		metal = 12
+		advanced = 4
+	}
+
+	history={
+		owner = BVC
+		add_core_of = BVC
+		victory_points = {
+			823 20
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			industrial_complex = 1
+			air_base = 1
+
+		}
+
+	}
+
+	provinces={
+		793 806 823 3303 4647 4648 7158 7159 7160 7161 7162 8560 8561
+	}
+	manpower=25000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

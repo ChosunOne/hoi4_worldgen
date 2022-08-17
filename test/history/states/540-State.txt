@@ -1,0 +1,27 @@
+state = {
+	id = 540
+	name = "STATE_540"
+	manpower = 9500
+	state_category = town
+
+	history = {
+		owner = YAK
+		add_core_of = YAK
+		victory_points = {
+			4322 15
+		}
+		victory_points = {
+			1938 5
+		}
+		buildings = {
+			infrastructure = 3
+			4319 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		1493 1938 1932 2526 4014 4015 4019 4321 4322 4332 7487 4012 4013 4333 4319 1949
+	}
+}

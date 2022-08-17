@@ -1,0 +1,26 @@
+state={
+	id=1137
+	name="STATE_1137"
+	provinces={
+		13950 13951 13954 13955 13956 13957 14211 14212 14214
+	}
+	resources = {
+		water = 4
+		energy = 4
+	}
+	history = {
+		owner = STC
+		add_core_of = STC
+		victory_points = {
+			13951 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+	state_category = large_town
+	manpower = 8600
+	buildings_max_level_factor=1.000
+}

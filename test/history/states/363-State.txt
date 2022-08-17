@@ -1,0 +1,26 @@
+state = {
+	id = 363
+	name = "STATE_363"
+	manpower = 2000
+	state_category = rural
+
+	resources = {
+		water = 4
+	}
+
+	history = {
+		owner = CYC
+		add_core_of = CYC
+		victory_points = {
+			3579 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		3378 3380 3379 3331 3577 3581 3579 3580
+	}
+}

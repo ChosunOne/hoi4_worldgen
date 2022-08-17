@@ -1,0 +1,27 @@
+state = {
+	id = 886
+	name = "STATE_886"
+	history={
+		owner = SCA
+		add_core_of = SCA
+		victory_points = {
+			12185 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1 #Caused a crash at 3, too few building slots
+
+		}
+	}
+	provinces={
+		943 2578 2809 2822 8732 12144 12147 12156 12157 12162 12172 12175 12178 12181 12182 12185 12191 12196 12199 12204 12246
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+
+	resources = {
+		water = 5
+		composites = 5
+	}
+}

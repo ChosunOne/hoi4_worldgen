@@ -1,0 +1,28 @@
+state = {
+	id = 449
+	name = "STATE_449"
+	manpower = 3000
+	state_category = rural
+
+	resources = {
+		water = 6
+		metal = 12
+	}
+	history = {
+		owner = RBT
+		add_core_of = RBT
+		victory_points = {
+			4119 5
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			industrial_complex = 1
+		}
+		add_extra_state_shared_building_slots = 1
+	}
+
+	provinces = {
+		4106 4116 4295 4117 4119 1437 4118 4122 8568 4123 1990 1978 3050
+	}
+}

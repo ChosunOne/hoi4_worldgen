@@ -1,0 +1,29 @@
+state = {
+	id = 358
+	name = "STATE_358"
+	manpower = 2500
+	state_category = rural
+
+	resources = {
+		water = 32 #The Crowlands have a ton of strange fauna that can be sold off.
+	}
+
+	history = {
+		owner = MLT
+		add_core_of = MLT
+		victory_points = {
+			1983 10
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+			7064 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		1408 1983 2521 2522 4110 4111 4112 4113 4114 4195 4196 4197 4200 4201 7062 7063 7064 7065 7131 7132 8587 4342 1432
+	}
+}

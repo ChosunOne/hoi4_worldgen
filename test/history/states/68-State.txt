@@ -1,0 +1,28 @@
+state = {
+	id = 68
+	name = "STATE_68"
+	manpower = 3000
+	state_category = shanty
+
+	resources={
+		water = 2
+		metal = 5
+	}
+
+	history = {
+		owner = SOK
+		add_core_of = SOK
+		victory_points = {
+			1585 5
+		}
+		buildings = {
+			infrastructure = 1
+			arms_factory = 1
+
+		}
+	}
+
+	provinces = {
+		1585 8844 3573
+	}
+}

@@ -1,0 +1,21 @@
+state={
+	id=1151
+	name="STATE_1151"
+	provinces={
+		14264 14265 14284 14285 14286 14287 14288
+	}
+	history = {
+		owner = LOI
+		add_core_of = LOI
+		victory_points = {
+			14284 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 5500
+	buildings_max_level_factor=1.000
+}

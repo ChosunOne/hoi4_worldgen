@@ -1,0 +1,24 @@
+state={
+	id=1069
+	name="STATE_1069"
+	resources = {
+		metal = 4
+	}
+	history={
+		owner = RMT
+		add_core_of = RMT
+		victory_points = {
+			12981 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		12981 12998 12999 12990 12973 12982 13002 12972 12988 13004
+	}
+	manpower = 3100
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,21 @@
+state = {
+	id = 493
+	name = "STATE_493"
+	manpower = 6000
+	state_category = town
+
+	history = {
+		owner = RBT
+		add_core_of = RBT
+		victory_points = {
+			4101 10
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces = {
+		3878 3879 3880 3881 4125 8573 4101 1464 1979 4297 1451 4296 4124
+	}
+}

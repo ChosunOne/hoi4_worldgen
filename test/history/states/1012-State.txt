@@ -1,0 +1,22 @@
+state={
+	id=1012
+	name="STATE_1012"
+	resources = {
+		metal = 4
+	}
+	history={
+		owner = MET
+		add_core_of = MET
+		buildings = {
+			infrastructure = 2
+	}
+	}
+
+	provinces={
+		12720 12701 12698 8641 12708 12693 12688 12681
+	}
+
+	manpower = 2300
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

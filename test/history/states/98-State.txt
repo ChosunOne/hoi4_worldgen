@@ -1,0 +1,21 @@
+state = {
+	id = 98
+	name = "STATE_98"
+	impassable = yes
+
+	history={
+		owner = CRZ
+		add_core_of = CRZ
+		buildings = {
+
+		}
+
+	}
+
+	provinces={
+		6333
+	}
+	manpower=121
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

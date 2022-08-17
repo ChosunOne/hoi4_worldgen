@@ -1,0 +1,21 @@
+state = {
+	id = 619
+	name = "STATE_619"
+	impassable = yes
+
+	history={
+		owner = TAR
+		add_core_of = TAR
+		buildings = {
+
+		}
+
+	}
+
+	provinces={
+		6325
+	}
+	manpower=124
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

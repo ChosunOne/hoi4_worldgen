@@ -1,0 +1,27 @@
+state = {
+	id = 814
+	name = "STATE_814"
+
+	history={
+		owner = ATE
+		add_core_of = ATE
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			10101 = {
+				naval_base = 3
+			}
+		}
+		victory_points = {
+			10156 10
+		}
+	}
+
+	provinces={
+		10032 10033 10038 10064 10083 10087 10101 10117 10120 10128 10156 10174 10198 10232 10245 10307
+	}
+
+	manpower=37022
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

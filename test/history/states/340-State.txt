@@ -1,0 +1,22 @@
+state = {
+	id = 340
+	name = "STATE_340"
+	manpower = 2200
+	state_category = rural
+
+	history = {
+		owner = NAT
+		add_core_of = NAT
+		victory_points = {
+			8578 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		1758 8580 8579 8578 4925 4924 2606 1759 4926
+	}
+}

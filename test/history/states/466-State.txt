@@ -1,0 +1,18 @@
+state = {
+	id = 466
+	name = "STATE_466"
+	manpower = 2500
+	state_category = rural
+
+	history = {
+		owner = MCA
+		add_core_of = MCA
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces = {
+		4571
+	}
+}

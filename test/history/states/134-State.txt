@@ -1,0 +1,26 @@
+state = {
+	id = 134
+	name = "STATE_134"
+	manpower = 1500
+	state_category = town
+
+	resources = {
+		energy = 4
+	}
+
+	history = {
+		owner = KAM
+		add_core_of = KAM
+		victory_points = {
+			3992 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		457 4375 4373 4374 4368 4369 3991 3992 2093 3990 2092 3994
+	}
+}

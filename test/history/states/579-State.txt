@@ -1,0 +1,33 @@
+state = {
+	id = 579
+	name = "STATE_579"
+	resources={
+		energy = 2
+		metal = 8
+	}
+
+	history={
+		owner = RBD
+		add_core_of = RBD
+		victory_points = {
+			3153 20
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 2
+			anti_air_building = 2
+			radar_station = 1
+			air_base = 1
+
+		}
+
+	}
+
+	provinces={
+		826 2335 2337 2630 2740 2741 2907 3000 3001 3003 3012 3143 3153 5397 5438 5439 5479 5480 5481 5482 5501 5502 5503 5504 5505 5507
+	}
+	manpower=21000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

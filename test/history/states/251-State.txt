@@ -1,0 +1,25 @@
+state = {
+	id = 251
+	name = "STATE_251"
+	manpower = 3500
+	state_category = town
+	resources = {
+		water = 12
+		energy = 4
+	}
+
+	history = {
+		owner = KLA
+		add_core_of = KLA
+		victory_points = {
+			2602 15 #This is a important defensive chokepoint
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces = {
+		2602 4349 4179 4180 2510 2601
+	}
+}

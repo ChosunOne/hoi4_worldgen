@@ -1,0 +1,35 @@
+state = {
+	id = 262
+	name = "STATE_262"
+	manpower = 2500
+	state_category = town
+	history={
+		owner = BRK
+		add_core_of = BRK
+		victory_points = {
+			3629 20
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+			industrial_complex = 1
+			arms_factory = 1
+			air_base = 1
+			620 = {
+				naval_base = 1
+
+			}
+			3627 = {
+				naval_base = 1
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		260 620 3621 3627 3629 3690 3693 3765 3767 3978 13618
+	}
+	buildings_max_level_factor=1.000
+}

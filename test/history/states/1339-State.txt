@@ -1,0 +1,24 @@
+state={
+	id=1339
+	name="STATE_1339"
+	provinces={
+		14625 14626 14627 14778 14781 14783 14798
+	}
+	resources = {
+		metal = 16
+	}
+	history = {
+		owner = FRG
+		add_core_of = FRG
+		victory_points = {
+			14625 4
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 3700
+	buildings_max_level_factor=1.000
+}

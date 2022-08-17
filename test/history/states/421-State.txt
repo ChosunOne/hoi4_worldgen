@@ -1,0 +1,27 @@
+state = {
+	id = 421
+	name = "STATE_421"
+
+	history={
+		owner = NCR
+		add_core_of = RDS
+		victory_points = {
+			4875 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			4871 = {
+				naval_base = 3
+			}
+		}
+
+	}
+
+	provinces={
+		2266 2294 2435 4871 4875 4876 4877 8546 9218 2436 2432 2429 4867 2434
+	}
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

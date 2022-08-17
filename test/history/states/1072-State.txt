@@ -1,0 +1,23 @@
+state={
+	id=1072
+	name="STATE_1072"
+
+	history={
+		owner = STR
+		add_core_of = STR
+		victory_points = {
+			12989 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		12925 12946 12971 12989 12991 12975 12964 12932
+	}
+	manpower = 1400
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

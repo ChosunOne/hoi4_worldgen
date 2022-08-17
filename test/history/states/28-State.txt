@@ -1,0 +1,22 @@
+state = {
+	id = 28
+	name = "STATE_28"
+	manpower = 1500
+	state_category = rural
+
+	history = {
+		owner = LAP
+		add_core_of = LAP
+		victory_points = {
+			1389 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		1309 1389 1392 1264 1254 1801 8626 1285 8625 1317 1260 1233 8163
+	}
+}

@@ -1,0 +1,22 @@
+state = {
+	id = 317
+	name = "STATE_317"
+	manpower = 13500
+	state_category = rural
+
+	history = {
+		owner = CES
+		add_core_of = CES
+		add_core_of = TWI
+		victory_points = {
+			1871 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		5643 1678 1871 2903 5170 1680 2905 886 2904 1679
+	}
+}

@@ -1,0 +1,33 @@
+state = {
+	id = 329
+	name = "STATE_329"
+	manpower = 10000
+	state_category = town
+
+	resources = {
+		water = 5
+		composites = 5
+		energy = 8
+		circuitry = 8
+		advanced = 8
+	}
+
+	history = {
+		owner = SKY
+		add_core_of = SKY
+		victory_points = {
+			8871 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+			air_base = 2
+
+		}
+	}
+
+	provinces = {
+		8881 8880 8874 8875 8872 8873 8871 8869 8879 8870 8867 8868 8847 8878 8877 8876
+	}
+}

@@ -1,0 +1,21 @@
+state = {
+	id = 272
+	name = "STATE_272"
+
+	history={
+		owner = BLO
+		add_core_of = BLO
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		2233 9280 9423 9424 9430 9440 11111 11136 11144 11155
+	}
+	manpower=4000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

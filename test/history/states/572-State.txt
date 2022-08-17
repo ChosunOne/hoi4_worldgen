@@ -1,0 +1,29 @@
+state = {
+	id = 572
+	name = "STATE_572"
+	resources={
+		metal=4.000
+		water=2.000
+	}
+
+	history={
+		owner = YMP
+		add_core_of = YMP
+		victory_points = {
+			9043 20
+		}
+		buildings = {
+			infrastructure = 7
+			arms_factory = 2
+			industrial_complex = 2
+		}
+
+	}
+
+	provinces={
+		3101 6826 6828 6832 6836 6837 6838 9043 9055 6821 6822 6823 9169 6845
+	}
+	manpower=27000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

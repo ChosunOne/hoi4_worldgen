@@ -1,0 +1,28 @@
+state = {
+	id = 927
+	name = "STATE_927"
+	resources = {
+		water = 4
+		metal = 8
+	}
+	history={
+		owner = LUB
+		add_core_of = LUB
+		victory_points = {
+			11713 25
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		1844 2789 2819 2852 7009 11709 11710 11713 11714 11716 11717
+	}
+	manpower=25000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

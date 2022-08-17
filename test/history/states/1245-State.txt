@@ -1,0 +1,20 @@
+state={
+	id=1245
+	name="STATE_1245"
+	provinces={
+		14704 14705 15030 15031 15036 15040 15043 15044
+	}
+	history = {
+		owner = WPG
+		add_core_of = WPG
+		victory_points = {
+			15044 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = rural
+	manpower = 2500
+	buildings_max_level_factor=1.000
+}

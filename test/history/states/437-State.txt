@@ -1,0 +1,29 @@
+state = {
+	id = 437
+	name = "STATE_437"
+	manpower = 5000
+	state_category = shanty
+
+	resources = {
+		water = 4
+		metal = 4
+		composites = 2
+		advanced = 2
+	}
+
+	history = {
+		owner = CCW
+		add_core_of = CCW
+		victory_points = {
+			1987 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+		}
+	}
+
+	provinces = {
+		1986 1987 4292 4107 2163
+	}
+}

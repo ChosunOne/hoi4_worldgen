@@ -1,0 +1,26 @@
+state = {
+	id = 899
+	name = "STATE_899"
+	resources = {
+		water = 1
+		energy = 2
+		metal = 5
+	}
+	history={
+		owner = TLL
+		add_core_of = TLL
+		victory_points = {
+			12068 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+	provinces={
+		880 1822 2968 12004 12008 12009 12016 12025 12026 12043 12062 12064 12065 12067 12068 12069
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

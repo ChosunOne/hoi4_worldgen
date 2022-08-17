@@ -1,0 +1,29 @@
+state = {
+	id = 270
+	name = "STATE_270"
+	resources={
+		energy = 8
+		metal = 12
+	}
+
+	history={
+		owner = EHT
+		add_core_of = EHT
+		add_core_of = WEN #A country that can appear through revolts or liberation/puppeting
+		victory_points = {
+			6531 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+
+	}
+
+	provinces={
+		1143 3361 3404 6529 6530 6531 8307 8308 8309
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

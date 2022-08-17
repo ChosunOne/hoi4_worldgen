@@ -1,0 +1,24 @@
+state = {
+	id = 113
+	name = "STATE_113"
+	manpower = 1000
+	state_category = rural
+
+	history = {
+		owner = MDT
+		add_core_of = MDT
+		victory_points = {
+			4092 5
+		}
+		victory_points = {
+			4178 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		4176 4177 4178 4175 4350 4092 4090 4091 1391 4174 4173
+	}
+}

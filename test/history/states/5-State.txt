@@ -1,0 +1,34 @@
+state = {
+	id = 5
+	name = "STATE_5"
+
+	history={
+		owner = LAC
+		add_core_of = LAC
+		victory_points = {
+			8968 20
+		}
+		add_extra_state_shared_building_slots = 2
+		buildings = {
+			infrastructure = 4
+			arms_factory = 6
+			industrial_complex = 2
+			8969 = {
+				naval_base = 2
+			}
+		}
+	}
+
+	resources = {
+		metal = 14
+		water = 8
+		energy = 6
+	}
+
+	provinces={
+		8967 8968 8969 8970
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

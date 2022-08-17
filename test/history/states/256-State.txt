@@ -1,0 +1,30 @@
+state = {
+	id = 256
+	name = "STATE_256"
+	manpower = 4000
+	state_category = shanty
+
+	resources = {
+		water = 2
+		metal = 6
+	}
+	history = {
+		owner = WHD
+		add_core_of = WHD
+		victory_points = {
+			8155 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			air_base = 2
+			8155 = {
+				bunker2 = 1
+			}
+		}
+	}
+
+	provinces = {
+		6672 6906 6907 8155 8156 6912 8005 8008 8148
+	}
+}

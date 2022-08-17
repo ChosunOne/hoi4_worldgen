@@ -1,0 +1,36 @@
+state = {
+	id = 356
+	name = "STATE_356"
+	manpower = 5600
+	state_category = city
+
+	history = {
+		owner = OST
+		add_core_of = OST
+		victory_points = {
+			7397 20
+		}
+		victory_points = {
+			7391 5
+		}
+		victory_points = {
+			7400 5
+		}
+		buildings = {
+			infrastructure = 6
+			dockyard = 1
+			arms_factory = 3
+			industrial_complex = 2
+			7401 = {
+				naval_base = 2
+			}
+			7391 = {
+				bunker2 = 2
+			}
+		}
+	}
+
+	provinces = {
+		7401 7399 7391 7400 7398 7397 3739
+	}
+}

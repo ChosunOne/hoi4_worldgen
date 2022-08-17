@@ -1,0 +1,29 @@
+
+state={
+	id=1292
+	name="STATE_1292"
+	provinces={
+		13513 13514 13515 13517 13518 13523 13524 13525 13526 13527 13529 13530
+	}
+	resources = {
+		water = 20
+		metal = 18
+	}
+	history = {
+		owner = SNO
+		add_core_of = SNO
+		add_claim_by = MTR
+		victory_points = {
+			13524 20
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+			dockyard = 1
+		}
+	}
+	state_category = large_town
+	manpower = 10800
+	local_supplies=0.000
+}

@@ -1,0 +1,28 @@
+state = {
+	id = 787
+	name = "STATE_787"
+	resources={
+		water = 8
+	}
+
+	history={
+		owner = ATE
+		add_core_of = ATE
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+
+		}
+		victory_points = {
+			2240 10
+		}
+
+	}
+
+	provinces={
+		2240 2242 9299 9300 9301 9302 9309 9310 9311 9313 10434 10441 10477 10496
+	}
+	manpower=31932
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

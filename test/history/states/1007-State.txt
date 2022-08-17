@@ -1,0 +1,26 @@
+state={
+	id=1007
+	name="STATE_1007"
+
+	history={
+		owner = SAN
+		add_core_of = SAN
+		buildings = {
+			infrastructure = 4
+			arms_factory = 4
+		}
+		victory_points = {
+			3772 10
+		}
+		victory_points = {
+			7306 5
+		}
+	}
+
+	provinces={
+		2472 7306 3798 3771 2112 3626 2106 3707 2562 3772 10461 3952
+	}
+	manpower = 17699
+	state_category = city
+	buildings_max_level_factor=1.000
+}

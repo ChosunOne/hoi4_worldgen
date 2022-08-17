@@ -1,0 +1,34 @@
+state = {
+	id = 617
+	name = "STATE_617"
+	history={
+		owner = CHR
+		add_core_of = CHR
+		victory_points = {
+			12271 25
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			anti_air_building = 1
+			radar_station = 1
+		}
+
+	}
+	provinces={
+		12263 12271 12276 12279 12280 12288 12294 12295 12299 12300 12302 12303 12304
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=city
+
+	resources = {
+		water = 5
+		energy = 5
+		metal = 3
+		composites = 8
+		circuitry = 8
+		advanced = 8
+	}
+}

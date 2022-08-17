@@ -1,0 +1,23 @@
+state={
+	id=1231
+	name="STATE_1231"
+	provinces={
+		13801 13802 13803 13804 13805 13811 13812
+	}
+	history={
+		owner =  BUM
+		add_core_of =  BUM
+		victory_points = {
+			13804 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	resources = {
+		energy = 4
+	}
+	state_category = rural
+	manpower = 1100
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,30 @@
+state = {
+	id = 313
+	name = "STATE_313"
+	resources={
+		metal = 6
+	}
+
+	history={
+		owner = VEG
+		add_core_of = VEG
+		add_core_of = JCT
+		victory_points = {
+			8849 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		8849 3225 3190 8853
+	}
+	manpower=9988
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

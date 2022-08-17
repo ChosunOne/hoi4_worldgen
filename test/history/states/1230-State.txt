@@ -1,0 +1,25 @@
+state={
+	id=1230
+	name="STATE_1230"
+	provinces={
+		13757 13758 13763 13764 13767 13778 13779 13780 13782
+	}
+	history={
+		owner =  BUM
+		add_core_of =  BUM
+		victory_points = {
+			13780 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+	resources = {
+		metal = 4
+	}
+	state_category = large_town
+	manpower = 3300
+	buildings_max_level_factor=1.000
+}

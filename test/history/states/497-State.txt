@@ -1,0 +1,24 @@
+state = {
+	id = 497
+	name = "STATE_497"
+	manpower = 7000
+	state_category = town
+
+	history = {
+		owner = CRZ
+		add_core_of = CRZ
+		victory_points = {
+			6494 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 1
+
+		}
+	}
+
+	provinces = {
+		6427 6462 6463 6471 6473 6494
+	}
+}

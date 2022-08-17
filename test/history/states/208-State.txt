@@ -1,0 +1,24 @@
+state = {
+	id = 208
+	name = "STATE_208"
+
+	history={
+		owner = MXC
+		add_core_of = MXC
+		victory_points = {
+			3033 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		1812 2861 2862 3033 3034 3129 5665 5666 5667 5668 5669 5670 5671 5675 7858 7860 7861 7862 7863 7864 7865
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

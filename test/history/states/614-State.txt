@@ -1,0 +1,25 @@
+state = {
+	id = 614
+	name = "STATE_614"
+
+	history={
+		owner = NEW
+		add_core_of = NEW
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+		}
+		victory_points = {
+			9146 5
+		}
+	}
+
+
+	provinces={
+		1655 4946 8803 9146 8480 8804 1658
+	}
+	manpower=12000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

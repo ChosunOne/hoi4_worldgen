@@ -1,0 +1,23 @@
+state = {
+	id = 187
+	name = "STATE_187"
+	manpower = 2000
+	state_category = rural
+
+	history = {
+		owner = GRA
+		add_core_of = GRA
+		victory_points = {
+			3443 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+
+		}
+	}
+
+	provinces = {
+		3365 3446 4429 3443 8444 3363 291 8884
+	}
+}

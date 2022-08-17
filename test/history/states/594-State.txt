@@ -1,0 +1,21 @@
+state = {
+	id = 594
+	name = "STATE_594"
+	manpower = 1680
+	state_category = rural
+	resources = {
+		composites = 2
+	}
+	history = {
+		owner = LAP
+		add_core_of = LAP
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		3761 1466 8623 5117 5135 5119 8627 1385 1388 3041 5137
+	}
+}

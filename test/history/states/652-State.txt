@@ -1,0 +1,26 @@
+
+state={
+	id=652
+	name="STATE_652"
+	resources = {
+		water = 4
+		energy = 2
+	}
+	history={
+		owner = MCA
+		add_core_of = MCA
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		2461 12366 12367 12368 12369 12372 12373 12374 12375 12379 12380 12381 12382 16414
+	}
+	manpower=1619
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

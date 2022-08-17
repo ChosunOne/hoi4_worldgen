@@ -1,0 +1,27 @@
+state = {
+	id = 95
+	name = "STATE_95"
+	manpower = 35000
+	state_category = large_town
+
+	history = {
+		owner = LGS
+		add_core_of = LGS
+		victory_points = {
+			7703 20
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 3
+			anti_air_building = 1
+			7702 = {
+				naval_base = 2
+			}
+		}
+	}
+
+	provinces = {
+		7702 7703 7704 7712 7713 7728 7743 7792 7793
+	}
+}

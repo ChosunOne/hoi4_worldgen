@@ -1,0 +1,30 @@
+state = {
+	id = 235
+	name = "STATE_235"
+	manpower = 28000
+	state_category = town
+
+	resources = {
+		energy = 4
+		water = 4
+		metal = 8
+	}
+
+	history = {
+		owner = TRL
+		add_core_of = TRL
+		victory_points = {
+			2158 25
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 3
+			industrial_complex = 1
+		}
+		add_extra_state_shared_building_slots = 1 #So that a Troll Warren player has a buildable slot at the start of the game
+	}
+
+	provinces = {
+		2159 2158 2161 2160
+	}
+}

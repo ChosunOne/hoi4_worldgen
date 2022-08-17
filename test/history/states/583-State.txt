@@ -1,0 +1,22 @@
+state = {
+	id = 583
+	name = "STATE_583"
+
+	history={
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			4640 10
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces={
+		860 4638 4640 4822 5781 5794 5800
+	}
+	manpower=15391
+	buildings_max_level_factor=1.000
+	state_category = large_town
+}

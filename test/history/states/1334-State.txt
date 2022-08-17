@@ -1,0 +1,24 @@
+state={
+	id=1334
+	name="STATE_1334"
+	provinces={
+		14611 14612 14755 14756 14757 14758 14765 14766
+	}
+	resources = {
+		water = 2
+		circuitry = 2
+	}
+	history = {
+		owner = DUN
+		add_core_of = DUN
+		victory_points = {
+			14611 5
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+		}
+	}
+	state_category = rural
+	manpower = 2700
+}

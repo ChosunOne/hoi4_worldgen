@@ -1,0 +1,21 @@
+state={
+	id=1153
+	name="STATE_1153"
+	provinces={
+		13736 13737 13738 13739 13740 13741 13742 13743 13744
+	}
+	history={
+		owner =  ENT
+		add_core_of =  ENT
+		victory_points = {
+			13743 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+	state_category = shanty
+	manpower = 1700
+	buildings_max_level_factor=1.000
+}

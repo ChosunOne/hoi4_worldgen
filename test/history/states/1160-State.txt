@@ -1,0 +1,24 @@
+state={
+	id=1160
+	name="STATE_1160"
+	provinces={
+		1329 14035 14041 14043 14044 14066 14067 14068 14070
+	}
+	resources = {
+		metal = 4
+	}
+	history={
+		owner =  WHC
+		add_core_of =  WHC
+		victory_points = {
+			14067 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 2900
+	buildings_max_level_factor=1.000
+}

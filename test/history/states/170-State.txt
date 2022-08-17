@@ -1,0 +1,29 @@
+state = {
+	id = 170
+	name = "STATE_170"
+	manpower = 11000
+	state_category = city
+
+	resources={
+		water = 6
+		metal = 12
+	}
+
+	history = {
+		owner = HAM
+		add_core_of = HAM
+		victory_points = {
+			8397 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			air_base = 1
+		}
+	}
+
+	provinces = {
+		1854 1853 3486 3504 1234 2684 8387 8390 8397 8400 8402 8406
+	}
+}

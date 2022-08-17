@@ -1,0 +1,32 @@
+state = {
+	id = 147
+	name = "STATE_147"
+	resources={
+		metal = 8
+		water = 11
+	}
+
+	history={
+		owner = RAP
+		add_core_of = RAP
+		victory_points = {
+			5787 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			dockyard = 1
+			5787 = {
+				naval_base = 3
+			}
+		}
+
+	}
+
+	provinces={
+		5776 5785 5786 5787 5640 5807 5788 5805 5799 8927 5802
+	}
+	manpower=17000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

@@ -1,0 +1,27 @@
+state={
+	id=945
+	name="STATE_945"
+	resources={
+		water = 6
+		metal = 9
+		energy = 7
+		circuitry = 3
+	}
+	history={
+		owner = TVT
+		add_core_of = TVT
+		victory_points = {
+			8768 25
+		}
+		buildings = {
+			infrastructure = 10
+		}
+
+	}
+	provinces={
+		8473 1634 8768
+	}
+	manpower=50000 #Ridiculously high on purpose, will probably change later
+	buildings_max_level_factor=1.000
+	state_category=megalopolis
+}

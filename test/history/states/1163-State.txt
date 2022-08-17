@@ -1,0 +1,26 @@
+state={
+	id=1163
+	name="STATE_1163"
+	provinces={
+		14149 14150 14151 14152
+	}
+	resources = {
+		water = 8
+		energy = 5
+		metal = 8
+	}
+	history = {
+		owner = URA
+		add_core_of = URA
+		victory_points = {
+			14149 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 6015
+	buildings_max_level_factor=1.000
+}

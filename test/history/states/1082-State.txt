@@ -1,0 +1,25 @@
+state={
+	id=1082
+	name="STATE_1082"
+	resources = {
+		circuitry = 8
+	}
+	history={
+		owner =  MNC
+		add_core_of = MNC
+		add_core_of = FVR
+		victory_points = {
+			13107 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		13096 13105 13098 13102 13107 13110 13113
+	}
+	manpower = 1300
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

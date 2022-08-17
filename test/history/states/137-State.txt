@@ -1,0 +1,29 @@
+state = {
+	id = 137
+	name = "STATE_137"
+
+	history={
+		owner = MOT
+		add_core_of = MRA
+		victory_points = {
+			3211 5
+		}
+		victory_points = {
+			3207 2
+		}
+		victory_points = {
+			971 2
+		}
+		buildings = {
+			infrastructure = 5
+			arms_factory = 2
+		}
+	}
+
+	provinces={
+		971 3207 3211 3210 3209 9074 5766
+	}
+	manpower=7956
+	buildings_max_level_factor=1.000
+	state_category=town
+}

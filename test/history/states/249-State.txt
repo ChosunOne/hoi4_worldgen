@@ -1,0 +1,21 @@
+state = {
+	id = 249
+	name = "STATE_249"
+	manpower = 1800
+	state_category = shanty
+
+	history = {
+		owner = LUM
+		add_core_of = LUM
+		victory_points = {
+			6928 5
+		}
+		buildings = {
+			infrastructure = 4
+		}
+	}
+
+	provinces = {
+		6937 6933 6924 6928 6932 6939
+	}
+}

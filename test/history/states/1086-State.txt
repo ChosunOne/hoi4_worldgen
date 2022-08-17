@@ -1,0 +1,17 @@
+state={
+	id=1086
+	name="STATE_1086"
+
+	history={
+		owner =  BGR
+		add_core_of =  BGR
+	}
+
+	provinces={
+		7362
+	}
+	impassable = yes
+	manpower = 12
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

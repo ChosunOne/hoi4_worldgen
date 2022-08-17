@@ -1,0 +1,25 @@
+state={
+	id=1018
+	name="STATE_1018"
+	resources = {
+		metal = 4
+	}
+	history={
+		owner = CPK
+		add_core_of = CPK
+		victory_points = {
+			12789 5
+		}
+		buildings = {
+			infrastructure = 1
+			arms_factory = 1
+		}
+	}
+
+	provinces={
+		12766 12787 12788 12770 12798 12781 12759 12767 12789
+	}
+	manpower = 2100
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

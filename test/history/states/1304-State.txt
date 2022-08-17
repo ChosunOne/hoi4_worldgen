@@ -1,0 +1,24 @@
+state={
+	id=1304
+	name="STATE_1304"
+	provinces={
+		13438 13439 13447 13449 13450 13451 13455 13456 13457 13458
+	}
+	resources = {
+		composites = 2
+	}
+	history = {
+		owner = ROL
+		add_core_of = ROL
+		victory_points = {
+			13458 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 3500
+	buildings_max_level_factor=1.000
+}

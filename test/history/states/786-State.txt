@@ -1,0 +1,29 @@
+state = {
+	id = 786
+	name = "STATE_786"
+	resources={
+		metal = 8
+	}
+
+	history={
+		owner = ATE
+		add_core_of = ATE
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			dockyard = 2
+
+		}
+		victory_points = {
+			9319 10
+		}
+
+	}
+
+	provinces={
+		706 2238 9296 9297 9312 9315 9316 9319 10480 10928 10929 10935
+	}
+	manpower=63865
+	buildings_max_level_factor=1.000
+	state_category=town
+}

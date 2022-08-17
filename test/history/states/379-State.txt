@@ -1,0 +1,22 @@
+state = {
+	id = 379
+	name = "STATE_379"
+	resources={
+		water = 12
+	}
+
+	history={
+		owner = ROS
+		add_core_of = ROS
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		2016
+	}
+	manpower=1500
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

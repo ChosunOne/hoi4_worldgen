@@ -1,0 +1,25 @@
+state = {
+	id = 218
+	name = "STATE_218"
+	resources={
+		water=4
+	}
+
+	history={
+		owner = STM
+		add_core_of = STM
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+		victory_points = {
+			7344 5
+		}
+	}
+	provinces={
+		2561 7357 7433 7344 7358 7345 7343 7508 12383 12385 7507 7356 7506 7505 7396 702
+	}
+	manpower = 915
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

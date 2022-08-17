@@ -1,0 +1,30 @@
+state = {
+	id = 565
+	name = "STATE_565"
+	resources = {
+		water = 10
+		metal = 8
+		composites = 1
+	}
+
+	history={
+		owner = SUN
+		add_core_of = SUN
+		victory_points = {
+			5664 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1 #3.2: Down from 2
+		}
+
+	}
+
+	provinces={
+		976 994 1839 1840 2856 2857 2858 3029 3130 5279 5280 5281 5282 5661 5662 5663 5664 5691 5692 7023 7024 8192
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

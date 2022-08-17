@@ -1,0 +1,25 @@
+state = {
+	id = 140
+	name = "STATE_140"
+
+	resources = {
+		metal = 2
+	}
+
+	history={
+		owner = HGH
+		add_core_of = HGH
+		victory_points = {
+			4465 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces={
+		4465 4466 4204 4464 4208 4210 4487 4462 2506 4207 4358
+	}
+	manpower=13000
+	buildings_max_level_factor=1.000
+	state_category= city
+}

@@ -1,0 +1,27 @@
+state = {
+	id = 294
+	name = "STATE_294"
+	manpower = 2000
+	state_category = pastoral
+
+	resources = {
+		water = 4
+		energy = 2
+	}
+
+	history = {
+		owner = SOR
+		add_core_of = SOR
+		victory_points = {
+			6523 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+	}
+
+	provinces = {
+		6522 6523 6521
+	}
+}

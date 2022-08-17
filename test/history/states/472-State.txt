@@ -1,0 +1,29 @@
+state = {
+	id = 472
+	name = "STATE_472"
+	resources={
+		circuitry = 4
+		advanced = 4
+	}
+
+	history={
+		owner = LON
+		add_core_of = LON
+		victory_points = {
+			1711 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			dockyard = 1
+		}
+
+	}
+
+	provinces={
+		1710 1711 1721 8330 8334 8335 8336
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category= town
+}

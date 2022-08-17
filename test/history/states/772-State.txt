@@ -1,0 +1,24 @@
+state = {
+	id = 772
+	name = "STATE_772"
+	resources={
+		metal = 12
+	}
+	impassable = yes
+	history={
+		owner = TLA
+		add_core_of = TLA
+		buildings = {
+			infrastructure = 1
+
+		}
+
+	}
+
+	provinces={
+		495 9342 9351 9352 9557 10966 10977
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

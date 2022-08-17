@@ -1,0 +1,26 @@
+state = {
+	id = 416
+	name = "STATE_416"
+
+	history={
+		owner = WHI
+		add_core_of = WHI
+		victory_points = {
+			3823 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			3823 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces={
+		3954 3823 3951 7417 2152 4380 3969 3797 3802 2120 3809 3801
+	}
+	manpower=1678
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

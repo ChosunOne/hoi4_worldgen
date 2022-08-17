@@ -1,0 +1,21 @@
+state = {
+	id = 650
+	name = "STATE_650"
+	impassable = yes
+	manpower = 100
+	state_category = wasteland
+	resources = {
+	}
+
+	history = {
+		owner = BVC
+		add_core_of = BVC
+		buildings = {
+
+		}
+	}
+
+	provinces = {
+		2624 4646 4645 4644
+	}
+}

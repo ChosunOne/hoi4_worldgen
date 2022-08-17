@@ -1,0 +1,28 @@
+state = {
+	id = 367
+	name = "STATE_367"
+	manpower = 10000
+	state_category = town
+
+	resources = {
+		advanced = 2
+	}
+
+	history = {
+		owner = EAS
+		add_core_of = EAS
+		victory_points = {
+			8426 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 3
+			air_base = 1
+		}
+	}
+
+	provinces = {
+		8421 8422 8423 8424 8425 8426 8427 8428
+	}
+}

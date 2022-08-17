@@ -1,0 +1,24 @@
+state={
+	id=1192
+	name="STATE_1192"
+	provinces={
+		12874 12876 14540 14541 14542 14555 14556 14557
+	}
+	resources = {
+		energy = 2
+	}
+	history = {
+		owner = STN
+		add_core_of = STN
+		victory_points = {
+			14541 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 3100
+	buildings_max_level_factor=1.000
+}

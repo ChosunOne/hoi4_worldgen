@@ -1,0 +1,20 @@
+state={
+	id=1116
+	name="STATE_1116"
+	provinces={
+		14073 14074 14078 14079 14081 14083 14099
+	}
+	history = {
+		owner = STC
+		add_core_of = STC
+		victory_points = {
+			14081 2
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	state_category = enclave
+	manpower = 2200
+	buildings_max_level_factor=1.000
+}

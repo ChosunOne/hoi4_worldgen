@@ -1,0 +1,25 @@
+state={
+	id=1048
+	name="STATE_1048"
+	resources = {
+		water = 6
+	}
+	history={
+		owner = JCK
+		add_core_of = JCK
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+		victory_points = {
+			12632 15
+		}
+	}
+
+	provinces={
+		12644 12659 12631 12646 12632 12615 12602 12612 12630 12638 12648
+	}
+	manpower = 5300
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

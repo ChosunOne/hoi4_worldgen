@@ -1,0 +1,21 @@
+state = {
+	id = 80
+	name = "STATE_80"
+	impassable = yes
+	history={
+		owner = NCR
+		add_core_of = NCR
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		804 843 4639 4706 4707
+	}
+	manpower=11000
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

@@ -1,0 +1,33 @@
+state = {
+	id = 571
+	name = "STATE_571"
+	resources = {
+		water = 1
+		energy = 1
+		metal = 1
+		circuitry = 1
+		composites = 1
+		advanced = 1
+	}
+
+	history={
+		owner = SUN
+		add_core_of = SUN
+		victory_points = {
+			7021 5
+		}
+		buildings = {
+			infrastructure = 2
+			5275 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces={
+		1838 2757 3028 5275 5689 5690 5730 5731 7019 7020 7021 7022
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

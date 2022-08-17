@@ -1,0 +1,31 @@
+state = {
+	id = 345
+	name = "STATE_345"
+
+	resources = {
+		metal = 6
+		water = 6
+		circuitry = 4
+	}
+
+	history={
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			4300 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+		}
+
+	}
+
+	provinces={
+		4126 4033 4300 1948 1950 8565 3888 4032
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

@@ -1,0 +1,24 @@
+state = {
+	id = 620
+	name = "STATE_620"
+	manpower = 3780
+	state_category = rural
+	resources = {
+		metal = 4
+	}
+
+	history = {
+		owner = MOT
+		add_core_of = MOT
+		buildings = {
+			infrastructure = 2
+		}
+		victory_points = {
+			931 5
+		}
+	}
+
+	provinces = {
+		3229 12326 12325 12328 12329 12327 919 931 932 941 5647 910
+	}
+}

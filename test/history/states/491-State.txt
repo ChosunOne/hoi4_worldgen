@@ -1,0 +1,24 @@
+state = {
+	id = 491
+	name = "STATE_491"
+
+	history={
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			7495 5
+		}
+		buildings = {
+			infrastructure = 1
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		1452 4306 1974 4305 8563 4121 4316 7499 4317 7494 4299 1470 8564 7495
+	}
+	manpower=1500
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

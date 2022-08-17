@@ -1,0 +1,34 @@
+state = {
+	id = 106
+	name = "STATE_106"
+	manpower = 7000
+	state_category = town
+
+	resources = {
+		water = 6
+		circuitry = 2
+		metal = 4
+	}
+
+	history = {
+		owner = MOT
+		add_core_of = MOT
+		add_core_of = KHA
+		victory_points = {
+			3197 15
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 3
+			industrial_complex = 1
+			air_base = 1
+			3243 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		3242 3243 3244 3197 3187
+	}
+}

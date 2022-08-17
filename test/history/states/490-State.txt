@@ -1,0 +1,27 @@
+state = {
+	id = 490
+	name = "STATE_490"
+	manpower = 1000
+	state_category = rural
+
+	history = {
+		#Happy dont move this state without looking at the below code.
+		#lol how about I do it anyway
+		set_state_flag = lac_give_to_irn_once #This is a special peacedeal flag, used for the LAC-IRN scripted peace deal.
+
+		owner = HAN
+		add_core_of = HAN
+		victory_points = {
+			6900 15
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+
+		}
+	}
+
+	provinces = {
+		1138 1729 6889 6890 6898 6900 6904 6908 8190 6901 6903 6905 7824
+	}
+}

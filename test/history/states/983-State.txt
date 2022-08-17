@@ -1,0 +1,18 @@
+state={
+	id=983
+	name="STATE_983"
+	history={
+		owner = PAS
+		add_core_of = PAS
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		2146
+	}
+	manpower=746
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

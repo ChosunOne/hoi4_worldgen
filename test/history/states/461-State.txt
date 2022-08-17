@@ -1,0 +1,35 @@
+state = {
+	id = 461
+	name = "STATE_461"
+	manpower = 3400
+	state_category = town
+
+	resources = {
+		metal = 8
+		circuitry = 4
+		advanced = 2
+	}
+
+	history = {
+		owner = VIC
+		add_core_of = VIC
+		victory_points = {
+			628 10
+		}
+		buildings = {
+			dockyard = 2
+			industrial_complex = 1
+			air_base = 1
+			radar_station = 4
+			infrastructure = 4
+			4446 = {
+				naval_base = 3
+				coastal_bunker = 3
+			}
+		}
+	}
+
+	provinces = {
+		4446 628 2545 4442 2546 3640 3636 3637 4441
+	}
+}

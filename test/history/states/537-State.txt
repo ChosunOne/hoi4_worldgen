@@ -1,0 +1,28 @@
+state = {
+	id = 537
+	name = "STATE_537"
+	resources={
+		composites=4.000
+	}
+
+	history={
+		owner = EXE
+		add_core_of = EXE
+		victory_points = {
+			5452 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+
+		}
+
+	}
+
+	provinces={
+		1702 2846 2847 2933 2955 3114 5451 5452 5453 5454 5604 5605 5606 7001 11554 11597 11613 11626
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

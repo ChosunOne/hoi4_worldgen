@@ -1,0 +1,24 @@
+
+state={
+	id=1202
+	name="STATE_1202"
+	provinces={
+		12879 12882 12883 14543 14585 14591 14593 14594
+	}
+	resources = {
+	}
+	history = {
+		owner = PAP
+		add_core_of = PAP
+		victory_points = {
+			12882 5
+		}
+		buildings = {
+			infrastructure = 3
+			dockyard = 1
+		}
+	}
+	state_category = rural
+	manpower = 3400
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,32 @@
+state = {
+	id = 934
+	name = "STATE_934"
+	resources={
+		energy = 4
+		metal = 7
+		water = 7
+	}
+	history={
+		owner = SHA
+		add_core_of = SHA
+		victory_points = {
+			11634 10
+		}
+		buildings = {
+			infrastructure = 4
+			dockyard = 2
+			air_base = 1
+			11634 = {
+				naval_base = 2
+			}
+		}
+
+
+	}
+	provinces={
+		2290 2991 2992 2993 3023 3025 11552 11614 11619 11622 11634 11724 11725 11726 11727 11728 11730 11738 11739
+	}
+	manpower=14000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

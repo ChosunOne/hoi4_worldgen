@@ -1,0 +1,22 @@
+state = {
+	id = 404
+	name = "STATE_404"
+	manpower = 2000
+	state_category = rural
+
+	history = {
+		owner = DEA
+		add_core_of = DEA
+		victory_points = {
+			1663 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+	}
+
+	provinces = {
+		1663 6528
+	}
+}

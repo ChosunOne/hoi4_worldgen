@@ -1,0 +1,24 @@
+state = {
+	id = 260
+	name = "STATE_260"
+
+	history={
+		owner = GDH
+		add_core_of = GDH
+		victory_points = {
+			7545 10
+		}
+		buildings = {
+			infrastructure = 3
+
+		}
+
+	}
+
+	provinces={
+		2625 3134 7544 7545 7546 7550 7564 7565 7566 7569 7572 7573 7575 7582 7583 7588 7754 7755 7766 7770
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

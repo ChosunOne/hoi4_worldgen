@@ -1,0 +1,29 @@
+state = {
+	id = 228
+	name = "STATE_228"
+	resources = {
+		water = 6
+		metal = 10
+	}
+
+	history={
+		owner = CLJ
+		add_core_of = CLJ
+		victory_points = {
+			6688 2
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		6684 6687 6688 9141 9131 9135 9143 6705
+	}
+	manpower=2000
+	buildings_max_level_factor=1.000
+	state_category=pastoral
+}

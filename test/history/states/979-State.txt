@@ -1,0 +1,21 @@
+state={
+	id=979
+	name="STATE_979"
+	history={
+		owner = NIT
+		add_core_of = NIT
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+		victory_points = {
+			4546 5
+		}
+	}
+	provinces={
+		8526 8525 4547 4546 438 8528 8530 8529 2085 8531 8532 2589 12402 2362
+	}
+	manpower=1606
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,25 @@
+state = {
+	id = 112
+	name = "STATE_112"
+	manpower = 1500
+	state_category = town
+
+	history = {
+		owner = ROB
+		add_core_of = ROB
+		victory_points = {
+			1850 5
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 2
+			6637 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		1065 1830 1850 3035 6637 7813 7852 7853 7855 7856 7857
+	}
+}

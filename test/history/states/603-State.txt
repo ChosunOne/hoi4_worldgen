@@ -1,0 +1,20 @@
+state = {
+	id = 603
+	name = "STATE_603"
+
+	history={
+		owner = NCR
+		add_core_of = NCR
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		12312 12313 12314 12315 12309 12335 12336 12337
+	}
+	manpower=3015
+	buildings_max_level_factor=1.000
+	state_category=town
+}

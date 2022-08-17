@@ -1,0 +1,24 @@
+state={
+	id=1003
+	name="STATE_1003"
+
+	history={
+		owner = BRE
+		add_core_of = BRE
+		buildings = {
+			infrastructure = 4
+			arms_factory = 3
+			dockyard = 1
+		}
+		victory_points = {
+			2096 10
+		}
+	}
+
+	provinces={
+		2128 3710 7250 3806 7244 2096 3950 3989 7246
+	}
+	manpower = 16590
+	state_category = large_city
+	buildings_max_level_factor=1.000
+}

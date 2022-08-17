@@ -1,0 +1,25 @@
+state = {
+	id = 383
+	name = "STATE_383"
+
+	history={
+		owner = SOR
+		add_core_of = SOR
+		victory_points = {
+			1010 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 0
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		1010 6344 6518 6519
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

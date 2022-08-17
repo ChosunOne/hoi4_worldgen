@@ -1,0 +1,27 @@
+state = {
+	id = 406
+	name = "STATE_406"
+	resources={
+		metal = 16
+	}
+
+	history={
+		owner = EAS
+		add_core_of = EAS
+		victory_points = {
+			8409 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		8410 8409 8912
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

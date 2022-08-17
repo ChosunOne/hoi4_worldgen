@@ -1,0 +1,21 @@
+state = {
+	id = 394
+	name = "STATE_394"
+	impassable = yes
+
+	history={
+		owner = INR
+		add_core_of = INR
+		buildings = {
+
+		}
+
+	}
+
+	provinces={
+		6616 6626
+	}
+	manpower=300
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

@@ -1,0 +1,30 @@
+state = {
+	id = 478
+	name = "STATE_478"
+	manpower = 18000
+	state_category = town
+
+	resources = {
+		metal = 12
+		composites = 12
+		water = 12
+	}
+
+	history = {
+		owner = EHT
+		add_core_of = EHT
+		add_core_of = WEN #A country that can appear through revolts or liberation/puppeting
+		victory_points = {
+			3358 20
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		2683 3400 3371 1567 3344 3401 3358 8380 8381 8382
+	}
+}

@@ -1,0 +1,27 @@
+state = {
+	id = 65
+	name = "STATE_65"
+	manpower = 6000
+	state_category = rural
+
+	history = {
+		owner = YAK
+		add_core_of = YAK
+		victory_points = {
+			4326 5
+		}
+		victory_points = {
+			7518 5
+		}
+		victory_points = {
+			7517 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces = {
+		1937 4010 4326 4327 4328 7517 7518 4318 7511 7512 4043 7514 4047 1500 7515 1936 4011 7378
+	}
+}

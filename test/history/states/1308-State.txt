@@ -1,0 +1,25 @@
+state={
+	id=1308
+	name="STATE_1308"
+	provinces={
+		13420 13429 13430 13468 13469 13470
+	}
+	resources = {
+		water = 2
+		metal = 2
+	}
+	history = {
+		owner = RCK
+		add_core_of = RCK
+		victory_points = {
+			13430 5
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 3456
+	buildings_max_level_factor=1.000
+}

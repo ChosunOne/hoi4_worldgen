@@ -1,0 +1,24 @@
+state = {
+	id = 477
+	name = "STATE_477"
+
+	history={
+		owner = GDH
+		add_core_of = GDH
+		victory_points = {
+			7525 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		801 2190 2626 3120 3135 7525 7558 7559 7570 7571 7574 7752 7753 7767 7768 7771 7772 7785 7786
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

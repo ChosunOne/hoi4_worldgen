@@ -1,0 +1,27 @@
+state={
+	id=1167
+	name="STATE_1167"
+	provinces={
+		12897 14639 14640
+	}
+	resources = {
+		water = 8
+		metal = 8
+	}
+	history = {
+		owner = TPA
+		add_core_of = TPA
+		victory_points = {
+			12897 15
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+			dockyard = 1
+		}
+	}
+	state_category = large_town
+	manpower = 15000
+	buildings_max_level_factor=1.000
+}

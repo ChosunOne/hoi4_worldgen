@@ -1,0 +1,21 @@
+state = {
+	id = 360
+	name = "STATE_360"
+	manpower = 8000
+	state_category = town
+
+	history = {
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			3433 10
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		962 1779 3293 3433 4955 4956 4957 8765
+	}
+}

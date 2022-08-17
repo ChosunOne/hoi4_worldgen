@@ -1,0 +1,24 @@
+
+state={
+	id=1332
+	name="STATE_1332"
+	provinces={
+		14610 14745 14746 14747 14751 14752
+	}
+	resources = {
+		metal = 12
+	}
+	history = {
+		owner = DUN
+		add_core_of = DUN
+		victory_points = {
+			14751 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+		}
+	}
+	state_category = town
+	manpower = 4580
+}

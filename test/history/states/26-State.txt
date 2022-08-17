@@ -1,0 +1,21 @@
+state = {
+	id = 26
+	name = "STATE_26"
+
+	history={
+		owner = TAR
+		add_core_of = TAR
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		6438 6439 6440 9099 9096
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category=pastoral
+}

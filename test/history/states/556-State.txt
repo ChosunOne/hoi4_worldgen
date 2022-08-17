@@ -1,0 +1,59 @@
+state = {
+	id = 556
+	name = "STATE_556"
+	manpower = 4000
+	state_category = town
+
+	resources = {
+		composites = 6
+		circuitry = 6
+	}
+
+	history = {
+		owner = OLY
+		add_core_of = OLY
+		victory_points = {
+			7116 15
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+			arms_factory = 2
+			7111 = {
+				naval_base = 1
+			}
+		}
+		2275.1.1 = {
+			WBH = {
+				set_province_controller = 1931
+				set_province_controller = 2497
+				set_province_controller = 2498
+				set_province_controller = 3859
+				set_province_controller = 3860
+				set_province_controller = 3861
+				set_province_controller = 3862
+				set_province_controller = 3863
+				set_province_controller = 3864
+				set_province_controller = 4025
+				set_province_controller = 4323
+				set_province_controller = 4324
+				set_province_controller = 7100
+				set_province_controller = 7108
+				set_province_controller = 7109
+				set_province_controller = 7110
+				set_province_controller = 7111
+				set_province_controller = 7112
+				set_province_controller = 7113
+				set_province_controller = 7114
+				set_province_controller = 7115
+				set_province_controller = 7116
+				set_province_controller = 7117
+				set_province_controller = 7118
+			}
+		}
+	}
+
+	provinces = {
+		3860 3861 3859 1931 4025 2498 3863 3862 3864 2497 7108 7110 7109 7112 7111 7113 7114 7115 7116 7118 7117 4324 4323 7100
+	}
+}

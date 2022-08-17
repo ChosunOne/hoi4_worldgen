@@ -1,0 +1,21 @@
+state={
+	id=1225
+	name="STATE_1225"
+	provinces={
+		12853 12855 12857 12858
+	}
+	history={
+		owner =  NOR
+		add_core_of =  NOR
+		victory_points = {
+			12857 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+		}
+	}
+	state_category = large_city
+	manpower = 31800
+	buildings_max_level_factor=1.000
+}

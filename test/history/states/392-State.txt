@@ -1,0 +1,28 @@
+state = {
+	id = 392
+	name = "STATE_392"
+	manpower = 7000
+	state_category = rural
+
+	resources = {
+		energy = 2
+		metal = 4
+		circuitry = 2
+	}
+
+	history = {
+		owner = NAV
+		add_core_of = NAV
+		victory_points = {
+			6732 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+	}
+
+	provinces = {
+		1564 5587 5684 6570 6613 6729 6730 6731 6732 6733 6734 6965
+	}
+}

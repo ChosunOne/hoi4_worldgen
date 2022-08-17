@@ -1,0 +1,25 @@
+state={
+	id=1058
+	name="STATE_1058"
+	resources = {
+		energy = 4
+	}
+	history={
+		owner = MRR
+		add_core_of = MRR
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+		victory_points = {
+			12651 10
+		}
+	}
+
+	provinces={
+		12626 12651 12637 12643 12655 12653 12640 12656
+	}
+	manpower = 4300
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

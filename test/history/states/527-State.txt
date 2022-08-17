@@ -1,0 +1,32 @@
+state = {
+	id = 527
+	name = "STATE_527"
+	resources={
+		water = 4
+		metal = 4
+	}
+
+	history={
+		owner = FOR
+		add_core_of = FOR
+		victory_points = {
+			9145 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			anti_air_building = 1
+			radar_station = 1
+
+		}
+
+	}
+
+	provinces={
+		3099 6690 9145 9129 6694 6691 9156 6689
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

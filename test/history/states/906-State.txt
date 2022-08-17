@@ -1,0 +1,25 @@
+state = {
+	id = 906
+	name = "STATE_906"
+	history={
+		owner = PER
+		add_core_of = PER
+		victory_points = {
+			11310 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 3
+			11317 = {
+				naval_base = 2
+			}
+		}
+
+	}
+	provinces={
+		11305 11310 11313 11315 11317 11320 11321 11324 11326 11330 11331 12342
+	}
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

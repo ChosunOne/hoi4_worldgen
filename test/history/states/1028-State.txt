@@ -1,0 +1,28 @@
+state={
+	id=1028
+	name="STATE_1028"
+
+	history={
+		owner = KHA
+		add_core_of = KHA
+		victory_points = {
+			4587 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+
+	resources = {
+		water = 5
+	}
+
+	provinces={
+		621 4569 2675 668 4586 4587 4585 2142 4584
+	}
+	manpower = 2849
+	state_category = town
+	buildings_max_level_factor=1.000
+}

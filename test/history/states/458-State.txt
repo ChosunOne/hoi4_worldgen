@@ -1,0 +1,27 @@
+state = {
+	id = 458
+	name = "STATE_458"
+	manpower = 3000
+	state_category = pastoral
+
+	resources = {
+		metal = 4
+		composites = 4
+	}
+
+	history = {
+		owner = PAL
+		add_core_of = PAL
+		victory_points = {
+			2708 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		2708 3499 3501 3500 3528 3593 3594
+	}
+}

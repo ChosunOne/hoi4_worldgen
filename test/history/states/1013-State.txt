@@ -1,0 +1,26 @@
+state={
+	id=1013
+	name="STATE_1013"
+	resources = {
+		water = 6
+		metal = 8
+	}
+	history={
+		owner = MET
+		add_core_of = MET
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+	}
+		victory_points = {
+			12692 15
+		}
+	}
+
+	provinces={
+		12692 1336 12700 12682 12696 12699 12711 12709
+	}
+	manpower = 4500
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

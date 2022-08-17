@@ -1,0 +1,29 @@
+
+state={
+	id=630
+	name="STATE_630"
+	resources={
+		water=2.000
+		metal=6.000
+	}
+
+	history={
+		owner = INR
+		add_core_of = INR
+		victory_points = {
+			6748 10
+		}
+		buildings = {
+
+		}
+
+	}
+
+	provinces={
+		6747 6748 6749 6750 6751 6752 9110 9112 9114 15432 15444 15453
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=town
+	local_supplies=0.000
+}

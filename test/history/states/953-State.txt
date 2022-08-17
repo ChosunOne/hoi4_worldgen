@@ -1,0 +1,18 @@
+state={
+	id=953
+	name="STATE_953"
+	history={
+		owner = ANO
+		add_core_of = ANO
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		8260
+	}
+	manpower=164
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

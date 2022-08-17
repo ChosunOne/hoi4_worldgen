@@ -1,0 +1,28 @@
+state = {
+	id = 557
+	name = "STATE_557"
+	resources={
+		metal=8.000
+		composites=2.000
+	}
+
+	history={
+		owner = WHI
+		add_core_of = WHI
+		victory_points = {
+			2100 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+
+	}
+
+	provinces={
+		679 2097 2098 2100 2101 2118 3770 3796 3810 3979 7213 7214 7395 3800
+	}
+	manpower=4235
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

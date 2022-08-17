@@ -1,0 +1,25 @@
+state = {
+	id = 205
+	name = "STATE_205"
+	resources={
+		water = 4
+	}
+
+	history={
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			6659 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		3302 4637 4970 4971 4972 4981 5780 5795 6659
+	}
+	manpower=11000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

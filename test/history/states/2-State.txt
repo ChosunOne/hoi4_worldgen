@@ -1,0 +1,28 @@
+state = {
+	id = 2
+	name = "STATE_2"
+	resources={
+		water = 4
+		metal = 12
+	}
+
+	history={
+		owner = COW
+		add_core_of = COW
+		victory_points = {
+			5328 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		1674 1676 2892 2893 5327 5328 5329 5380 5381 5387
+	}
+	manpower=27000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

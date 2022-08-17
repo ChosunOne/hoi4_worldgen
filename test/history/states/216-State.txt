@@ -1,0 +1,27 @@
+state = {
+	id = 216
+	name = "STATE_216"
+
+	history={
+		owner = NAT
+		add_core_of = NAT
+		victory_points = {
+			1767 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+
+	resources = {
+		metal = 3
+	}
+
+	provinces={
+		1767 2268 4745 4746 4747 4893 4759 4760 1628
+	}
+	manpower=8000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

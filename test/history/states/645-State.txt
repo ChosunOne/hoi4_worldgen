@@ -1,0 +1,16 @@
+state = {
+	id = 645
+	name = "STATE_645"
+	impassable = yes
+	manpower = 50
+	state_category = wasteland
+
+	history = {
+		owner = TTM
+		add_core_of = TTM
+	}
+
+	provinces = {
+		6640 6609
+	}
+}

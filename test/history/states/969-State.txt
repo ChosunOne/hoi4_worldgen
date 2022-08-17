@@ -1,0 +1,18 @@
+state={
+	id=969
+	name="STATE_969"
+	history={
+		owner = ROT
+		add_core_of = ROT
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		12386 8502
+	}
+	manpower=126
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

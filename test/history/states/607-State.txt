@@ -1,0 +1,24 @@
+state = {
+	id = 607
+	name = "STATE_607"
+	manpower = 5900
+	state_category = town
+	resources = {
+		energy = 4
+	}
+	history = {
+		owner = LAP
+		add_core_of = LAP
+		victory_points = {
+			4406 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		4412 4401 4406 4404 7402 3712 4417 4414 3737
+	}
+}

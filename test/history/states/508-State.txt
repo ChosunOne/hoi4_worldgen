@@ -1,0 +1,22 @@
+state = {
+	id = 508
+	name = "STATE_508"
+	manpower = 5000
+	state_category = rural
+
+	history = {
+		owner = SLE
+		add_core_of = SLE
+		victory_points = {
+			6408 5
+		}
+		buildings = {
+			infrastructure = 1
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		6407 6406 6408 6405
+	}
+}

@@ -1,0 +1,23 @@
+state={
+	id=1213
+	name="STATE_1213"
+	provinces={
+		13918 13921 13922 13925 13927 13928 13932 13934 13935 13936
+	}
+	resources = {
+		composites = 5
+	}
+	history = {
+		owner = COM
+		add_core_of = COM
+		victory_points = {
+			13935 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = town
+	manpower = 5500
+	buildings_max_level_factor=1.000
+}

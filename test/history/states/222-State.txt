@@ -1,0 +1,35 @@
+state = {
+	id = 222
+	name = "STATE_222"
+
+	resources={
+		metal = 14
+		water = 10
+		circuitry = 8
+		energy = 8
+	}
+
+	history={
+		owner = UIN
+		add_core_of = UIN
+		victory_points = {
+			6517 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			6515 = {
+				naval_base = 1
+			}
+		}
+
+	}
+
+	provinces={
+		6508 6515 6516 6517 7455 9175
+	}
+	manpower=21000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

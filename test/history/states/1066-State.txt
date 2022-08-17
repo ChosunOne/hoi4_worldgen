@@ -1,0 +1,27 @@
+state={
+	id=1066
+	name = "STATE_1066"
+	resources = {
+		metal = 4
+		energy = 2
+		advanced = 2
+	}
+	history={
+		owner = RMT
+		add_core_of = RMT
+		victory_points = {
+			13052 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		13009 13019 13031 13038 13051 13052 13034 13035 13064 13053
+	}
+	manpower = 3200
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

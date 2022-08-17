@@ -1,0 +1,36 @@
+state = {
+	id = 380
+	name = "STATE_380"
+
+	history={
+		owner = MOT
+		add_core_of = FIE
+		victory_points = {
+			9066 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+			9066 = {
+				bunker2 = 1
+			}
+		}
+
+	}
+
+	resources = {
+		metal = 8
+		water = 4
+		energy = 4
+		advanced = 4
+		composites = 4
+	}
+
+	provinces={
+		3193 3195 9066 6605 6606
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=large_city
+}

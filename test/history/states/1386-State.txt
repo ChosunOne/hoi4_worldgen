@@ -1,0 +1,15 @@
+state={
+	id=1386
+	name="STATE_1386"
+	provinces={
+		3715 7260 7432
+	}
+	history={
+		owner = DED
+		add_core_of = DED
+	}
+	impassable = yes
+	manpower=681
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

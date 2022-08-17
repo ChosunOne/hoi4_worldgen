@@ -1,0 +1,33 @@
+state = {
+	id = 34
+	name = "STATE_34"
+	resources={
+		water=4
+	}
+
+	history={
+		owner = PEN
+		add_core_of = PEN
+		victory_points = {
+			3977 5
+		}
+		victory_points = {
+			7305 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			7308 = {
+				bunker = 2
+			}
+		}
+
+	}
+
+	provinces={
+		7309 7305 3947 3977 7216 7308 7323
+	}
+	manpower=3568
+	buildings_max_level_factor=1
+	state_category=rural
+}

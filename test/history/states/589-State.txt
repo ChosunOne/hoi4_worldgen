@@ -1,0 +1,26 @@
+state = {
+	id = 589
+	name = "STATE_589"
+	manpower = 22801
+	state_category = city
+
+	resources = {
+		water = 4
+	}
+
+	history = {
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			2313 20
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 4
+		}
+	}
+
+	provinces = {
+		1607 2071 2313 2314 2315 2385 2395 2396
+	}
+}

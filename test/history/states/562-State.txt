@@ -1,0 +1,26 @@
+state = {
+	id = 562
+	name = "STATE_562"
+
+	history={
+		owner = ITZ
+		add_core_of = ITZ
+		victory_points = {
+			10105 5
+		}
+		buildings = {
+			infrastructure = 3
+			10105 = {
+				naval_base = 1
+			}
+		}
+
+	}
+
+	provinces={
+		10041 10105 10140 10869 10873 10886 10894 10895
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

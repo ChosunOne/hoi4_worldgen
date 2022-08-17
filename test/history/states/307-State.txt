@@ -1,0 +1,28 @@
+state = {
+	id = 307
+	name = "STATE_307"
+	resources={
+		metal = 5
+		water = 3
+	}
+
+	history={
+		owner = DES
+		add_core_of = DES
+		victory_points = {
+			1589 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		1589 2003 9644 1661
+	}
+	manpower=3261
+	buildings_max_level_factor=1.000
+	state_category=town
+}

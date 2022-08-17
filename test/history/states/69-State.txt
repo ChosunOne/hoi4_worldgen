@@ -1,0 +1,30 @@
+state = {
+	id = 69
+	name = "STATE_69"
+
+	history={
+		owner = TOC
+		add_core_of = TOC
+		victory_points = {
+			1518 10
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 1
+			arms_factory = 2
+			dockyard = 1
+			air_base = 1
+			1518 = {
+				naval_base = 2
+			}
+		}
+
+	}
+
+	provinces={
+		1518 1954 1957 4006 1955 8575 2485 1515 4007 8576 4005 2348 2529 7203
+	}
+	manpower=7500
+	buildings_max_level_factor=1.000
+	state_category=town
+}

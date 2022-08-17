@@ -1,0 +1,30 @@
+state = {
+	id = 545
+	name = "STATE_545"
+
+	history={
+		owner = PEC
+		add_core_of = PEC
+		victory_points = {
+			2950 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			dockyard = 2
+			3115 = {
+				naval_base = 1
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		2793 2943 2950 2960 3006 3007 3009 3010 3115 5401 5487 5652 5693 5695 7619 7621 7628 7629
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

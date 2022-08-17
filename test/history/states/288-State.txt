@@ -1,0 +1,30 @@
+state = {
+	id = 288
+	name = "STATE_288"
+	resources={
+		water=12
+		composites=4
+		energy=6
+	}
+
+	history={
+		owner = SYN
+		add_core_of = SYN
+		victory_points = {
+			3783 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+		}
+
+	}
+
+	provinces={
+		264 1964 1965 3685 3780 3781 3783 3784 3844 3995 3851 3849 3850 2484 3782 3786 3785 3836
+	}
+	manpower=6961
+	buildings_max_level_factor=1.000
+	state_category=town
+}

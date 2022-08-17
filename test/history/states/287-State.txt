@@ -1,0 +1,39 @@
+
+state={
+	id=287
+	name="STATE_287"
+	resources={
+		water=10.000
+		energy=7.000
+	}
+
+	history={
+		owner = ASF
+		add_core_of = ASF
+		victory_points = {
+			2974 10
+		}
+		buildings = {
+			infrastructure = 4
+			2977 = {
+				naval_base = 1
+
+			}
+			industrial_complex = 1
+			2973 = {
+				naval_base = 1
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		2748 2971 2973 2974 2976 2977 2979 5687 9021 15673
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+	local_supplies=0.000
+}

@@ -1,0 +1,15 @@
+state={
+	id=1209
+	name="STATE_1209"
+	history={
+		owner = HVR
+		add_core_of = HVR
+	}
+	provinces={
+		13619
+	}
+	impassable = yes
+	state_category = wasteland
+	manpower = 31
+	buildings_max_level_factor=1.000
+}

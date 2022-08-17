@@ -1,0 +1,24 @@
+state={
+	id=1223
+	name="STATE_1223"
+	provinces={
+		12872 13119 13786 13787 13788 13789 13796 13797
+	}
+	history={
+		owner =  YLJ
+		add_core_of =  YLJ
+		victory_points = {
+			13788 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+	resources = {
+		metal = 8
+	}
+	state_category = rural
+	manpower = 4500
+	buildings_max_level_factor=1.000
+}

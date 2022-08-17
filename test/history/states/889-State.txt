@@ -1,0 +1,25 @@
+state = {
+	id = 889
+	name = "STATE_889"
+	history={
+		owner = CHC
+		add_core_of = CHC
+		victory_points = {
+			12237 5
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+		}
+	}
+	provinces={
+		987 2579 2824 12217 12218 12222 12225 12226 12230 12232 12233 12234 12237 12238 12239 12240 12242 12245
+	}
+	resources = {
+		energy = 8
+		water = 7
+	}
+	manpower=11093
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

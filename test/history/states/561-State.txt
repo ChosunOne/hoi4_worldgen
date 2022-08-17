@@ -1,0 +1,25 @@
+state = {
+	id = 561
+	name = "STATE_561"
+	manpower = 2000
+	state_category = rural
+
+	resources = {
+		metal = 4
+	}
+
+	history = {
+		owner = BRK
+		add_core_of = BRK
+		victory_points = {
+			2114 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces = {
+		2105 2114 2109 3625 2115 4435 16 2116 2155
+	}
+}

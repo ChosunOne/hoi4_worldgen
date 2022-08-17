@@ -1,0 +1,24 @@
+state = {
+	id = 255
+	name = "STATE_255"
+	manpower = 10000
+	state_category = large_town
+
+	history = {
+		owner = PEC
+		add_core_of = PEC
+		victory_points = {
+			794 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 1
+			dockyard = 2
+		}
+	}
+
+	provinces = {
+		785 794 3019 3021 7595 7596 7597 7598 7599 7600 7601 7602 7603 7604 7605 7606 7607 7608 7609 7610 7631 7781 7782 7783 7784
+	}
+}

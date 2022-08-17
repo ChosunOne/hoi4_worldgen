@@ -1,0 +1,20 @@
+state={
+	id=1322
+	name="STATE_1322"
+	provinces={
+		15151 15162 15163 15164 15166 15168 15169 15172
+	}
+	history = {
+		owner = MTC
+		add_core_of = MTC
+		victory_points = {
+			15169 7
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = rural
+	manpower = 4400
+	buildings_max_level_factor=1.000
+}

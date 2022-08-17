@@ -1,0 +1,29 @@
+state={
+	id=1040
+	name="STATE_1040"
+
+	history={
+		owner = WYR
+		add_core_of = WYR
+		victory_points = {
+			12525 20
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			industrial_complex = 3
+		}
+	}
+
+	resources = {
+		metal = 5
+		energy = 13
+	}
+
+	provinces={
+		12525 12520 12533 12534 12528 12513 12517 12518 12511 12531
+	}
+	manpower = 16502
+	state_category = large_city
+	buildings_max_level_factor=1.000
+}

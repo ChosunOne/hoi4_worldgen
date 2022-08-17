@@ -1,0 +1,26 @@
+state={
+	id=1294
+	name="STATE_1294"
+	provinces={
+		13495 13496 13498 13499 13511 13512 13534 13535
+	}
+	resources = {
+		composites = 4
+		circuitry = 4
+	}
+	history = {
+		owner = SNO
+		add_core_of = SNO
+		victory_points = {
+			13498 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 2
+		}
+	}
+	state_category = town
+	manpower = 5500
+	buildings_max_level_factor=1.000
+}

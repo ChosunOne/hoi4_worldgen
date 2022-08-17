@@ -1,0 +1,29 @@
+
+state={
+	id=1263
+	name="STATE_1263"
+	provinces={
+		14305 14306 14307 14308 14309 14310
+	}
+	resources = {
+		water = 6
+		energy = 10
+		metal = 8
+		composites = 2
+	}
+	history = {
+		owner = STA
+		add_core_of = STA
+		victory_points = {
+			14305 60
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 5
+			arms_factory = 5
+		}
+	}
+	state_category = metropolis
+	manpower = 81000
+	buildings_max_level_factor=1.000
+}

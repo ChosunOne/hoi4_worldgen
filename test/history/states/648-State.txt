@@ -1,0 +1,19 @@
+state = {
+	id = 648
+	name = "STATE_648"
+	impassable = yes
+	state_category = rural
+	manpower = 5938
+
+	history = {
+		owner = RES
+		add_core_of = RES
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces = {
+		5685 6560 6561 8065 8067 8070
+	}
+}

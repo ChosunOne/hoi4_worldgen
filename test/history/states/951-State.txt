@@ -1,0 +1,18 @@
+state={
+	id=951
+	name="STATE_951"
+	history={
+		owner = TIM
+		add_core_of = TIM
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		474
+	}
+	manpower=591
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

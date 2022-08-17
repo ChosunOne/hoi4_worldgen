@@ -1,0 +1,30 @@
+state={
+	id=1044
+	name="STATE_1044"
+
+	history={
+		owner = MRR
+		add_core_of = MRR
+		victory_points = {
+			12604 25
+		}
+		buildings = {
+			infrastructure = 6
+			arms_factory = 4
+			industrial_complex = 3
+		}
+	}
+
+	resources = {
+		water = 8
+		advanced = 4
+		metal = 6
+	}
+
+	provinces={
+		12562 12577 12572 12583 12591 12580 12594 12595 12598 12604 12610
+	}
+	manpower = 28646
+	state_category = metropolis
+	buildings_max_level_factor=1.000
+}

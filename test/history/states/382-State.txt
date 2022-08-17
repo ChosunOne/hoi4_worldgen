@@ -1,0 +1,24 @@
+state = {
+	id = 382
+	name = "STATE_382"
+
+	history={
+		owner = SLA
+		add_core_of = SLA
+		victory_points = {
+			3349 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		2669 3348 3349 3473 3478 3479 3533 3534 3556
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

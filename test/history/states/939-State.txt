@@ -1,0 +1,21 @@
+
+state={
+	id=939
+	name = "STATE_939"
+	history={
+		owner = NCR
+		add_core_of = NCR
+		buildings = {
+			infrastructure = 1
+		}
+		victory_points = {
+			12306 5
+		}
+	}
+	provinces={
+		12306 12307 12308 12322 12330 12323
+	}
+	manpower=1850
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,31 @@
+state = {
+	id = 178
+	name = "STATE_178"
+
+	resources = {
+		metal = 4
+		energy = 4
+	}
+
+	history={
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			5757 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			dockyard = 1
+			air_base = 1
+		}
+
+	}
+
+	provinces={
+		4034 4298 7496 1485 4035 7500 7501 7498 4036 5756 7497 5757
+	}
+	manpower=1500
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

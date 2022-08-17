@@ -1,0 +1,28 @@
+state = {
+	id = 310
+	name = "STATE_310"
+	manpower = 4000
+	state_category = rural
+
+	resources = {
+		water = 4
+		energy = 2
+		circuitry = 2
+	}
+
+	history = {
+		owner = GLW
+		add_core_of = GLW
+		victory_points = {
+			6800 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+	}
+
+	provinces = {
+		6799 6800 6801 6861 6862 6863 6864 6936
+	}
+}

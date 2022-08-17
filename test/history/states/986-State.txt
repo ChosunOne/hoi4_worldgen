@@ -1,0 +1,21 @@
+state={
+	id=986
+	name="STATE_986"
+	history={
+		owner = PAS
+		add_core_of = PAS
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+		victory_points = {
+			7219 5
+		}
+	}
+	provinces={
+		687 4387 7338 7219 2224 7218 7339 7224 7223 2222 7220 2366 7503 2469
+	}
+	manpower=2919
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

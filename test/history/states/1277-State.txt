@@ -1,0 +1,25 @@
+state={
+	id=1277
+	name="STATE_1277"
+	provinces={
+		14334 14335 14336 14359 14360 14361 14362 14363 14364
+	}
+	resources = {
+		circuitry = 5
+	}
+	history = {
+		owner = MTR
+		add_core_of = MTR
+		victory_points = {
+			14361 5
+		}
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 1
+			dockyard = 1
+		}
+	}
+	state_category = large_town
+	manpower = 4590
+	buildings_max_level_factor=1.000
+}

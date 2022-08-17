@@ -1,0 +1,33 @@
+state = {
+	id = 116
+	name = "STATE_116"
+	resources={
+		water = 4
+		metal = 1
+	}
+	history={
+		owner = HEA
+		add_core_of = HEA
+		victory_points = {
+			4067 5
+		}
+		buildings = {
+			infrastructure = 6
+			industrial_complex = 2
+			4067 = {
+				bunker = 1
+			}
+			4068 = {
+				bunker = 1
+			}
+		}
+
+	}
+
+	provinces={
+		7166 4066 4065 4364 1945 4067 4554 4068 1453 1455 4363 16433 16434
+	}
+	manpower=7880
+	buildings_max_level_factor=1.000
+	state_category=metropolis
+}

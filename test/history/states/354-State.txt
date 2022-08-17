@@ -1,0 +1,30 @@
+state = {
+	id = 354
+	name = "STATE_354"
+	manpower = 4000
+	state_category = rural
+
+	resources = {
+		water = 5
+		metal = 5
+	}
+
+	history = {
+		owner = ANO
+		add_core_of = ANO
+		victory_points = {
+			7439 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			7436 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		2169 7440 7439 7438 7437 7436 7522 8917
+	}
+}

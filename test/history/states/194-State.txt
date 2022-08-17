@@ -1,0 +1,25 @@
+state = {
+	id = 194
+	name = "STATE_194"
+	manpower = 2000
+	state_category = shanty
+
+	history = {
+		owner = BRK
+		add_core_of = BRK
+		victory_points = {
+			7426 10
+		}
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+			7427 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		3691 3973 2156 7427 7426 3972 3976 3974 3698 3699 3696 4458 3981
+	}
+}

@@ -1,0 +1,34 @@
+state = {
+	id = 430
+	name = "STATE_430"
+	resources={
+		metal = 8
+		circuitry = 4
+		advanced = 4
+		composites = 4
+		energy = 4
+	}
+
+	history={
+		owner = IRN
+		add_core_of = IRN
+		buildings = {
+			infrastructure = 6
+			arms_factory = 4
+			industrial_complex = 5
+			anti_air_building = 2
+			radar_station = 2
+			air_base = 2
+		}
+		victory_points = {
+			9007 10
+		}
+	}
+
+	provinces={
+		1730 1731 1852 7814 7815 7816 7817 7818 7819 7820 7821 7822 7823 8007 9007 9008 9009 9010 9011 9035
+	}
+	manpower=22000
+	buildings_max_level_factor=1.000
+	state_category=megalopolis
+}

@@ -1,0 +1,28 @@
+state = {
+	id = 547
+	name = "STATE_547"
+	manpower = 4537
+	state_category = large_town
+
+	resources = {
+		metal = 4
+		water = 6
+	}
+
+	history = {
+		owner = CLK
+		add_core_of = CLK
+		victory_points = {
+			6391 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		6392 6391 6389 9111 9108 9100
+	}
+}

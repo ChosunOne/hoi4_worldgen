@@ -1,0 +1,27 @@
+state = {
+	id = 165
+	name = "STATE_165"
+	resources={
+		water = 8
+	}
+
+	history={
+		owner = DES
+		add_core_of = DES
+		victory_points = {
+			9645 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		5020 5021 9642 9643 9645
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

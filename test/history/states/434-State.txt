@@ -1,0 +1,28 @@
+state = {
+	id = 434
+	name = "STATE_434"
+	resources={
+		water = 6
+		metal = 12
+		advanced = 2
+	}
+
+	history={
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			1478 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+
+	}
+
+	provinces={
+		1478 1947 4037 4038 4129 4282 4284 4315 4281 5754
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

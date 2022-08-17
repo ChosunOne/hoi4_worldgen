@@ -1,0 +1,27 @@
+state = {
+	id = 925
+	name = "STATE_925"
+	resources = {
+		water = 2
+		metal = 6
+	}
+	history={
+		owner = LNS
+		add_core_of = LNS
+		victory_points = {
+			11687 15
+		}
+		buildings = {
+			infrastructure = 5
+			arms_factory = 1
+			industrial_complex = 2
+		}
+
+	}
+	provinces={
+		1847 1849 2966 8588 11638 11648 11652 11653 11661 11663 11670 11673 11676 11682 11685 11686 11687 11690 11697
+	}
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

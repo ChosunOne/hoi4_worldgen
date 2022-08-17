@@ -1,0 +1,31 @@
+state = {
+	id = 3
+	name = "STATE_3"
+	resources={
+		metal = 4
+		circuitry = 2
+		water = 4
+	}
+
+	history={
+		owner = DEA
+		add_core_of = DEA
+		victory_points = {
+			3102 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		3102 3103 6451 6453 6458 6459 7478 7479 7483 7484 7485
+	}
+	manpower=6000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

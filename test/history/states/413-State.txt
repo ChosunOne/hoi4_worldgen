@@ -1,0 +1,25 @@
+state = {
+	id = 413
+	name = "STATE_413"
+	manpower = 200
+	state_category = rural
+
+	resources = {
+	}
+
+	history = {
+		owner = HAM
+		add_core_of = HAM
+		victory_points = {
+			1237 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+	}
+
+	provinces = {
+		8232 8231 1253 8229 8234 8233 1237 8235 3373 6299 8227 8228
+	}
+}

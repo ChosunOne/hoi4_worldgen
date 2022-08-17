@@ -1,0 +1,34 @@
+state = {
+	id = 832
+	name = "STATE_832"
+
+	history={
+		owner = TDT
+		add_core_of = TDT
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 1
+			10001 = {
+				naval_base = 4
+			}
+		}
+		victory_points = {
+			10001 25
+		}
+	}
+
+	provinces={
+		9889 9950 9953 9974 10001 10002 10022 10034
+	}
+
+	resources = {
+		energy = 2
+		metal = 2
+		composites = 4
+	}
+
+	manpower=25000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

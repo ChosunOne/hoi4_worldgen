@@ -1,0 +1,25 @@
+state = {
+	id =  456
+	name = "STATE_456"
+
+	history={
+		owner = DEA
+		add_core_of = DEA
+		victory_points = {
+			7473 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			3095 = {
+				naval_base = 1
+			}
+		}
+	}
+	provinces={
+		3095 7473 7474 7475
+	}
+	manpower=25000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,22 @@
+state = {
+	id = 166
+	name = "STATE_166"
+	manpower = 3000
+	state_category = rural
+
+	history = {
+		owner = CCW
+		add_core_of = CCW
+		victory_points = {
+			1985 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		2162 4291 1985 4290
+	}
+}

@@ -1,0 +1,20 @@
+state={
+	id=1035
+	name="STATE_1035"
+
+	history={
+		owner = SIE
+		add_core_of = SIE
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+		}
+	}
+
+	provinces={
+		6833 12461 12903 2206 12465 12466 12462
+	}
+	manpower = 1753
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,26 @@
+state = {
+	id = 59
+	name = "STATE_59"
+	manpower = 4500
+	state_category = rural
+
+	resources = {
+		water = 4
+		metal = 4
+	}
+
+	history = {
+		owner = TDN
+		add_core_of = TDN
+		victory_points = {
+			5031 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces = {
+		5031 8585 1857 8584 5055 5023
+	}
+}

@@ -1,0 +1,18 @@
+state={
+	id=967
+	name="STATE_967"
+	history={
+		owner = MCA
+		add_core_of = MCA
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		12355 8727
+	}
+	manpower=360
+	buildings_max_level_factor=1.000
+	state_category=wasteland
+}

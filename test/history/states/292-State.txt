@@ -1,0 +1,26 @@
+state = {
+	id = 292
+	name = "STATE_292"
+	manpower = 15000
+	state_category = shanty
+
+	resources = {
+		water = 8
+	}
+
+	history = {
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			2310 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		876 2274 2275 2310 2658 3301 5071 4967 6666 2657 884 4968
+	}
+}

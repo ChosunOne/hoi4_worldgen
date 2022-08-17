@@ -1,0 +1,26 @@
+state={
+	id=1045
+	name="STATE_1045"
+	resources = {
+		metal = 14
+		water = 4
+	}
+
+	history={
+		owner = BTH
+		add_core_of = BTH
+		victory_points = {
+			12672 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces={
+		12661 12666 12654 12664 12667 12671 12672 12673
+	}
+	manpower = 1500
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

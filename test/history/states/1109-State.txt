@@ -1,0 +1,26 @@
+state={
+	id=1109
+	name="STATE_1109"
+	provinces={
+		12885 12886 12888 12890 12891 12893
+	}
+	resources = {
+		energy = 18
+		composites = 4
+	}
+	history = {
+		owner = STC
+		add_core_of = STC
+		victory_points = {
+			12890 25
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+		}
+	}
+	state_category = metropolis
+	manpower = 49000
+	buildings_max_level_factor=1.000
+}

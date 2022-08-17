@@ -1,0 +1,30 @@
+state = {
+	id = 452
+	name = "STATE_452"
+	manpower = 7000
+	state_category = large_town
+
+	resources = {
+		metal = 4
+	}
+
+	history = {
+		owner = ORO
+		add_core_of = ORO
+		victory_points = {
+			1836 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 2
+			7464 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		3100 1836 6736 6738 6737 7466 7464
+	}
+}

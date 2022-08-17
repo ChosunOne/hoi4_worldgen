@@ -1,0 +1,29 @@
+state = {
+	id = 573
+	name = "STATE_573"
+	resources={
+		energy=1.000
+		metal=17.000
+		advanced=1.000
+	}
+
+	history={
+		owner = MOJ
+		add_core_of = MOJ
+		buildings = {
+			infrastructure = 2
+			arms_factory = 2
+			industrial_complex = 1
+			radar_station = 1
+
+		}
+
+	}
+
+	provinces={
+		3234 3235 6991
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

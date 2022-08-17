@@ -1,0 +1,39 @@
+state = {
+	id = 211
+	name = "STATE_211"
+	resources={
+		composites = 12
+		advanced = 12
+		circuitry = 12
+		metal = 12
+		energy = 6
+		water = 6
+	}
+
+	history={
+		owner = VEG
+		add_core_of = VEG
+		victory_points = {
+			3179 50
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 3
+			industrial_complex = 3
+			anti_air_building = 5
+			radar_station = 2
+			3179 = {
+				bunker = 2
+				bunker2 = 1
+			}
+		}
+	}
+
+	provinces={
+		3179 3180 3182 3188 9069 3191
+	}
+	manpower=70034
+	buildings_max_level_factor=1.000
+	state_category=megalopolis
+}
+# vim: set ft=pdx ts=2 sw=2 tw=79 :

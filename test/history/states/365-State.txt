@@ -1,0 +1,27 @@
+state = {
+	id = 365
+	name = "STATE_365"
+	resources={
+		water = 2
+		metal = 6
+	}
+
+	history={
+		owner = ROS
+		add_core_of = ROS
+		victory_points = {
+			4240 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+
+	provinces={
+		4240 290 4237 4490 308 4238 2077 4534 4533 1445 4491 4493 4538 4251
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category = rural
+}

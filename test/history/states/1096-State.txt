@@ -1,0 +1,23 @@
+state={
+	id=1096
+	name="STATE_1096"
+	resources = {
+		water = 2
+	}
+	provinces={
+		13133 13134 13142 13143 13150 13152 13153 13159
+	}
+	history={
+		owner = TPL
+		add_core_of = TPL
+		victory_points = {
+			13143 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = rural
+	manpower = 2100
+	buildings_max_level_factor=1.000
+}

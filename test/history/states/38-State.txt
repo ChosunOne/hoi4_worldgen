@@ -1,0 +1,26 @@
+state = {
+	id = 38
+	name = "STATE_38"
+	manpower = 1000
+	state_category = pastoral
+	resources={
+		energy = 12
+		metal = 24
+		advanced = 8
+		circuitry = 16
+		composites = 12
+		water = 124
+	}
+
+	history = {
+		owner = YMP
+		add_core_of = YMP
+		victory_points = {
+			6840 5
+		}
+	}
+
+	provinces = {
+		639 6844 6842 6843 6841 6840
+	}
+}

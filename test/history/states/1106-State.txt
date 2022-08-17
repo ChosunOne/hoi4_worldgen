@@ -1,0 +1,24 @@
+state={
+	id=1106
+	name="STATE_1106"
+	provinces={
+		14689 14690 14847 14850 14851
+	}
+	resources = {
+		water = 4
+	}
+	history = {
+		owner = BRA
+		add_core_of = BRA
+		victory_points = {
+			14690 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+	state_category = pastoral
+	manpower = 1800
+	buildings_max_level_factor=1.000
+}

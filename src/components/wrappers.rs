@@ -310,6 +310,11 @@ pub struct PixelDensity(pub f32);
 #[non_exhaustive]
 pub struct LocalSupplies(pub f32);
 
+/// A state buildings max level factor value
+#[derive(Copy, Clone, Debug, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr)]
+#[non_exhaustive]
+pub struct BuildingsMaxLevelFactor(pub f32);
+
 /// The color index in bmp palette
 #[derive(
     Copy,

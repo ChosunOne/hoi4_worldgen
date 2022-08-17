@@ -1,0 +1,36 @@
+state = {
+	id = 883
+	name = "STATE_883"
+	history={
+		owner = CMC
+		add_core_of = CMC
+		victory_points = {
+			12104 15
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			dockyard = 1
+			12083 = {
+				naval_base = 1
+			}
+		}
+	}
+	provinces={
+		893 2754 12078 12079 12080 12083 12085 12086 12088 12091 12092 12096 12099 12103 12104 12108 12112 12114 12118 12123 12129 12134
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=city
+
+
+	resources = {
+		water = 10
+		energy = 10
+		metal = 10
+		composites = 8
+		circuitry = 5
+		advanced = 2
+	}
+}

@@ -1,0 +1,26 @@
+state = {
+	id = 73
+	name = "STATE_73"
+	manpower = 5000
+	state_category = rural
+
+	resources = {
+		water = 6
+	}
+
+	history = {
+		owner = EAS
+		add_core_of = EAS
+		victory_points = {
+			8414 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+	}
+
+	provinces = {
+		8411 8419 8417 8418 8414 8413 8415 8412 8420 8416
+	}
+}

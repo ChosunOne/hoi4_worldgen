@@ -1,0 +1,26 @@
+state = {
+	id = 43
+	name = "STATE_43"
+
+	history={
+		owner = SOR
+		add_core_of = SOR
+		victory_points = {
+			1021 15
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		1011 1021 6346
+	}
+	manpower=9000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

@@ -1,0 +1,25 @@
+state={
+	id=1354
+	name="STATE_1354"
+	provinces={
+		14866 14952 14953 14954 14955 14956 14970 14971
+	}
+	resources = {
+		water = 2
+		composites = 2
+	}
+	history = {
+		owner = PLT
+		add_core_of = PLT
+		victory_points = {
+			14914 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	state_category = pastoral
+	manpower = 2750
+	buildings_max_level_factor=1.000
+}

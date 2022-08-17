@@ -1,0 +1,24 @@
+state={
+	id=1234
+	name="STATE_1234"
+	provinces={
+		13831 13832 13833 13834 13835 13836 13837 13839 13858
+	}
+	history={
+		owner =  MSQ
+		add_core_of =  MSQ
+		victory_points = {
+			13835 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+	resources = {
+		metal = 5
+	}
+	state_category = town
+	manpower = 6100
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,23 @@
+state = {
+	id = 410
+	name = "STATE_410"
+	manpower = 15000
+	state_category = town
+
+	history = {
+		owner = LAC
+		add_core_of = LAC
+		victory_points = {
+			5259 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 3
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		2765 2772 2773 2803 2814 2934 2935 5251 5259 5552 5554 7003
+	}
+}

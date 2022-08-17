@@ -1,0 +1,24 @@
+state = {
+	id = 263
+	name = "STATE_263"
+
+	history={
+		owner = EAS
+		add_core_of = EAS
+		victory_points = {
+			8915 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+
+	}
+
+	provinces={
+		8914 8911 8913 8915
+	}
+	manpower=4000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

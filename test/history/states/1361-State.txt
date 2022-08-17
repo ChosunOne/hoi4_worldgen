@@ -1,0 +1,20 @@
+state={
+	id=1361
+	name="STATE_1361"
+	provinces={
+		13315 14647 14829 14830 14831 14833 14834 14838 14839
+	}
+	history = {
+		owner = DUK
+		add_core_of = DUK
+		victory_points = {
+			14831 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = shanty
+	manpower = 1800
+	buildings_max_level_factor=1.000
+}

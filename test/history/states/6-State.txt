@@ -1,0 +1,27 @@
+state = {
+	id = 6
+	name = "STATE_6"
+	resources={
+		water=3
+	}
+
+	history={
+		owner = DRE
+		add_core_of = DRE
+		victory_points = {
+			3749 5
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+
+	}
+
+	provinces={
+		7247 7251 3749 3983 3984 2474 3721 3747 3727 2564
+	}
+	manpower=1401
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,28 @@
+
+state={
+	id=1196
+	name="STATE_1196"
+	provinces={
+		12873 14558 14566 14567 14568 14569 14599
+	}
+	resources = {
+		water = 5
+		energy = 4
+		metal = 4
+	}
+	history = {
+		owner = BAT
+		add_core_of = BAT
+		victory_points = {
+			12873 10
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 3
+			arms_factory = 1
+		}
+	}
+	state_category = town
+	manpower = 11900
+	buildings_max_level_factor=1.000
+}

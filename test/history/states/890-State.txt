@@ -1,0 +1,30 @@
+state = {
+	id = 890
+	name = "STATE_890"
+	history={
+		owner = CHC
+		add_core_of = CHC
+		victory_points = {
+			12215 15
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+			arms_factory = 2
+			12215 = {
+				bunker = 2
+			}
+		}
+	}
+	resources = {
+		metal = 12
+		energy = 5
+		circuitry = 6
+	}
+	provinces={
+		2753 12200 12205 12211 12212 12215 12219 12220 12223 12229 12231
+	}
+	manpower=18621
+	buildings_max_level_factor=1.000
+	state_category=town
+}

@@ -1,0 +1,27 @@
+state = {
+	id = 316
+	name = "STATE_316"
+	manpower = 1500
+	state_category = rural
+
+	resources = {
+		water = 3
+		energy = 3
+	}
+
+	history = {
+		owner = PAS
+		add_core_of = PAS
+		victory_points = {
+			12418 5
+		}
+		buildings = {
+			infrastructure = 1
+			air_base = 1
+		}
+	}
+
+	provinces = {
+		12408 12406 271 12411 12412 12413 12409 634 8521 2592 452 12418 12422 2644 12424 12427 12428 2147 12432
+	}
+}

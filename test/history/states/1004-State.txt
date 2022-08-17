@@ -1,0 +1,33 @@
+state={
+	id=1004
+	name="STATE_1004"
+
+	history={
+		owner = PEN
+		add_core_of = PEN
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			3799 = {
+				bunker = 2
+			}
+			2103 = {
+				bunker = 2
+			}
+		}
+		victory_points = {
+			3628 5
+		}
+		victory_points = {
+			2103 10
+		}
+	}
+
+	provinces={
+		3628 2119 7349 3799 2103 3792 2107 2130
+	}
+	manpower = 8650
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,21 @@
+state={
+	id=1336
+	name="STATE_1336"
+	provinces={
+		14759 14760 14761 14767 14771
+	}
+	history = {
+		owner = WAK
+		add_core_of = WAK
+		victory_points = {
+			14767 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = shanty
+	manpower = 2500
+	buildings_max_level_factor=1.000
+}

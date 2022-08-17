@@ -1,0 +1,21 @@
+state = {
+	id = 629
+	name = "STATE_629"
+	manpower = 44
+	state_category = wasteland
+	impassable = yes
+	resources = {
+	}
+
+	history = {
+		owner = TAR
+		add_core_of = TAR
+		buildings = {
+
+		}
+	}
+
+	provinces = {
+		6329
+	}
+}

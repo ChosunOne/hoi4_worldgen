@@ -1,0 +1,24 @@
+state = {
+	id = 146
+	name = "STATE_146"
+
+	history={
+		owner = TON
+		add_core_of = TON
+		victory_points = {
+			5358 5
+		}
+		buildings = {
+			infrastructure = 3
+
+		}
+
+	}
+
+	provinces={
+		845 1677 2047 2623 5311 5313 5315 5358 5372 5373 5374
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

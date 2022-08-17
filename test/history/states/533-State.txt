@@ -1,0 +1,24 @@
+state = {
+	id = 533
+	name = "STATE_533"
+
+	history={
+		owner = SIN
+		add_core_of = SIN
+		victory_points = {
+			9489 10
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+
+	}
+
+	provinces={
+		11 9288 9489 9500 9506 11271 11273 11278 11282 11285 11287 11293
+	}
+	manpower=4000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

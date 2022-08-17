@@ -1,0 +1,24 @@
+state = {
+	id = 306
+	name = "STATE_306"
+	manpower = 700
+	state_category = rural
+
+	resources = {
+	}
+
+	history = {
+		owner = CLK
+		add_core_of = CLK
+		victory_points = {
+			8315 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces = {
+		1059 3389 3390 6409 6532 8313 8314 8315 8316
+	}
+}

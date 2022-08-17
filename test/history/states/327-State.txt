@@ -1,0 +1,29 @@
+state = {
+	id = 327
+	name = "STATE_327"
+	manpower = 19000
+	state_category = city
+
+	resources = {
+		water = 4
+		metal = 6
+	}
+
+	history = {
+		owner = VIP
+		add_core_of = VIP
+		victory_points = {
+			3453 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 3
+			industrial_complex = 2
+			air_base = 1
+		}
+	}
+
+	provinces = {
+		3342 3452 1535 3454 1534 3453 3416 3417
+	}
+}

@@ -1,0 +1,21 @@
+state = {
+	id = 600
+	name = "STATE_600"
+	manpower = 3000
+	state_category = rural
+
+	history = {
+		owner = DIS
+		add_core_of = DIS
+		victory_points = {
+			1350 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces = {
+		1350 4190 5009 5010 5011 2509 4347 4346 2292
+	}
+}

@@ -1,0 +1,31 @@
+state = {
+	id = 590
+	name = "STATE_590"
+
+	resources = {
+		energy = 26
+		advanced = 12
+		composites = 10
+		circuitry = 14
+	}
+
+	history={
+		owner = ROS
+		add_core_of = ROS
+		victory_points = {
+			4516 5
+		}
+		buildings = {
+			infrastructure = 2
+			electricity_generator = 2
+		}
+		add_extra_state_shared_building_slots = 2
+	}
+
+	provinces={
+		4516 2595 4513 2076 4518 2137 4514 1395 4582 4575 4248 4220 1993 4517
+	}
+	manpower=2100
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

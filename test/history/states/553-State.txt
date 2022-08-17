@@ -1,0 +1,33 @@
+state = {
+	id = 553
+	name = "STATE_553"
+
+	history={
+		owner = CES
+		add_core_of = CES
+		add_core_of = TWI
+		victory_points = {
+			968 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			air_base = 1
+			968 = {
+				bunker = 4
+			}
+			968 = {
+				naval_base = 6
+			}
+		}
+
+	}
+
+	provinces={
+		946 956 968 3177 3214 3219 3220
+	}
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

@@ -1,0 +1,25 @@
+state={
+	id=1165
+	name="STATE_1165"
+	provinces={
+		14174 14175 14176 14177 14178
+	}
+	resources = {
+		energy = 6
+		metal = 6
+	}
+	history = {
+		owner = NUN
+		add_core_of = NUN
+		victory_points = {
+			14177 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 2900
+	buildings_max_level_factor=1.000
+}

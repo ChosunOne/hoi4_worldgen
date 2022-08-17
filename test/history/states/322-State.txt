@@ -1,0 +1,23 @@
+state = {
+	id = 322
+	name = "STATE_322"
+
+	history={
+		owner = TIM
+		add_core_of = TIM
+		victory_points = {
+			4311 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+
+	}
+
+	provinces={
+		4083 4085 4310 4308 4314 4312 4313 4311 4128 4127 4307 4081
+	}
+	manpower=2500
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

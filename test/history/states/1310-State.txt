@@ -1,0 +1,24 @@
+state={
+	id=1310
+	name="STATE_1310"
+	resources = {
+		metal = 5
+	}
+	provinces={
+		13472 13473 13474 13477 13478 13481 13482 13485 13486 13487
+	}
+	history = {
+		owner = RCK
+		add_core_of = RCK
+		victory_points = {
+			13481 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 909
+	buildings_max_level_factor=1.000
+}

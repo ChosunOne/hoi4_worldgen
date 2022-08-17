@@ -1,0 +1,32 @@
+state = {
+	id = 489
+	name = "STATE_489"
+
+	resources = {
+		metal = 32
+		composites = 12
+		circuitry = 16
+		advanced = 4
+	}
+
+	history={
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			9630 25
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 1
+			electricity_generator = 2
+		}
+	}
+
+	provinces={
+		3288 4619 4789 9628 9629 9630 9631 2075 2264 4827 2262
+	}
+	manpower=25000
+	buildings_max_level_factor=1.000
+	state_category=metropolis
+}

@@ -1,0 +1,38 @@
+state = {
+	id = 566
+	name = "STATE_566"
+	resources = {
+		water = 4
+		energy = 6
+		metal = 6
+		circuitry = 4
+		composites = 4
+		advanced = 4
+	}
+
+	history={
+		owner = EXE
+		add_core_of = EXE
+		victory_points = {
+			8980 20
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 2
+			8978 = {
+				naval_base = 6
+
+			}
+
+		}
+
+	}
+
+	provinces={
+		2775 2786 2931 5456 5457 5621 5626 5627 6634 8978 8979 8980
+	}
+	manpower=15000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

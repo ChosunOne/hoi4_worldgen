@@ -1,0 +1,27 @@
+state = {
+	id = 438
+	name = "STATE_438"
+	manpower = 1000
+	state_category = town
+
+	resources = {
+		advanced = 2
+		composites = 1
+	}
+
+	history = {
+		owner = CES
+		add_core_of = CES
+		add_core_of = TWI
+		victory_points = {
+			1623 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces = {
+		1623 5177 9073
+	}
+}

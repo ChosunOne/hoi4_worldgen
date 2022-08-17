@@ -1,0 +1,24 @@
+state = {
+	id = 505
+	name = "STATE_505"
+
+	history={
+		owner = OST
+		add_core_of = OST
+		victory_points = {
+			3742 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+		}
+		set_demilitarized_zone = yes
+	}
+
+	provinces={
+		3720 3719 10435 2565 3742 3734
+	}
+	manpower=3725
+	buildings_max_level_factor=1.000
+	state_category=town
+}

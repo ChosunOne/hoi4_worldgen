@@ -1,0 +1,26 @@
+
+state={
+	id=305
+	name="STATE_305"
+
+	history={
+		owner = ROT
+		add_core_of = ROT
+		victory_points = {
+			7179 5
+		}
+		buildings = {
+			infrastructure = 3
+
+		}
+
+	}
+
+	provinces={
+		7178 7179 7183 7194 16995
+	}
+	manpower=4000
+	buildings_max_level_factor=1.000
+	state_category=rural
+	local_supplies=0.000
+}

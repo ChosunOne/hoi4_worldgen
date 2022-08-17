@@ -1,0 +1,23 @@
+state={
+	id=1068
+	name="STATE_1068"
+
+	history={
+		owner = RMT
+		add_core_of =  RMT
+		victory_points = {
+			12958 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 2
+		}
+	}
+
+	provinces={
+		12960 12961 12942 12962 12943 12958 12931 12927 12955 12939
+	}
+	manpower = 4700
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

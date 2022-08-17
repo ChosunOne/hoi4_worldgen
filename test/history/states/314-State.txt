@@ -1,0 +1,26 @@
+state = {
+	id = 314
+	name = "STATE_314"
+	manpower = 9810
+	state_category = large_town
+
+	history = {
+		owner = TOC
+		add_core_of = TOC
+		victory_points = {
+			4049 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
+			4049 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		1509 1956 3917 3918 3920 4048 4049 4045 3924 4046 4329 7205 1506 2641 12371 12370
+	}
+}

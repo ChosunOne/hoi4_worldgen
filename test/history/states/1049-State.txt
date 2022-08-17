@@ -1,0 +1,22 @@
+state={
+	id=1049
+	name="STATE_1049"
+
+	history={
+		owner = JCK
+		add_core_of = JCK
+		victory_points = {
+			12660 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		12660 12663 12658 12662 12665 12669 12670 12668 12676 12675 12674
+	}
+	manpower = 2100
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

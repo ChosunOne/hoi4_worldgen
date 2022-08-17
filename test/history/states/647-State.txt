@@ -1,0 +1,16 @@
+state = {
+	id = 647
+	name = "STATE_647"
+	impassable = yes
+	manpower = 100
+	state_category = wasteland
+
+	history = {
+		owner = ASF
+		add_core_of = ASF
+	}
+
+	provinces = {
+		6680
+	}
+}

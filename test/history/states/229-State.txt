@@ -1,0 +1,25 @@
+state = {
+	id = 229
+	name = "STATE_229"
+	manpower = 7000
+	state_category = town
+
+	history = {
+		owner = RBD
+		add_core_of = RBD
+		victory_points = {
+			7741 10
+		}
+		buildings = {
+			infrastructure = 4
+			dockyard = 2
+			798 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		798 2627 3119 3127 5215 5223 5353 7656 7657 7659 7692 7721 7741 7742
+	}
+}

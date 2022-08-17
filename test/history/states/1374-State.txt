@@ -1,0 +1,24 @@
+state={
+	id=1374
+	name="STATE_1374"
+	provinces={
+		14669 14670 14671 14672 15235 15245 15248
+	}
+	resources = {
+		water = 8
+		circuitry = 8
+	}
+	history = {
+		owner = BRA
+		add_core_of = BRA
+		victory_points = {
+			14670 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = shanty
+	manpower = 3400
+	buildings_max_level_factor=1.000
+}

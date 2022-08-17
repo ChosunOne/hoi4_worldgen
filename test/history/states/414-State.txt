@@ -1,0 +1,29 @@
+state = {
+	id = 414
+	name = "STATE_414"
+	manpower = 10000
+	state_category = large_city
+
+	resources = {
+	}
+
+	history = {
+		owner = HAN
+		add_core_of = HAN
+		victory_points = {
+			6894 15
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+			anti_air_building = 2
+			radar_station = 2
+			air_base = 2
+
+		}
+	}
+
+	provinces = {
+		6895 1827 5719 5718 6894 6892 6893 6857 1728 6896 6859 6858 5574
+	}
+}

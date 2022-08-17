@@ -1,0 +1,25 @@
+state={
+	id=1089
+	name="STATE_1089"
+	resources = {
+		metal = 2
+
+	}
+	provinces={
+		13225 13226 13227 13229 13233 13234 13235 13236 13239 13240 13242
+	}
+
+	history={
+		owner = DRA
+		add_core_of = DRA
+		victory_points = {
+			13227 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+	state_category = rural
+	manpower = 3200
+	buildings_max_level_factor=1.000
+}

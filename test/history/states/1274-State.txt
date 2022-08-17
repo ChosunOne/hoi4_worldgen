@@ -1,0 +1,25 @@
+state={
+	id=1274
+	name="STATE_1274"
+	resources = {
+		water = 5
+	}
+	provinces={
+		14326 14327 14328 14337 14338 14339 14353 14374 14375 14378 14379 14380 14381
+	}
+	history={
+		owner =  STA
+		add_core_of =  STA
+		victory_points = {
+			14381 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+	state_category = shanty
+	manpower = 2600
+	buildings_max_level_factor=1.000
+}

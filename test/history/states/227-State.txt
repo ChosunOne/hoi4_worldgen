@@ -1,0 +1,25 @@
+state = {
+	id = 227
+	name = "STATE_227"
+
+	history={
+		owner = LOS
+		add_core_of = LOS
+		victory_points = {
+			5608 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		11609 5608 5607 11616 2291
+	}
+	manpower=12500
+	buildings_max_level_factor=1.000
+	state_category=town
+}

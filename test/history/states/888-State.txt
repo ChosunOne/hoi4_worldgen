@@ -1,0 +1,29 @@
+state = {
+	id = 888
+	name = "STATE_888"
+	history={
+		owner = SCA
+		add_core_of = SCA
+		victory_points = {
+			2751 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 1
+		}
+	}
+	provinces={
+		899 2751 12090 12105 12107 12121 12122 12128 12138 12150 12164
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+
+	resources = {
+		water = 8
+		energy = 7
+		circuitry = 5
+	}
+
+}

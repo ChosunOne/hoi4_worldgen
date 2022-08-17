@@ -1,0 +1,25 @@
+state = {
+	id = 928
+	name = "STATE_928"
+
+	history={
+		owner = LUB
+		add_core_of = LUB
+		victory_points = {
+			11683 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+
+		}
+
+	}
+
+	provinces={
+		848 2851 3109 3132 5612 5613 11674 11680 11681 11683 11688 11691 11696 11698 11699 11707 11745
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

@@ -1,0 +1,22 @@
+state={
+	id=1019
+	name="STATE_1019"
+
+	history={
+		owner = CPK
+		add_core_of = CPK
+		victory_points = {
+			12760 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces={
+		12738 12739 12740 12745 12760 12763 12761 12779
+	}
+	manpower = 3100
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

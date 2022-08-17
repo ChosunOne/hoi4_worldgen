@@ -1,0 +1,31 @@
+state = {
+	id = 169
+	name = "STATE_169"
+	manpower = 3500
+	state_category = city
+
+	resources = {
+		energy = 22
+		metal = 8
+	}
+
+	history = {
+		owner = DAM
+		add_core_of = DAM
+		victory_points = {
+			1330 10
+		}
+		victory_points = {
+			1806 5
+		}
+		buildings = {
+			infrastructure = 5
+			arms_factory = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		1330 1806 1274 8630 2478 2480 7249 10455 1807 7324 33 7262 7263
+	}
+}

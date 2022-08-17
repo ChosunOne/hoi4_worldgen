@@ -1,0 +1,23 @@
+
+state={
+	id=941
+	name="STATE_941"
+	history={
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			4620 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 3
+		}
+
+	}
+	provinces={
+		4621 1783 4788 4620 4824 974 4823 4825 2382
+	}
+	manpower=10451
+	buildings_max_level_factor=1.000
+	state_category=town
+}

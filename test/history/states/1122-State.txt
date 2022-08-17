@@ -1,0 +1,21 @@
+
+state={
+	id=1122
+	name="STATE_1122"
+	provinces={
+		13991 13992 14094 14096 14111
+	}
+	history = {
+		owner = STC
+		add_core_of = STC
+		victory_points = {
+			13991 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	state_category = shanty
+	manpower = 3600
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,19 @@
+state={
+	id=1059
+	name="STATE_1059"
+
+	history={
+		owner = MRR
+		add_core_of = MRR
+		buildings = {
+			infrastructure = 1
+		}
+	}
+
+	provinces={
+		12607 12907 12614 12911 12909 12920 12917 12912 12922
+	}
+	manpower = 2300
+	state_category = rural
+	buildings_max_level_factor=1.000
+}

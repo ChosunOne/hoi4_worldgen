@@ -1,0 +1,24 @@
+state={
+	id=1131
+	name="STATE_1131"
+	provinces={
+		13696 13697 16397 16398
+	}
+	resources = {
+		water = 4
+	}
+	history={
+		owner =  BGR
+		add_core_of =  BGR
+		victory_points = {
+			16397 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = town
+	manpower = 1400
+	buildings_max_level_factor=1.000
+}

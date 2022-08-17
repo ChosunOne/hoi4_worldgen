@@ -1,0 +1,31 @@
+state = {
+	id = 425
+	name = "STATE_425"
+	manpower = 11000
+	state_category = town
+
+	resources = {
+		energy = 4
+		advanced = 4
+		metal = 8
+	}
+
+	history = {
+		owner = GRA
+		add_core_of = GRA
+		victory_points = {
+			8893 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+			air_base = 1
+
+		}
+	}
+
+	provinces = {
+		3444 3367 8893 8894 8891 8895 8896 8897 8898 8899 8900
+	}
+}

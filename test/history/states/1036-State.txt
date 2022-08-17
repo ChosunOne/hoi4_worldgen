@@ -1,0 +1,26 @@
+state={
+	id=1036
+	name="STATE_1036"
+	resources = {
+		circuitry = 4
+	}
+
+	history={
+		owner = PRO
+		add_core_of = PRO
+		victory_points = {
+			12505 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+		}
+	}
+
+	provinces={
+		12482 12483 12472 12488 12497 12505 12494
+	}
+	manpower = 1062
+	state_category = shanty
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,26 @@
+state={
+	id=1320
+	name="STATE_1320"
+	provinces={
+		15130 15131 15132 15139 15145 15146 15147
+	}
+	resources = {
+		water = 2
+		composites = 2
+	}
+	history = {
+		owner = MTC
+		add_core_of = MTC
+		victory_points = {
+			15145 15
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+	state_category = town
+	manpower = 5500
+	buildings_max_level_factor=1.000
+}

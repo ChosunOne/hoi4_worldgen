@@ -1,0 +1,23 @@
+state = {
+	id = 400
+	name = "STATE_400"
+
+	history={
+		owner = ROS
+		add_core_of = ROS
+		victory_points = {
+			4531 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		4535 4537 4531 4536 4539 4573 4577 2135 2596 1444 4227
+	}
+	manpower=5169
+	buildings_max_level_factor=1.000
+	state_category=town
+}

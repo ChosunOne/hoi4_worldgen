@@ -1,0 +1,36 @@
+state = {
+	id = 471
+	name = "STATE_471"
+	resources={
+		water = 4
+		energy = 2
+		metal = 8
+		circuitry = 8
+	}
+
+	history={
+		owner = GDH
+		add_core_of = GDH
+		victory_points = {
+			7775 15
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 2
+			industrial_complex = 2
+			dockyard = 2
+			anti_air_building = 2
+			radar_station = 1
+			air_base = 1
+
+		}
+
+	}
+
+	provinces={
+		2254 2569 5219 5222 5357 6973 7554 7555 7556 7557 7594 7773 7774 7775 7776 7777
+	}
+	manpower=25000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

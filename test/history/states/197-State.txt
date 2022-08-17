@@ -1,0 +1,30 @@
+state = {
+	id = 197
+	name = "STATE_197"
+	resources={
+		water = 3
+		metal = 4
+	}
+
+	history={
+		owner = CRZ
+		add_core_of = CRZ
+		victory_points = {
+			6482 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 3
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		6468 6469 6477 6478 6479 6482 6483 6485 6486 9166
+	}
+	manpower=1358
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

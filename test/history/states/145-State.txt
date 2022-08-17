@@ -1,0 +1,30 @@
+state = {
+	id = 145
+	name = "STATE_145"
+	resources={
+		energy=4.000
+		metal=8.000
+		composites=4.000
+	}
+
+	history={
+		owner = SUN
+		add_core_of = SUN
+		victory_points = {
+			2972 10
+		}
+		buildings = {
+			arms_factory = 1
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		2750 2855 2870 2972 2982 5568 7025 5680
+	}
+	manpower=5000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

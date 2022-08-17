@@ -1,0 +1,29 @@
+state = {
+	id = 150
+	name = "STATE_150"
+	resources={
+		composites = 5
+		metal = 10
+	}
+
+	history={
+		owner = DIS
+		add_core_of = DIS
+		victory_points = {
+			1746 10
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 2
+			industrial_complex = 2
+		}
+
+	}
+
+	provinces={
+		1745 1746 1753 2604 2727 4191 5012 7128 7129 7133
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=city
+}

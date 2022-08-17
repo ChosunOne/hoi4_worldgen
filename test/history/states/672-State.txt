@@ -1,0 +1,15 @@
+state = {
+	id = 672
+	name = "STATE_672"
+	provinces={
+		8728
+	}
+	history={
+		owner = MET
+		add_core_of = MET
+	}
+	impassable = yes
+	manpower = 25
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,33 @@
+state = {
+	id = 418
+	name = "STATE_418"
+	resources={
+		water = 7
+		metal = 11
+		energy = 12
+	}
+
+	history={
+		owner = ROT
+		add_core_of = ROT
+		victory_points = {
+			4001 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 3
+			4001 = {
+				bunker = 2
+			}
+		}
+
+	}
+
+	provinces={
+		4001 4051 8497 8492 238 8493 8494 8495
+	}
+	manpower=12500
+	buildings_max_level_factor=1.000
+	state_category=city
+}

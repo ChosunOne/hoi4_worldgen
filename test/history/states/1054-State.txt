@@ -1,0 +1,28 @@
+state={
+	id=1054
+	name="STATE_1054"
+
+	history={
+		owner = WYR
+		add_core_of = WYR
+		victory_points = {
+			12527 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+		}
+	}
+
+	resources = {
+		water = 8
+	}
+
+	provinces={
+		4419 12521 12532 12535 12522 12540 12527 12537 12526 12536
+	}
+	manpower = 6855
+	state_category = large_town
+	buildings_max_level_factor=1.000
+}

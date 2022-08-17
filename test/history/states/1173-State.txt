@@ -1,0 +1,23 @@
+state={
+	id=1173
+	name="STATE_1173"
+	provinces={
+		16326 16327 16330 16332 16333 16336 16337 16338 16341
+	}
+	resources = {
+		metal = 4
+	}
+	history = {
+		owner = WPG
+		add_core_of = WPG
+		victory_points = {
+			16332 5
+		}
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	state_category = rural
+	manpower = 1600
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,25 @@
+state = {
+	id = 428
+	name = "STATE_428"
+	manpower = 1000
+	state_category = pastoral
+
+	history = {
+		owner = DEA
+		add_core_of = DEA
+		victory_points = {
+			6524 5
+		}
+		buildings = {
+			infrastructure = 1
+			dockyard = 1
+			6524 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		6524 6525 6527
+	}
+}

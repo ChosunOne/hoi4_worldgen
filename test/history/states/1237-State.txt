@@ -1,0 +1,24 @@
+state={
+	id=1237
+	name="STATE_1237"
+	provinces={
+		13840 13841 13842 13849 13856 13857 16371 16372
+	}
+	history={
+		owner =  WSP
+		add_core_of =  WSP
+		victory_points = {
+			13856 5
+		}
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+		}
+	}
+	resources = {
+		advanced = 4
+	}
+	state_category = rural
+	manpower = 2400
+	buildings_max_level_factor=1.000
+}

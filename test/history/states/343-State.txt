@@ -1,0 +1,22 @@
+state = {
+	id = 343
+	name = "STATE_343"
+
+	history={
+		owner = BDT
+		add_core_of = BDT
+		victory_points = {
+			1387 5
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		1387 4137 4140 4142 4203 7144 7147 7148 1399
+	}
+	manpower=3000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

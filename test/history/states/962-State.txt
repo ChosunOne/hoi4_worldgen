@@ -1,0 +1,30 @@
+
+state={
+	id=962
+	name="STATE_962"
+	resources={
+		water=2.000
+	}
+
+	history={
+		owner = HGH
+		add_core_of = HGH
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 1
+
+		}
+		victory_points = {
+			4231 5
+		}
+
+	}
+
+	provinces={
+		649 1383 2200 2201 4224 4226 4231 4558 4559 4560 4561 7420 16395 16419 16420
+	}
+	manpower=6160
+	buildings_max_level_factor=1.000
+	state_category=large_town
+	local_supplies=0.000
+}

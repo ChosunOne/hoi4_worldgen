@@ -1,0 +1,34 @@
+state = {
+	id = 598
+	name = "STATE_598"
+	manpower = 10000
+	state_category = large_town
+
+	history = {
+		owner = SLN
+		add_core_of = SLN
+		victory_points = {
+			3321 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 2
+		}
+	}
+	resources = {
+		metal = 8
+		energy = 6
+		water = 4
+		circuitry = 1
+		composites = 1
+		advanced = 2
+	}
+
+
+
+	provinces = {
+		2715 2730 2709 8379 3321
+	}
+
+}

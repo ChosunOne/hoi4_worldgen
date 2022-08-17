@@ -1,0 +1,25 @@
+state = {
+	id = 639
+	name = "STATE_639"
+	history={
+		owner = MXC
+		add_core_of = MXC
+		buildings = {
+			infrastructure = 5
+			industrial_complex = 2
+		}
+
+	}
+	resources = {
+		circuitry = 4
+		advanced = 5
+		energy = 8
+	}
+
+	provinces={
+		6641 6642 6761 6762 6764 6765 6766 7042 8988 8990 1793 7812
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

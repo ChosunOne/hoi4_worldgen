@@ -1,0 +1,28 @@
+state = {
+	id = 370
+	name = "STATE_370"
+	manpower = 2700
+	state_category = shanty
+	resources = {
+		metal = 10
+		circuitry = 4
+		advanced = 2
+	}
+	history = {
+		owner = VIC
+		add_core_of = VIC
+		victory_points = {
+			3635 5
+		}
+		buildings = {
+			infrastructure = 3
+			7376 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		2544 2540 3632 4452 2543 4453 3633 3641 4440 3635 2542 7376 3049 2541 3638 4456
+	}
+}

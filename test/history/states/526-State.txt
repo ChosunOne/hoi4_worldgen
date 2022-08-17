@@ -1,0 +1,24 @@
+state = {
+	id = 526
+	name = "STATE_526"
+
+	history={
+		owner = GRD
+		add_core_of = GRD
+		victory_points = {
+			8771 10
+		}
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 3
+		}
+
+	}
+
+	provinces={
+		8771 8772 8773 8474 8770 8769
+	}
+	manpower=2100
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

@@ -1,0 +1,32 @@
+state = {
+	id = 359
+	name = "STATE_359"
+	manpower = 14000
+	state_category = large_town
+
+	resources = {
+		water = 5
+	}
+
+	history = {
+		owner = CES
+		add_core_of = CES
+		add_core_of = TWI
+		victory_points = {
+			3218 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			3218 = {
+				bunker = 3
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		978 3215 3217 3218 5174 5175 5176 5178 3249
+	}
+}

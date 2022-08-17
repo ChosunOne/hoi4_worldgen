@@ -1,0 +1,21 @@
+state={
+	id=1199
+	name="STATE_1199"
+	provinces={
+		14559 14560 14561 14562 14595 14600 14602
+	}
+	history = {
+		owner = BAT
+		add_core_of = BAT
+		victory_points = {
+			14562 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 2700
+	buildings_max_level_factor=1.000
+}

@@ -1,0 +1,26 @@
+state = {
+	id = 139
+	name = "STATE_139"
+	resources={
+		water=3.000
+	}
+
+	history={
+		owner = KAM
+		add_core_of = KAM
+		add_claim_by = SYN
+		victory_points = {
+			3967 10
+		}
+		buildings = {
+			infrastructure = 2
+		}
+	}
+
+	provinces={
+		3967 8486 2132 7365 7366 7370 7415 2645 2470 4389 7410 7367 4394 4392
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

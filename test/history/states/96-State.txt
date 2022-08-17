@@ -1,0 +1,26 @@
+state = {
+	id = 96
+	name = "STATE_96"
+	manpower = 2500
+	state_category = shanty
+
+	resources = {
+		water = 4
+		metal = 4
+	}
+
+	history = {
+		owner = ARR
+		add_core_of = ARR
+		victory_points = {
+			7151 5
+		}
+		buildings = {
+			infrastructure = 3
+		}
+	}
+
+	provinces = {
+		1298 4189 1277 1751 7152 7151 7150 8586 7135 7134
+	}
+}

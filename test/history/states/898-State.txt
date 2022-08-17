@@ -1,0 +1,24 @@
+state = {
+	id = 898
+	name = "STATE_898"
+	resources = {
+		circuitry = 5
+	}
+	history={
+		owner = TLL
+		add_core_of = TLL
+		victory_points = {
+			12057 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 1
+		}
+	}
+	provinces={
+		881 1823 2808 2820 12024 12032 12038 12051 12052 12055 12057 12071 12072 12073 12074
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

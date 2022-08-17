@@ -1,0 +1,26 @@
+state = {
+	id = 50
+	name = "STATE_50"
+	manpower = 4899
+	state_category = rural
+
+	resources = {
+	}
+
+	history = {
+		owner = NCN
+		add_core_of = NCN
+		add_core_of = FAR
+		victory_points = {
+			8277 5
+		}
+		buildings = {
+		infrastructure = 3
+		industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		6303 6304 8278 8277 8280 8279 6298
+	}
+}

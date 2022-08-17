@@ -1,0 +1,27 @@
+state = {
+	id = 576
+	name = "STATE_576"
+
+	history={
+		owner = ANO
+		add_core_of = ANO
+		victory_points = {
+			8207 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+			dockyard = 1
+
+		}
+
+	}
+
+	provinces={
+		1289 1327 2185 8198 8199 8200 8201 8202 8203 8204 8205 8206 8207 8208
+	}
+	manpower=12000
+	buildings_max_level_factor=1.000
+	state_category=town
+}

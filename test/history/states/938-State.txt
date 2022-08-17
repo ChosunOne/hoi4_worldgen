@@ -1,0 +1,25 @@
+state = {
+	id = 938
+	name = "STATE_938"
+	resources = {
+		energy = 2
+		metal = 8
+	}
+	history={
+		owner = PAR
+		add_core_of = PAR
+		victory_points = {
+			12224 10
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	provinces={
+		1811 2860 5657 5658 5659 12214 12216 12221 12224 12227 12228
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

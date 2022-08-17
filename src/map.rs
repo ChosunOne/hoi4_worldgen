@@ -1,4 +1,5 @@
 use crate::components::prelude::*;
+use crate::components::state::{State, States};
 use crate::{LoadObject, MapDisplayMode, MapError};
 use actix::{Actor, AsyncContext, Context, Handler, Message, MessageResult};
 use egui::Pos2;
@@ -68,6 +69,8 @@ pub struct Map {
     pub provinces_by_color: HashMap<Rgb<u8>, ProvinceId>,
     /// The map of province ids to strategic regions
     pub strategic_regions_by_province: HashMap<ProvinceId, StrategicRegionId>,
+    /// The map of state ids to States
+    pub states: HashMap<StateId, State>,
     strategic_region_map_handle: Option<JoinHandle<()>>,
 }
 
@@ -212,7 +215,7 @@ impl Map {
                 root_path_buf
             };
             let definitions_path = map_file(root_path, &default_map.definitions);
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading definitions and terrain...\n");
                 let result = Definitions::from_files(&definitions_path, &terrain_path);
                 if result.is_err() {
@@ -230,7 +233,7 @@ impl Map {
         let continents_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let continent_path = map_file(root_path, &default_map.continent);
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading continents...\n");
                 let result = Continents::load_object(&continent_path);
                 if result.is_err() {
@@ -244,7 +247,7 @@ impl Map {
         let adjacency_rules_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let adjacency_rules_path = map_file(root_path, &default_map.adjacency_rules);
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading adjacency rules...\n");
                 let result = AdjacencyRules::from_file(&adjacency_rules_path);
                 pb.finish();
@@ -265,7 +268,7 @@ impl Map {
         let adjacencies_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let adjacencies_path = map_file(root_path, &default_map.adjacencies);
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading adjacencies...\n");
                 let result = Adjacencies::from_file(&adjacencies_path);
                 if result.is_err() {
@@ -282,7 +285,7 @@ impl Map {
         let seasons_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let seasons_path = map_file(root_path, &default_map.seasons);
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading seasons...\n");
                 let result = Seasons::load_object(&seasons_path);
                 if result.is_err() {
@@ -298,7 +301,7 @@ impl Map {
         let strategic_regions_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let strategic_regions_path = map_file(root_path, Path::new("strategicregions"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading strategic regions...\n");
                 let result = StrategicRegions::from_dir(&strategic_regions_path);
                 pb.finish();
@@ -319,7 +322,7 @@ impl Map {
         let supply_nodes_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let supply_nodes_path = map_file(root_path, Path::new("supply_nodes.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading supply nodes...\n");
                 let result = SupplyNodes::from_file(&supply_nodes_path);
                 if result.is_err() {
@@ -336,7 +339,7 @@ impl Map {
         let railways_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let railways_path = map_file(root_path, Path::new("railways.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading railways...\n");
                 let result = Railways::from_file(&railways_path);
                 if result.is_err() {
@@ -355,7 +358,7 @@ impl Map {
                 root_path_buf
             };
             let buildings_path = map_file(root_path, Path::new("buildings.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading buildings and building types...\n");
                 let result = Buildings::from_files(&types_path, &buildings_path);
                 if result.is_err() {
@@ -373,7 +376,7 @@ impl Map {
         let cities_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let cities_path = map_file(root_path, Path::new("cities.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading cities...\n");
                 let result = Cities::load_object(&cities_path);
                 if result.is_err() {
@@ -387,7 +390,7 @@ impl Map {
         let colors_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let colors_path = map_file(root_path, Path::new("colors.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading colors...\n");
                 let result = Colors::load_object(&colors_path);
                 if result.is_err() {
@@ -401,7 +404,7 @@ impl Map {
         let rocket_sites_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let rocket_sites_path = map_file(root_path, Path::new("rocketsites.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading rocket sites...\n");
                 let result = RocketSites::from_file(&rocket_sites_path);
                 if result.is_err() {
@@ -418,7 +421,7 @@ impl Map {
         let unit_stacks_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let unit_stacks_path = map_file(root_path, Path::new("unitstacks.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading unit stacks...\n");
                 let result = UnitStacks::from_file(&unit_stacks_path);
                 if result.is_err() {
@@ -435,7 +438,7 @@ impl Map {
         let weather_positions_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let weather_positions_path = map_file(root_path, Path::new("weatherpositions.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading weather positions...\n");
                 let result = WeatherPositions::from_file(&weather_positions_path);
                 if result.is_err() {
@@ -452,9 +455,24 @@ impl Map {
         let airports_handle = {
             let pb = Self::create_map_progress_indicator(&progress, &progress_style);
             let airports_path = map_file(root_path, Path::new("airports.txt"));
-            tokio::spawn(async move {
+            tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading airports...\n");
                 let result = Airports::from_file(&airports_path);
+                pb.finish();
+                result
+            })
+        };
+
+        let states_handle = {
+            let pb = Self::create_map_progress_indicator(&progress, &progress_style);
+            let states_path = {
+                let mut states = root_path.to_path_buf();
+                states.push("history/states");
+                states
+            };
+            tokio::task::spawn_blocking(move || {
+                pb.set_message("Loading states...\n");
+                let result = States::from_dir(&states_path);
                 pb.finish();
                 result
             })
@@ -477,6 +495,7 @@ impl Map {
             unit_stacks_result,
             weather_positions_result,
             airports_result,
+            states_result,
         ) = rt.block_on(async move {
             try_join!(
                 verify_images_handle,
@@ -494,7 +513,8 @@ impl Map {
                 rocket_sites_handle,
                 unit_stacks_handle,
                 weather_positions_handle,
-                airports_handle
+                airports_handle,
+                states_handle
             )
         })?;
 
@@ -514,6 +534,7 @@ impl Map {
         let unit_stacks = unit_stacks_result?;
         let weather_positions = weather_positions_result?;
         let airports = airports_result?;
+        let states = states_result?.states;
 
         let provinces_by_color = definitions
             .definitions
@@ -563,6 +584,7 @@ impl Map {
             provinces_by_color,
             strategic_regions_by_province,
             strategic_region_map_handle: None,
+            states,
         })
     }
 
@@ -844,7 +866,7 @@ fn generate_strategic_region_map(
     // Iterate over each pixel in self.provinces, get the associated province definition, and
     // set the strategic region color if it has a strategic region
     for (x, y, pixel) in provinces.enumerate_pixels() {
-        let province_id = provinces_by_color.get(&pixel).ok_or_else(|| {
+        let province_id = provinces_by_color.get(pixel).ok_or_else(|| {
             MapError::InvalidProvinceColor((Red(pixel.0[0]), Green(pixel.0[1]), Blue(pixel.0[2])))
         })?;
         let province = definitions

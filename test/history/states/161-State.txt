@@ -1,0 +1,26 @@
+state = {
+	id = 161
+	name = "STATE_161"
+	manpower = 17000
+	state_category = town
+	resources = {
+		metal = 4
+		water = 2
+	}
+	history = {
+		owner = VIP
+		add_core_of = VIP
+		victory_points = {
+			1659 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+		}
+	}
+
+	provinces = {
+		8794 8793 8791 9180 1659 1086
+	}
+}

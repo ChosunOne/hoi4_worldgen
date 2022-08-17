@@ -1,0 +1,26 @@
+state = {
+	id = 507
+	name = "STATE_507"
+	resources={
+		metal=4
+	}
+
+	history={
+		owner = KAM
+		add_core_of = KAM
+		victory_points = {
+			4382 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+
+	provinces={
+		7217 4384 7412 7413 2150 7411 7368 7337 7372 7371 4383 3968 4382 12419 12417 2133
+	}
+	manpower=1500
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

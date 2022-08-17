@@ -1,0 +1,25 @@
+state = {
+	id = 254
+	name = "STATE_254"
+
+	history={
+		owner = GDH
+		add_core_of = GDH
+		victory_points = {
+			7763 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+
+		}
+
+	}
+
+	provinces={
+		771 7526 7527 7528 7529 7530 7531 7532 7533 7534 7541 7567 7568 7576 7577 7587 7592 7763
+	}
+	manpower=7000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

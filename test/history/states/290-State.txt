@@ -1,0 +1,22 @@
+state = {
+	id = 290
+	name = "STATE_290"
+	resources={
+		metal = 5
+	}
+
+	history={
+		owner = ROS
+		add_core_of = ROS
+		buildings = {
+			infrastructure = 1
+		}
+	}
+	impassable = yes
+	provinces={
+		4530 4071
+	}
+	manpower=4200
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

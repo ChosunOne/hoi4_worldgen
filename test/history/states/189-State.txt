@@ -1,0 +1,26 @@
+state = {
+	id = 189
+	name = "STATE_189"
+
+	history={
+		owner = LAC
+		add_core_of = LAC
+		victory_points = {
+			2802 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+
+	}
+	resources = {
+		energy = 3
+	}
+	provinces={
+		917 1700 1787 2286 2768 2769 2770 2802 2830 2853 5249 5254 5409 5410 5411 5412 5413 5414 5415 5416 5419 5549 5550
+	}
+	manpower=10000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

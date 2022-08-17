@@ -1,0 +1,32 @@
+state = {
+	id = 47
+	name = "STATE_47"
+	resources={
+		metal = 4
+	}
+
+	history={
+		owner = MOT
+		add_core_of = MRA
+		victory_points = {
+			3238 10
+		}
+		victory_points = {
+			3186 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+
+		}
+
+	}
+
+	provinces={
+		3223 3238 5763 12305 3206 5760 3186
+	}
+	manpower=13519
+	buildings_max_level_factor=1.000
+	state_category=large_town
+}

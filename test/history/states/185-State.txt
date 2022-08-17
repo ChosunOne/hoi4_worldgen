@@ -1,0 +1,22 @@
+state = {
+	id = 185
+	name = "STATE_185"
+	manpower = 14000
+	state_category = large_city
+
+	history = {
+		owner = HAN
+		add_core_of = HAN
+		victory_points = {
+			9023 10
+		}
+		buildings = {
+			infrastructure = 4
+			arms_factory = 3
+		}
+	}
+
+	provinces = {
+		6849 6852 6782 9023 9027 6856 9026 9030 9025
+	}
+}

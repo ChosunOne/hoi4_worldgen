@@ -1,0 +1,29 @@
+state={
+	id=1033
+	name="STATE_1033"
+
+	history={
+		owner = PRO
+		add_core_of = PRO
+		victory_points = {
+			8342 10
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 4
+			metal_generator = 1
+		}
+	}
+
+	resources = {
+		metal = 16
+		composites = 2
+	}
+
+	provinces={
+		8342 12503 8354 12495 12500 12491 12492 12499 12504
+	}
+	manpower = 6868
+	state_category = town
+	buildings_max_level_factor=1.000
+}

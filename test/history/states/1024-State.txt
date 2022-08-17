@@ -1,0 +1,17 @@
+state={
+	id=1024
+	name="STATE_1024"
+
+	history={
+		owner = MRR
+		add_core_of = MRR
+	}
+
+	provinces={
+		12550 12586 12636
+	}
+	impassable = yes
+	manpower = 296
+	state_category = wasteland
+	buildings_max_level_factor=1.000
+}

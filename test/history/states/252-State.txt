@@ -1,0 +1,36 @@
+state = {
+	id = 252
+	name = "STATE_252"
+	manpower = 10
+	state_category = large_city
+
+	resources = {
+		energy = 20
+		water = 120
+		metal = 12
+		composites = 4
+		circuitry = 8
+		advanced = 4
+	}
+
+	history = {
+		owner = MOT
+		add_core_of = MOT
+		victory_points = {
+			6603 50
+		}
+		buildings = {
+			anti_air_building = 1
+			infrastructure = 4
+			industrial_complex = 5
+			6603 = {
+				bunker = 1
+				coastal_bunker = 1
+			}
+		}
+	}
+
+	provinces = {
+		6603
+	}
+}

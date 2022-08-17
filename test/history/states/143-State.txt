@@ -1,0 +1,25 @@
+state = {
+	id = 143
+	name = "STATE_143"
+	manpower = 7000
+	state_category = large_town
+
+	history = {
+		owner = LGS
+		add_core_of = LGS
+		victory_points = {
+			7788 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			industrial_complex = 2
+			radar_station = 1
+
+		}
+	}
+
+	provinces = {
+		7686 7687 7688 7689 7693 7714 7787 7788 7799 7804 7805 7808
+	}
+}

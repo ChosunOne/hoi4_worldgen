@@ -1,0 +1,27 @@
+state = {
+	id = 286
+	name = "STATE_286"
+	manpower = 4000
+	state_category = rural
+
+	resources = {
+		metal = 6
+	}
+
+	history = {
+		owner = RUB
+		add_core_of = RUB
+		victory_points = {
+			3526 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+
+		}
+	}
+
+	provinces = {
+		3328 3457 3523 3522 3524 3526 3525 3521 8906 8905 8907 3492 3491 9133
+	}
+}

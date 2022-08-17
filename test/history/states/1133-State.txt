@@ -1,0 +1,30 @@
+state={
+	id=1133
+	name="STATE_1133"
+	provinces={
+		14113 14115 14116 14117
+	}
+	resources = {
+		water = 10
+		energy = 8
+		metal = 10
+		advanced = 8
+	}
+	history = {
+		owner = VER
+		add_core_of = VER
+		victory_points = {
+			14113 30
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 3
+			arms_factory = 2
+			air_base = 3
+		}
+	}
+	state_category = large_city
+	manpower = 39500
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+}

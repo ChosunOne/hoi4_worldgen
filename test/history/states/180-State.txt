@@ -1,0 +1,27 @@
+state = {
+	id = 180
+	name = "STATE_180"
+	resources={
+		metal = 4
+	}
+
+	history={
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			921 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		921 1997 2000 2307 2664 3307 3308 4628 4629 4630 4714 4771 4773 4774 4775 4776 4777 4959 4960
+	}
+	manpower=20000
+	buildings_max_level_factor=1.000
+	state_category=rural
+}

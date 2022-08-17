@@ -1,0 +1,32 @@
+state = {
+	id = 770
+	name = "STATE_770"
+	resources={
+		metal = 8
+		water = 8
+		circuitry = 5
+		energy = 14
+	}
+
+	history={
+		owner = ARM
+		add_core_of = ARM
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+			dockyard = 1
+			industrial_complex = 1
+		}
+		victory_points = {
+			9565 15
+		}
+
+	}
+
+	provinces={
+		724 9368 9373 9565 11004 11006 11011 11012 11020
+	}
+	manpower=20840
+	buildings_max_level_factor=1.000
+	state_category=city
+}

@@ -1,0 +1,29 @@
+state = {
+	id = 462
+	name = "STATE_462"
+	manpower = 6000
+	state_category = town
+
+	resources = {
+		water = 2
+		metal = 4
+	}
+
+	history = {
+		owner = RIP
+		add_core_of = RIP
+		victory_points = {
+			8470 10
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 1
+			air_base = 1
+		}
+	}
+
+	provinces = {
+		3451 8469 8470 8471 3316 3450 1166 8439 2685 3352 1178
+	}
+}

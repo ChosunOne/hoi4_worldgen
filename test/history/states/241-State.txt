@@ -1,0 +1,22 @@
+state = {
+	id = 241
+	name = "STATE_241"
+	manpower = 3000
+	state_category = shanty
+
+	history = {
+		owner = NCR
+		add_core_of = NCR
+		victory_points = {
+			2377 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+		}
+	}
+
+	provinces = {
+		948 955 2367 2368 2369 2370 2371 2372 2373 2377 2386 2389 5142
+	}
+}

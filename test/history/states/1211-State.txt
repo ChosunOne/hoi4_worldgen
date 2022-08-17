@@ -1,0 +1,25 @@
+state={
+	id=1211
+	name="STATE_1211"
+	provinces={
+		13906 13907 13908 13909 13910 13919 13920 13926 13929
+	}
+	resources = {
+		metal = 4
+		circuitry = 4
+	}
+	history = {
+		owner = COM
+		add_core_of = COM
+		victory_points = {
+			13909 5
+		}
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	state_category = rural
+	manpower = 6600
+	buildings_max_level_factor=1.000
+}

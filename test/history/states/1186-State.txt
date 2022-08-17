@@ -1,0 +1,24 @@
+state={
+	id=1186
+	name="STATE_1186"
+	provinces={
+		13200 13203 13205 13208 13209 13213 13215
+	}
+	resources = {
+		metal = 2
+	}
+	history={
+		owner = ATM
+		add_core_of = ATM
+		victory_points = {
+			13209 5
+		}
+		buildings = {
+			infrastructure = 3
+			arms_factory = 1
+		}
+	}
+	state_category = rural
+	manpower = 2100
+	buildings_max_level_factor=1.000
+}

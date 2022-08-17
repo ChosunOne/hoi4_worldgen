@@ -1,0 +1,22 @@
+state = {
+	id = 610
+	name = "STATE_610"
+	manpower = 4000
+	state_category = rural
+
+	history = {
+		owner = HAN
+		add_core_of = HAN
+		victory_points = {
+			5713 5
+		}
+		buildings = {
+			infrastructure = 2
+
+		}
+	}
+
+	provinces = {
+		2346 5711 5714 5713 5715 6885 1828 5716 5717 6652 6676
+	}
+}

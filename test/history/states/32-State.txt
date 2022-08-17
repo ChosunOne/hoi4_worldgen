@@ -1,0 +1,26 @@
+state = {
+	id = 32
+	name = "STATE_32"
+	manpower = 2500
+	state_category = town
+
+	history = {
+		owner = ARR
+		add_core_of = ARR
+		victory_points = {
+			2728 5
+		}
+		buildings = {
+			infrastructure = 4
+			dockyard = 1
+			industrial_complex = 1
+			5005 = {
+				naval_base = 1
+			}
+		}
+	}
+
+	provinces = {
+		5006 1744 5005 1743 5004 2728
+	}
+}

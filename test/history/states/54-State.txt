@@ -1,0 +1,29 @@
+state = {
+	id = 54
+	name = "STATE_54"
+
+	resources={
+		energy = 6
+	}
+
+	history={
+		owner = SOK
+		add_core_of = SOK
+		victory_points = {
+			1633 5
+		}
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 1
+		}
+
+	}
+
+	provinces={
+		1633 3312 3574 8774 5141
+	}
+	manpower=1950
+	buildings_max_level_factor=1.000
+	state_category=shanty
+}

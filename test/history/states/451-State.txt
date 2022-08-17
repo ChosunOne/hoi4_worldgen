@@ -1,0 +1,28 @@
+state = {
+	id = 451
+	name = "STATE_451"
+	manpower = 8000
+	state_category = city
+
+	resources = {
+		metal = 8
+		water = 4
+	}
+
+	history = {
+		owner = MLT
+		add_core_of = MLT
+		victory_points = {
+			4109 5
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 2
+		}
+	}
+
+	provinces = {
+		1394 1984 2603 4108 4109 4199 4343 4344 4345 7125 7126 7127
+	}
+}

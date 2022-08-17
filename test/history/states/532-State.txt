@@ -1,0 +1,30 @@
+state = {
+	id = 532
+	name = "STATE_532"
+	resources={
+		metal=17.000
+	}
+
+	history={
+		owner = YMP
+		add_core_of = YMP
+		victory_points = {
+			6700 15
+		}
+		victory_points = {
+			6824 10
+		}
+		buildings = {
+			infrastructure = 1
+
+		}
+
+	}
+
+	provinces={
+		6824 6699 9160 6700
+	}
+	manpower=1000
+	buildings_max_level_factor=1.000
+	state_category=pastoral
+}

@@ -1,0 +1,34 @@
+state={
+	id=1034
+	name="STATE_1034"
+	resources = {
+		water = 12
+		energy = 4
+	}
+
+	history={
+		owner = PRO
+		add_core_of = PRO
+		victory_points = {
+			12477 10
+		}
+		victory_points = {
+			12487 5
+		}
+		buildings = {
+			infrastructure = 2
+				industrial_complex = 1
+			arms_factory = 2
+			12477 = {
+				bunker = 1
+			}
+		}
+	}
+
+	provinces={
+		1712 12477 8345 12470 3086 12487 12478 12474 12481 12469 12476
+	}
+	manpower = 3666
+	state_category = town
+	buildings_max_level_factor=1.000
+}

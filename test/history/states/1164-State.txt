@@ -1,0 +1,21 @@
+state={
+	id=1164
+	name="STATE_1164"
+	provinces={
+		14179 14180 14181 14182 14183 14184 14185
+	}
+	history = {
+		owner = NUN
+		add_core_of = NUN
+		victory_points = {
+			14184 2
+		}
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	state_category = shanty
+	manpower = 2900
+	buildings_max_level_factor=1.000
+}
