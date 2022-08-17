@@ -13,6 +13,7 @@ pub enum LoadImage {
     Provinces { image: RgbImage, context: Context },
     Rivers { image: RgbImage, context: Context },
     StrategicRegions { image: RgbImage, context: Context },
+    States { image: RgbImage, context: Context },
 }
 
 impl LoadImage {
@@ -27,6 +28,7 @@ impl LoadImage {
             MapDisplayMode::Provinces => Self::Provinces { image, context },
             MapDisplayMode::Rivers => Self::Rivers { image, context },
             MapDisplayMode::StrategicRegions => Self::StrategicRegions { image, context },
+            MapDisplayMode::States => Self::States { image, context },
         }
     }
 }
@@ -40,6 +42,7 @@ enum UpdateTexture {
     Provinces(TextureHandle),
     Rivers(TextureHandle),
     StrategicRegions(TextureHandle),
+    States(TextureHandle),
 }
 
 /// A request to get a texture
@@ -52,6 +55,7 @@ pub enum GetTexture {
     Provinces,
     Rivers,
     StrategicRegions,
+    States,
 }
 
 impl From<MapDisplayMode> for GetTexture {
@@ -62,6 +66,7 @@ impl From<MapDisplayMode> for GetTexture {
             MapDisplayMode::Provinces => Self::Provinces,
             MapDisplayMode::Rivers => Self::Rivers,
             MapDisplayMode::StrategicRegions => Self::StrategicRegions,
+            MapDisplayMode::States => Self::States,
         }
     }
 }
@@ -73,11 +78,13 @@ pub struct MapTextures {
     provinces_texture: Option<TextureHandle>,
     rivers_texture: Option<TextureHandle>,
     strategic_regions_texture: Option<TextureHandle>,
+    states_texture: Option<TextureHandle>,
     heightmap_handle: Option<JoinHandle<()>>,
     terrain_handle: Option<JoinHandle<()>>,
     provinces_handle: Option<JoinHandle<()>>,
     rivers_handle: Option<JoinHandle<()>>,
     strategic_regions_handle: Option<JoinHandle<()>>,
+    states_handle: Option<JoinHandle<()>>,
 }
 
 impl Actor for MapTextures {
@@ -135,6 +142,15 @@ impl Handler<LoadImage> for MapTextures {
                     self_addr.do_send(UpdateTexture::StrategicRegions(tex));
                 }));
             }
+            LoadImage::States { image, context } => {
+                if self.states_handle.is_some() {
+                    return;
+                }
+                self.states_handle = Some(tokio::task::spawn_blocking(move || {
+                    let tex = load_texture(image, &context);
+                    self_addr.do_send(UpdateTexture::States(tex));
+                }));
+            }
         };
     }
 }
@@ -157,6 +173,7 @@ impl Handler<GetTexture> for MapTextures {
             GetTexture::Provinces => self.provinces_texture.clone(),
             GetTexture::Rivers => self.rivers_texture.clone(),
             GetTexture::StrategicRegions => self.strategic_regions_texture.clone(),
+            GetTexture::States => self.states_texture.clone(),
         }
     }
 }
@@ -185,6 +202,10 @@ impl Handler<UpdateTexture> for MapTextures {
             UpdateTexture::StrategicRegions(t) => {
                 self.strategic_regions_texture = Some(t);
                 self.strategic_regions_handle.take();
+            }
+            UpdateTexture::States(t) => {
+                self.states_texture = Some(t);
+                self.states_handle.take();
             }
         }
     }

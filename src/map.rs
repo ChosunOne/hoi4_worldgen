@@ -1,13 +1,14 @@
 use crate::components::prelude::*;
 use crate::components::state::{State, States};
 use crate::{LoadObject, MapDisplayMode, MapError};
-use actix::{Actor, AsyncContext, Context, Handler, Message, MessageResult};
+use actix::{Actor, AsyncContext, Context, Handler, Message};
 use egui::Pos2;
 use image::{open, DynamicImage, Pixel, Rgb, RgbImage};
 use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle, TermLike};
 use log::{debug, error, info, trace, warn};
 use rand::{thread_rng, Rng};
 use std::collections::{HashMap, HashSet};
+use std::hash::Hash;
 use std::path::{Path, PathBuf};
 use tokio::task::JoinHandle;
 use tokio::try_join;
@@ -33,6 +34,8 @@ pub struct Map {
     pub cities_map: RgbImage,
     /// The map of strategic regions
     pub strategic_region_map: Option<RgbImage>,
+    /// The map of states
+    pub state_map: Option<RgbImage>,
     /// The province definitions
     pub definitions: Definitions,
     /// The continent definitions
@@ -71,7 +74,10 @@ pub struct Map {
     pub strategic_regions_by_province: HashMap<ProvinceId, StrategicRegionId>,
     /// The map of state ids to States
     pub states: HashMap<StateId, State>,
+    /// The map of province ids to states
+    pub states_by_province: HashMap<ProvinceId, StateId>,
     strategic_region_map_handle: Option<JoinHandle<()>>,
+    state_map_handle: Option<JoinHandle<()>>,
 }
 
 impl Map {
@@ -553,6 +559,11 @@ impl Map {
             .flat_map(|(id, sr)| sr.provinces.iter().map(|p| (*p, *id)).collect::<Vec<_>>())
             .collect();
 
+        let states_by_province = states
+            .iter()
+            .flat_map(|(id, sr)| sr.provinces.iter().map(|p| (*p, *id)).collect::<Vec<_>>())
+            .collect();
+
         progress.println("Loading map complete")?;
         progress.clear()?;
 
@@ -585,6 +596,9 @@ impl Map {
             strategic_regions_by_province,
             strategic_region_map_handle: None,
             states,
+            state_map_handle: None,
+            state_map: None,
+            states_by_province,
         })
     }
 
@@ -705,9 +719,17 @@ impl GetContinentFromIndex {
 #[rtype(result = "()")]
 pub struct GenerateStrategicRegionMap;
 
+#[derive(Message, Debug)]
+#[rtype(result = "()")]
+pub struct GenerateStateMap;
+
 #[derive(Message)]
 #[rtype(result = "()")]
 struct UpdateStrategicRegionMap(RgbImage);
+
+#[derive(Message)]
+#[rtype(result = "()")]
+struct UpdateStateMap(RgbImage);
 
 /// A request to get an `RgbImage` from a supplied `MapDisplayMode`
 #[allow(clippy::exhaustive_enums)]
@@ -719,6 +741,7 @@ pub enum GetMapImage {
     Provinces,
     Rivers,
     StrategicRegions,
+    States,
 }
 
 impl From<MapDisplayMode> for GetMapImage {
@@ -730,6 +753,7 @@ impl From<MapDisplayMode> for GetMapImage {
             MapDisplayMode::Provinces => Self::Provinces,
             MapDisplayMode::Rivers => Self::Rivers,
             MapDisplayMode::StrategicRegions => Self::StrategicRegions,
+            MapDisplayMode::States => Self::States,
         }
     }
 }
@@ -745,6 +769,7 @@ impl Handler<GetMapImage> for Map {
             GetMapImage::Provinces => Some(self.provinces.clone()),
             GetMapImage::Rivers => Some(self.rivers.clone()),
             GetMapImage::StrategicRegions => self.strategic_region_map.clone(),
+            GetMapImage::States => self.state_map.clone(),
         }
     }
 }
@@ -790,18 +815,22 @@ impl Handler<GenerateStrategicRegionMap> for Map {
     type Result = ();
 
     #[inline]
-    fn handle(&mut self, msg: GenerateStrategicRegionMap, ctx: &mut Self::Context) -> Self::Result {
+    fn handle(
+        &mut self,
+        _msg: GenerateStrategicRegionMap,
+        ctx: &mut Self::Context,
+    ) -> Self::Result {
         if self.strategic_region_map.is_some() {
             return;
         }
-        let strategic_regions = self.strategic_regions.clone();
+        let strategic_regions = self.strategic_regions.strategic_regions.clone();
         let provinces = self.provinces.clone();
         let provinces_by_color = self.provinces_by_color.clone();
-        let definitions = self.definitions.clone();
+        let definitions = self.definitions.definitions.clone();
         let strategic_regions_by_province = self.strategic_regions_by_province.clone();
         let self_addr = ctx.address();
         let strategic_region_map_handle = tokio::task::spawn_blocking(move || {
-            match generate_strategic_region_map(
+            match generate_region_map(
                 &strategic_regions,
                 &provinces,
                 &provinces_by_color,
@@ -833,24 +862,67 @@ impl Handler<UpdateStrategicRegionMap> for Map {
     }
 }
 
-/// Generates an `RgbImage` from the strategic regions
+impl Handler<GenerateStateMap> for Map {
+    type Result = ();
+
+    #[inline]
+    fn handle(&mut self, _msg: GenerateStateMap, ctx: &mut Self::Context) -> Self::Result {
+        if self.state_map.is_some() {
+            return;
+        }
+        let states = self.states.clone();
+        let provinces = self.provinces.clone();
+        let provinces_by_color = self.provinces_by_color.clone();
+        let definitions = self.definitions.definitions.clone();
+        let states_by_province = self.states_by_province.clone();
+        let self_addr = ctx.address();
+        let state_map_handle = tokio::task::spawn_blocking(move || {
+            match generate_region_map(
+                &states,
+                &provinces,
+                &provinces_by_color,
+                &definitions,
+                &states_by_province,
+            ) {
+                Ok(m) => {
+                    if let Err(e) = self_addr.try_send(UpdateStateMap(m)) {
+                        error!("Failed to send state map update: {}", e);
+                    }
+                }
+                Err(e) => {
+                    error!("Failed to generate state map: {:?}", e);
+                }
+            }
+        });
+
+        self.state_map_handle = Some(state_map_handle);
+    }
+}
+
+impl Handler<UpdateStateMap> for Map {
+    type Result = ();
+
+    #[inline]
+    fn handle(&mut self, msg: UpdateStateMap, _ctx: &mut Self::Context) -> Self::Result {
+        self.state_map = Some(msg.0);
+        self.state_map_handle.take();
+    }
+}
+
+/// Generates an `RgbImage` from the regions
 /// # Errors
-/// * If the strategic regions are not valid
-#[allow(clippy::unwrap_in_result)]
-#[allow(clippy::expect_used)]
+/// * If the regions are not valid
 #[inline]
-fn generate_strategic_region_map(
-    strategic_regions: &StrategicRegions,
+fn generate_region_map<RegionId: Copy + Eq + Hash, Region>(
+    regions: &HashMap<RegionId, Region>,
     provinces: &RgbImage,
     provinces_by_color: &HashMap<Rgb<u8>, ProvinceId>,
-    definitions: &Definitions,
-    strategic_regions_by_province: &HashMap<ProvinceId, StrategicRegionId>,
+    definitions: &HashMap<ProvinceId, Definition>,
+    regions_by_province: &HashMap<ProvinceId, RegionId>,
 ) -> Result<RgbImage, MapError> {
-    debug!("Generating strategic region map");
-    let strategic_region_colors = {
+    let region_colors = {
         let mut rng = thread_rng();
-        strategic_regions
-            .strategic_regions
+        regions
             .keys()
             .copied()
             .map(|id| {
@@ -862,27 +934,23 @@ fn generate_strategic_region_map(
             })
             .collect::<HashMap<_, _>>()
     };
-    let mut strategic_region_map = RgbImage::new(provinces.width(), provinces.height());
-    // Iterate over each pixel in self.provinces, get the associated province definition, and
-    // set the strategic region color if it has a strategic region
+    let mut region_map = RgbImage::new(provinces.width(), provinces.height());
     for (x, y, pixel) in provinces.enumerate_pixels() {
         let province_id = provinces_by_color.get(pixel).ok_or_else(|| {
             MapError::InvalidProvinceColor((Red(pixel.0[0]), Green(pixel.0[1]), Blue(pixel.0[2])))
         })?;
         let province = definitions
-            .definitions
             .get(province_id)
             .ok_or(MapError::DefinitionNotFound(*province_id))?;
-        let strategic_region_id = strategic_regions_by_province
-            .get(&province.id)
-            .ok_or(MapError::StrategicRegionNotFoundForProvince(province.id))?;
-        let color = strategic_region_colors
-            .get(strategic_region_id)
-            .expect("Strategic regions are inconsistent with assigned colors");
-        strategic_region_map.put_pixel(x, y, *color);
+        let region_id = regions_by_province.get(&province.id);
+        let color = region_id.map_or(Rgb::<u8>::from([0, 0, 0]), |rid| {
+            *region_colors
+                .get(rid)
+                .expect("Regions are inconsistent with assigned colors")
+        });
+        region_map.put_pixel(x, y, color);
     }
-    debug!("Finished generating strategic region map");
-    Ok(strategic_region_map)
+    Ok(region_map)
 }
 
 /// Checks the image sizes and aspect ratios

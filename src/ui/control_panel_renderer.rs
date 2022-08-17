@@ -1,3 +1,4 @@
+use crate::ui::central_panel_renderer::SetMap;
 use crate::ui::map_loader::{GetMap, IsMapLoading, LoadMap, MapLoader};
 use crate::ui::map_mode::{GetMapMode, SetMapMode};
 use crate::ui::root_path::GetRootPath;
@@ -91,11 +92,14 @@ impl Handler<RenderControlPanel> for ControlPanelRenderer {
                         if ui.button("Terrain").clicked() {
                             map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::Terrain));
                         }
+                        if ui.button("Rivers").clicked() {
+                            map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::Rivers));
+                        }
                         if ui.button("Provinces").clicked() {
                             map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::Provinces));
                         }
-                        if ui.button("Rivers").clicked() {
-                            map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::Rivers));
+                        if ui.button("States").clicked() {
+                            map_mode_addr.do_send(SetMapMode::new(MapDisplayMode::States));
                         }
                         if ui.button("Strategic Regions").clicked() {
                             map_mode_addr

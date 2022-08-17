@@ -52,6 +52,7 @@ pub enum MapDisplayMode {
     Provinces,
     Rivers,
     StrategicRegions,
+    States,
 }
 
 /// Errors that may occur when loading/verifying/creating a map.
@@ -164,7 +165,7 @@ pub enum MapError {
     #[error("{0}")]
     RecvError(#[from] std::sync::mpsc::RecvError),
     #[error("{0}")]
-    StrategicRegionNotFoundForProvince(ProvinceId),
+    RegionNotFoundForProvince(ProvinceId),
 }
 
 /// Appends a directory to the front of a given path.
