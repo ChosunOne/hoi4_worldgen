@@ -27,15 +27,15 @@
 
 mod ui;
 
-use crate::ui::central_panel_renderer::{CentralPanelRenderer, RenderCentralPanel};
-use crate::ui::control_panel_renderer::{ControlPanelRenderer, RenderControlPanel};
+use crate::ui::central_panel_renderer::CentralPanelRenderer;
+use crate::ui::control_panel_renderer::ControlPanelRenderer;
 use crate::ui::map_loader::MapLoader;
 use crate::ui::map_mode::MapMode;
 use crate::ui::map_textures::MapTextures;
-use crate::ui::right_panel_renderer::{RenderRightPanel, RightPanelRenderer};
+use crate::ui::right_panel_renderer::RightPanelRenderer;
 use crate::ui::root_path::RootPath;
 use crate::ui::selection::Selection;
-use crate::ui::top_menu_renderer::{RenderTopMenuBar, TopMenuRenderer};
+use crate::ui::top_menu_renderer::TopMenuRenderer;
 use crate::ui::viewport::Viewport;
 use crate::ui::{root_path::SetRootPath, UiRenderer};
 use actix::{Actor, System};
@@ -85,43 +85,36 @@ impl WorldGenApp {
             system.block_on(async {
                 trace!("Starting root path");
                 let root_path = RootPath::default().start();
-                trace!("Starting top menu renderer");
-                let top_menu_renderer = TopMenuRenderer::new(root_path.clone()).start();
+                let top_menu_renderer = TopMenuRenderer::new(root_path.clone());
                 trace!("Starting map textures");
                 let map_textures = MapTextures::default().start();
                 trace!("Starting map loader");
                 let map_loader = MapLoader::default().start();
                 trace!("Starting map mode");
                 let map_mode = MapMode::default().start();
-                trace!("Starting control panel renderer");
                 let control_panel_renderer = ControlPanelRenderer::new(
                     root_path,
                     map_loader.clone(),
                     map_mode.clone(),
                     terminal.clone(),
-                )
-                .start();
+                );
                 trace!("Starting selection");
                 let selection = Selection::default().start();
-                trace!("Starting right panel renderer");
                 let right_panel_renderer = RightPanelRenderer::new(
                     map_mode.clone(),
                     selection.clone(),
                     map_loader.clone(),
                     terminal,
-                )
-                .start();
+                );
                 trace!("Starting viewport");
                 let viewport = Viewport::default().start();
-                trace!("Starting central panel renderer");
                 let central_panel_renderer = CentralPanelRenderer::new(
                     map_loader,
                     map_mode.clone(),
                     map_textures,
                     selection,
                     viewport.clone(),
-                )
-                .start();
+                );
 
                 let ui_renderer = UiRenderer::new(
                     top_menu_renderer,
@@ -152,28 +145,16 @@ impl WorldGenApp {
     }
 
     fn render_panels(&mut self, ctx: &Context) -> Result<(), MapError> {
-        if let Some(ui_renderer) = &self.ui_renderer {
+        if let Some(ui_renderer) = &mut self.ui_renderer {
             if let Some(rt) = &self.runtime {
                 trace!("Render Loop start");
-                let render_top_menu_bar = RenderTopMenuBar::new(ctx.clone());
-                trace!("Block on TopMenubar");
-                rt.block_on(ui_renderer.top_menu_renderer.send(render_top_menu_bar))??;
-                let render_control_panel = RenderControlPanel::new(ctx.clone());
+                ui_renderer.top_menu_renderer.render_top_menu_bar(ctx);
                 trace!("Block on ControlPanel");
-                rt.block_on(
-                    ui_renderer
-                        .control_panel_renderer
-                        .send(render_control_panel),
-                )??;
-                let render_right_panel = RenderRightPanel::new(ctx.clone());
+                rt.block_on(ui_renderer.control_panel_renderer.render_control_panel(ctx))?;
                 trace!("Block on RightPanel");
-                rt.block_on(ui_renderer.right_panel_renderer.send(render_right_panel))??;
-                let render_central_panel = RenderCentralPanel::new(ctx.clone());
-                rt.block_on(
-                    ui_renderer
-                        .central_panel_renderer
-                        .send(render_central_panel),
-                )??;
+                rt.block_on(ui_renderer.right_panel_renderer.render_right_panel(ctx))?;
+                trace!("Block on CentralPanel");
+                rt.block_on(ui_renderer.central_panel_renderer.render_central_panel(ctx))?;
                 trace!("Render Loop End");
             }
         }

@@ -4,33 +4,12 @@ use crate::ui::map_textures::{GetTexture, LoadImage};
 use crate::ui::selection::SetSelectedPoint;
 use crate::ui::viewport::{GetViewportArea, GetZoomLevel, Scroll, SetViewportArea};
 use crate::{MapError, MapLoader, MapMode, MapTextures, Selection, Viewport};
-use actix::{Actor, Addr, AsyncContext, Context as ActixContext, Handler, Message, ResponseFuture};
+use actix::Addr;
 use egui::{
     CentralPanel, Context, ImageButton, Pos2, Rect, Response, Sense, TextureHandle, Ui, Vec2,
 };
 use world_gen::map::{GetMapImage, Map};
 use world_gen::MapDisplayMode;
-
-/// A request to render the right panel
-#[derive(Message)]
-#[rtype(result = "Result<(), MapError>")]
-#[non_exhaustive]
-pub struct RenderCentralPanel {
-    pub context: Context,
-}
-
-impl RenderCentralPanel {
-    #[inline]
-    pub const fn new(context: Context) -> Self {
-        Self { context }
-    }
-}
-
-/// A request to set the address of the map
-#[derive(Message)]
-#[rtype(result = "()")]
-#[non_exhaustive]
-pub struct SetMap(pub Addr<Map>);
 
 #[derive(Debug)]
 pub struct CentralPanelRenderer {
@@ -60,98 +39,67 @@ impl CentralPanelRenderer {
             viewport,
         }
     }
-}
 
-impl Actor for CentralPanelRenderer {
-    type Context = ActixContext<Self>;
-}
-
-impl Handler<RenderCentralPanel> for CentralPanelRenderer {
-    type Result = ResponseFuture<Result<(), MapError>>;
-
-    fn handle(&mut self, msg: RenderCentralPanel, ctx: &mut Self::Context) -> Self::Result {
-        let context = msg.context;
-        let map_loader_addr = self.map_loader.clone();
-        let map_addr = self.map.clone();
-        let map_mode_addr = self.map_mode.clone();
-        let map_textures_addr = self.map_textures.clone();
-        let selection_addr = self.selection.clone();
-        let viewport_addr = self.viewport.clone();
-        let self_addr = ctx.address();
-        Box::pin(async move {
-            let map_mode: MapDisplayMode = map_mode_addr.send(GetMapMode).await?;
-            let texture: Option<TextureHandle> =
-                map_textures_addr.send(GetTexture::from(map_mode)).await?;
-            if map_addr.is_none() {
-                let addr = map_loader_addr.send(GetMap).await?;
-                if let Some(m) = addr {
-                    self_addr.do_send(SetMap(m));
-                }
+    pub async fn render_central_panel(&mut self, ctx: &Context) -> Result<(), MapError> {
+        let map_mode: MapDisplayMode = self.map_mode.send(GetMapMode).await?;
+        let texture: Option<TextureHandle> =
+            self.map_textures.send(GetTexture::from(map_mode)).await?;
+        if self.map.is_none() {
+            let addr = self.map_loader.send(GetMap).await?;
+            if let Some(m) = addr {
+                self.map = Some(m);
             }
-            if let (Some(map), None) = (map_addr.clone(), texture.clone()) {
-                if let Some(image) = map.send(GetMapImage::from(map_mode)).await? {
-                    map_textures_addr
-                        .send(LoadImage::from_display_mode(
-                            map_mode,
-                            image,
-                            context.clone(),
-                        ))
-                        .await?;
-                }
+        }
+        if let (Some(map), None) = (self.map.clone(), texture.clone()) {
+            if let Some(image) = map.send(GetMapImage::from(map_mode)).await? {
+                self.map_textures
+                    .send(LoadImage::from_display_mode(map_mode, image, ctx.clone()))
+                    .await?;
             }
-            let viewport_rect: Rect = viewport_addr.send(GetViewportArea).await?.map_or(
-                Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
-                |r| r,
-            );
-            let zoom_level = viewport_addr.send(GetZoomLevel).await?;
+        }
+        let viewport_rect: Rect = self.viewport.send(GetViewportArea).await?.map_or(
+            Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
+            |r| r,
+        );
+        let zoom_level = self.viewport.send(GetZoomLevel).await?;
 
-            let mut selected_point = None;
-            CentralPanel::default().show(&context, |ui| {
-                if let Some(tex) = &texture {
-                    let tex_size = tex.size_vec2();
-                    let size = ui.ctx().available_rect().size() * 0.8;
-                    let x_scale = size.x / tex_size.x;
-                    let y_scale = size.y / tex_size.y;
-                    let min_scale = x_scale.min(y_scale);
-                    let image_button = ImageButton::new(tex, tex_size * min_scale)
-                        .uv(viewport_rect)
-                        .sense(Sense::click_and_drag());
-                    let map = ui.add(image_button);
-                    let map_rect = map.rect;
-                    let mouse_pos = ui.ctx().pointer_latest_pos();
-                    if let Some(pos) = mouse_pos {
-                        if map_rect.contains(pos) {
-                            let scroll = handle_scroll(ui, &viewport_addr);
-                            handle_zoom(&viewport_addr, zoom_level, viewport_rect, scroll);
-                            handle_drag(&viewport_addr, zoom_level, viewport_rect, &map);
-                            let tex_uv =
-                                project_to_texture(&viewport_rect, tex_size, pos, &map_rect);
-                            ui.label(format!(
-                                "Map Coordinate: ({:?}, {:?})",
-                                tex_uv.x as i32, tex_uv.y as i32
-                            ));
-                            if map.clicked() {
-                                selected_point = Some(tex_uv);
-                            }
+        let mut selected_point = None;
+        CentralPanel::default().show(ctx, |ui| {
+            if let Some(tex) = &texture {
+                let tex_size = tex.size_vec2();
+                let size = ui.ctx().available_rect().size() * 0.8;
+                let x_scale = size.x / tex_size.x;
+                let y_scale = size.y / tex_size.y;
+                let min_scale = x_scale.min(y_scale);
+                let image_button = ImageButton::new(tex, tex_size * min_scale)
+                    .uv(viewport_rect)
+                    .sense(Sense::click_and_drag());
+                let map = ui.add(image_button);
+                let map_rect = map.rect;
+                let mouse_pos = ui.ctx().pointer_latest_pos();
+                if let Some(pos) = mouse_pos {
+                    if map_rect.contains(pos) {
+                        let scroll = handle_scroll(ui, &self.viewport);
+                        handle_zoom(&self.viewport, zoom_level, viewport_rect, scroll);
+                        handle_drag(&self.viewport, zoom_level, viewport_rect, &map);
+                        let tex_uv = project_to_texture(&viewport_rect, tex_size, pos, &map_rect);
+                        ui.label(format!(
+                            "Map Coordinate: ({:?}, {:?})",
+                            tex_uv.x as i32, tex_uv.y as i32
+                        ));
+                        if map.clicked() {
+                            selected_point = Some(tex_uv);
                         }
                     }
-                } else if map_addr.is_some() {
-                    ui.label("Loading...");
                 }
-            });
-            if let Some(point) = selected_point {
-                selection_addr.send(SetSelectedPoint::new(point)).await?;
+            } else if self.map.is_some() {
+                ui.label("Loading...");
             }
-            Ok(())
-        })
-    }
-}
-
-impl Handler<SetMap> for CentralPanelRenderer {
-    type Result = ();
-
-    fn handle(&mut self, msg: SetMap, _ctx: &mut Self::Context) -> Self::Result {
-        self.map = Some(msg.0);
+        });
+        if let Some(point) = selected_point {
+            self.selection.send(SetSelectedPoint::new(point)).await?;
+        }
+        Ok(())
     }
 }
 

@@ -18,10 +18,10 @@ use crate::ui::viewport::Viewport;
 use actix::Addr;
 
 pub struct UiRenderer {
-    pub top_menu_renderer: Addr<TopMenuRenderer>,
-    pub control_panel_renderer: Addr<ControlPanelRenderer>,
-    pub right_panel_renderer: Addr<RightPanelRenderer>,
-    pub central_panel_renderer: Addr<CentralPanelRenderer>,
+    pub top_menu_renderer: TopMenuRenderer,
+    pub control_panel_renderer: ControlPanelRenderer,
+    pub right_panel_renderer: RightPanelRenderer,
+    pub central_panel_renderer: CentralPanelRenderer,
     pub map_mode: Addr<MapMode>,
     pub viewport: Addr<Viewport>,
 }
@@ -29,10 +29,10 @@ pub struct UiRenderer {
 impl UiRenderer {
     #[inline]
     pub const fn new(
-        top_menu_renderer: Addr<TopMenuRenderer>,
-        control_panel_renderer: Addr<ControlPanelRenderer>,
-        right_panel_renderer: Addr<RightPanelRenderer>,
-        central_panel_renderer: Addr<CentralPanelRenderer>,
+        top_menu_renderer: TopMenuRenderer,
+        control_panel_renderer: ControlPanelRenderer,
+        right_panel_renderer: RightPanelRenderer,
+        central_panel_renderer: CentralPanelRenderer,
         map_mode: Addr<MapMode>,
         viewport: Addr<Viewport>,
     ) -> Self {
