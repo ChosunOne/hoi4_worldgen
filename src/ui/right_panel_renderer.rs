@@ -1,15 +1,20 @@
 use crate::ui::map_loader::GetMap;
 use crate::ui::map_mode::GetMapMode;
-use crate::ui::selection::{GetSelectedPoint, GetSelectedProvince, Selection, SetSelectedProvince};
+use crate::ui::selection::{
+    GetSelectedPoint, GetSelectedProvince, GetSelectedState, GetSelectedStrategicRegion, Selection,
+    SetSelectedProvince, SetSelectedStrategicRegion,
+};
 use crate::{MapError, MapLoader, MapMode};
 use actix::Addr;
 use egui::{Context, Pos2, SidePanel, TopBottomPanel};
 use indicatif::InMemoryTerm;
 use log::{debug, trace};
-use world_gen::components::prelude::Definition;
+use world_gen::components::prelude::{Definition, StrategicRegion};
+use world_gen::components::state::State;
 use world_gen::components::wrappers::Continent;
 use world_gen::map::{
-    GetContinentFromIndex, GetProvinceDefinitionFromId, GetProvinceIdFromPoint, Map,
+    GetContinentFromIndex, GetProvinceDefinitionFromId, GetProvinceIdFromPoint,
+    GetStrategicRegionFromId, GetStrategicRegionIdFromPoint, Map,
 };
 use world_gen::MapDisplayMode;
 
@@ -36,23 +41,50 @@ impl RightPanelRenderer {
         }
     }
 
+    #[allow(clippy::too_many_lines)]
     pub async fn render_right_panel(&self, ctx: &Context) -> Result<(), MapError> {
         let map_mode: MapDisplayMode = self.map_mode.send(GetMapMode).await?;
         let map_addr: Option<Addr<Map>> = self.map_loader.send(GetMap).await?;
         let selected_point: Option<Pos2> = self.selection.send(GetSelectedPoint).await?;
         let selected_province: Option<Definition> =
             self.selection.send(GetSelectedProvince).await?;
-        if let (Some(p), None, Some(m)) =
-            (selected_point, selected_province.clone(), map_addr.clone())
-        {
-            // TODO: Perhaps reconsider where this logic should live
-            if let Some(province_id) = m.send(GetProvinceIdFromPoint::new(p)).await? {
-                if let Some(def) = m
-                    .send(GetProvinceDefinitionFromId::new(province_id))
-                    .await?
-                {
-                    self.selection.send(SetSelectedProvince::new(def)).await?;
+        let selected_state: Option<State> = self.selection.send(GetSelectedState).await?;
+        let selected_strategic_region: Option<StrategicRegion> =
+            self.selection.send(GetSelectedStrategicRegion).await?;
+        if let (Some(map), Some(point)) = (map_addr.clone(), selected_point) {
+            match map_mode {
+                MapDisplayMode::HeightMap | MapDisplayMode::Terrain | MapDisplayMode::Rivers => {}
+                MapDisplayMode::Provinces => {
+                    if selected_province.is_none() {
+                        // TODO: Perhaps reconsider where this logic should live
+                        if let Some(province_id) =
+                            map.send(GetProvinceIdFromPoint::new(point)).await?
+                        {
+                            if let Some(def) = map
+                                .send(GetProvinceDefinitionFromId::new(province_id))
+                                .await?
+                            {
+                                self.selection.send(SetSelectedProvince::new(def)).await?;
+                            }
+                        }
+                    }
                 }
+                MapDisplayMode::StrategicRegions => {
+                    if selected_strategic_region.is_none() {
+                        if let Some(sr_id) =
+                            map.send(GetStrategicRegionIdFromPoint::new(point)).await?
+                        {
+                            if let Some(sr) = map.send(GetStrategicRegionFromId::new(sr_id)).await?
+                            {
+                                self.selection
+                                    .send(SetSelectedStrategicRegion::new(sr))
+                                    .await?;
+                            }
+                        }
+                    }
+                }
+                MapDisplayMode::States => {}
+                m => {}
             }
         }
         let continent_index = selected_province
@@ -72,8 +104,6 @@ impl RightPanelRenderer {
                 TopBottomPanel::top("info_panel")
                     .min_height(200.0)
                     .show_inside(ui, |ui| match map_mode {
-                        MapDisplayMode::HeightMap => {}
-                        MapDisplayMode::Terrain => {}
                         MapDisplayMode::Provinces => {
                             ui.label("Province Information");
                             if let (Some(_), Some(_), Some(definition)) =
@@ -90,7 +120,19 @@ impl RightPanelRenderer {
                                 continent.map(|c| ui.label(format!("Continent: {:?}", c.0)));
                             }
                         }
-                        MapDisplayMode::Rivers => {}
+                        MapDisplayMode::States => {}
+                        MapDisplayMode::StrategicRegions => {
+                            ui.label("Strategic Region Information");
+                            if let (Some(_), Some(_), Some(sr)) =
+                                (map_addr, selected_point, selected_strategic_region)
+                            {
+                                ui.label(format!("Id: {:?}", sr.id.0));
+                                ui.label(format!("Name: {:?}", sr.name.0));
+                            }
+                        }
+                        MapDisplayMode::HeightMap
+                        | MapDisplayMode::Terrain
+                        | MapDisplayMode::Rivers => {}
                         m => {
                             ui.label(format!("Unknown map mode: {m}"));
                         }

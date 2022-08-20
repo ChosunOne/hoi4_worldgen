@@ -664,6 +664,11 @@ impl Map {
 
         Ok(())
     }
+
+    fn province_id_from_point(&self, point: Pos2) -> Option<ProvinceId> {
+        let color = self.provinces.get_pixel(point.x as u32, point.y as u32);
+        self.provinces_by_color.get(color).copied()
+    }
 }
 
 impl Actor for Map {
@@ -685,6 +690,21 @@ impl GetProvinceIdFromPoint {
     }
 }
 
+/// A request to get a `StrategicRegionId` from a supplied texture uv coordinate
+#[derive(Message, Debug)]
+#[rtype(result = "Option<StrategicRegionId>")]
+#[non_exhaustive]
+pub struct GetStrategicRegionIdFromPoint(pub Pos2);
+
+impl GetStrategicRegionIdFromPoint {
+    /// Creates a new request for a strategic region id
+    #[inline]
+    #[must_use]
+    pub const fn new(pos: Pos2) -> Self {
+        Self(pos)
+    }
+}
+
 /// A request to get a `Definition` from a supplied `ProvinceId`
 #[derive(Message, Debug)]
 #[rtype(result = "Option<Definition>")]
@@ -696,6 +716,20 @@ impl GetProvinceDefinitionFromId {
     #[inline]
     #[must_use]
     pub const fn new(id: ProvinceId) -> Self {
+        Self(id)
+    }
+}
+
+#[derive(Message, Debug)]
+#[rtype(result = "Option<StrategicRegion>")]
+#[non_exhaustive]
+pub struct GetStrategicRegionFromId(pub StrategicRegionId);
+
+impl GetStrategicRegionFromId {
+    /// Creates a new request for a strategic region id
+    #[inline]
+    #[must_use]
+    pub const fn new(id: StrategicRegionId) -> Self {
         Self(id)
     }
 }
@@ -780,8 +814,39 @@ impl Handler<GetProvinceIdFromPoint> for Map {
     #[inline]
     fn handle(&mut self, msg: GetProvinceIdFromPoint, _ctx: &mut Context<Self>) -> Self::Result {
         let point = msg.0;
-        let color = self.provinces.get_pixel(point.x as u32, point.y as u32);
-        self.provinces_by_color.get(color).copied()
+        self.province_id_from_point(point)
+    }
+}
+
+impl Handler<GetStrategicRegionIdFromPoint> for Map {
+    type Result = Option<StrategicRegionId>;
+    #[inline]
+    fn handle(
+        &mut self,
+        msg: GetStrategicRegionIdFromPoint,
+        _ctx: &mut Context<Self>,
+    ) -> Self::Result {
+        let point = msg.0;
+        if self.strategic_region_map.is_some() {
+            let color = self.provinces.get_pixel(point.x as u32, point.y as u32);
+            let province_id = self.provinces_by_color.get(color).copied();
+            if let Some(id) = province_id {
+                return self.strategic_regions_by_province.get(&id).copied();
+            }
+        }
+
+        None
+    }
+}
+
+impl Handler<GetStrategicRegionFromId> for Map {
+    type Result = Option<StrategicRegion>;
+    #[inline]
+    fn handle(&mut self, msg: GetStrategicRegionFromId, _ctx: &mut Context<Self>) -> Self::Result {
+        self.strategic_regions
+            .strategic_regions
+            .get(&msg.0)
+            .cloned()
     }
 }
 
