@@ -2,7 +2,7 @@ use crate::ui::map_loader::GetMap;
 use crate::ui::map_mode::GetMapMode;
 use crate::ui::selection::{
     GetSelectedPoint, GetSelectedProvince, GetSelectedState, GetSelectedStrategicRegion, Selection,
-    SetSelectedProvince, SetSelectedStrategicRegion,
+    SetSelectedProvince, SetSelectedState, SetSelectedStrategicRegion,
 };
 use crate::{MapError, MapLoader, MapMode};
 use actix::Addr;
@@ -13,8 +13,8 @@ use world_gen::components::prelude::{Definition, StrategicRegion};
 use world_gen::components::state::State;
 use world_gen::components::wrappers::Continent;
 use world_gen::map::{
-    GetContinentFromIndex, GetProvinceDefinitionFromId, GetProvinceIdFromPoint,
-    GetStrategicRegionFromId, GetStrategicRegionIdFromPoint, Map,
+    GetContinentFromIndex, GetProvinceDefinitionFromId, GetProvinceIdFromPoint, GetStateFromId,
+    GetStateIdFromPoint, GetStrategicRegionFromId, GetStrategicRegionIdFromPoint, Map,
 };
 use world_gen::MapDisplayMode;
 
@@ -83,7 +83,15 @@ impl RightPanelRenderer {
                         }
                     }
                 }
-                MapDisplayMode::States => {}
+                MapDisplayMode::States => {
+                    if selected_state.is_none() {
+                        if let Some(s_id) = map.send(GetStateIdFromPoint::new(point)).await? {
+                            if let Some(s) = map.send(GetStateFromId::new(s_id)).await? {
+                                self.selection.send(SetSelectedState::new(s)).await?;
+                            }
+                        }
+                    }
+                }
                 m => {}
             }
         }
@@ -120,7 +128,35 @@ impl RightPanelRenderer {
                                 continent.map(|c| ui.label(format!("Continent: {:?}", c.0)));
                             }
                         }
-                        MapDisplayMode::States => {}
+                        MapDisplayMode::States => {
+                            ui.label("State Information");
+                            if let (Some(_), Some(_), Some(state)) =
+                                (map_addr, selected_point, selected_state)
+                            {
+                                ui.label(format!("Id: {:?}", state.id.0));
+                                ui.label(format!("Name: {:?}", state.name.0));
+                                ui.label(format!(
+                                    "Manpower: {:?}",
+                                    state.manpower[state.manpower.len() - 1].0
+                                ));
+                                if let Some(supplies) = state.local_supplies {
+                                    ui.label(format!("Local Supplies: {:?}", supplies.0));
+                                }
+                                if let Some(max_level_factor) = state.buildings_max_level_factor {
+                                    ui.label(format!(
+                                        "Buildings Max Level Factor: {:?}",
+                                        max_level_factor.0
+                                    ));
+                                }
+                                if let Some(impassable) = state.impassable {
+                                    ui.label(format!("Impassable: {:?}", impassable));
+                                }
+                                ui.label(format!(
+                                    "Category: {:?}",
+                                    state.state_category[state.state_category.len() - 1].0
+                                ));
+                            }
+                        }
                         MapDisplayMode::StrategicRegions => {
                             ui.label("Strategic Region Information");
                             if let (Some(_), Some(_), Some(sr)) =

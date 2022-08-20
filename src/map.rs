@@ -705,6 +705,21 @@ impl GetStrategicRegionIdFromPoint {
     }
 }
 
+/// A request to get a `StrategicRegionId` from a supplied texture uv coordinate
+#[derive(Message, Debug)]
+#[rtype(result = "Option<StateId>")]
+#[non_exhaustive]
+pub struct GetStateIdFromPoint(pub Pos2);
+
+impl GetStateIdFromPoint {
+    /// Creates a new request for a state id
+    #[inline]
+    #[must_use]
+    pub const fn new(pos: Pos2) -> Self {
+        Self(pos)
+    }
+}
+
 /// A request to get a `Definition` from a supplied `ProvinceId`
 #[derive(Message, Debug)]
 #[rtype(result = "Option<Definition>")]
@@ -720,6 +735,7 @@ impl GetProvinceDefinitionFromId {
     }
 }
 
+/// A request to get a `StrategicRegion` from a given `StrategicRegionId`
 #[derive(Message, Debug)]
 #[rtype(result = "Option<StrategicRegion>")]
 #[non_exhaustive]
@@ -730,6 +746,21 @@ impl GetStrategicRegionFromId {
     #[inline]
     #[must_use]
     pub const fn new(id: StrategicRegionId) -> Self {
+        Self(id)
+    }
+}
+
+/// A request to get a `State` from a given `StateId`.
+#[derive(Message, Debug)]
+#[rtype(result = "Option<State>")]
+#[non_exhaustive]
+pub struct GetStateFromId(pub StateId);
+
+impl GetStateFromId {
+    /// Creates a new request for a state id
+    #[inline]
+    #[must_use]
+    pub const fn new(id: StateId) -> Self {
         Self(id)
     }
 }
@@ -839,6 +870,23 @@ impl Handler<GetStrategicRegionIdFromPoint> for Map {
     }
 }
 
+impl Handler<GetStateIdFromPoint> for Map {
+    type Result = Option<StateId>;
+
+    #[inline]
+    fn handle(&mut self, msg: GetStateIdFromPoint, _ctx: &mut Self::Context) -> Self::Result {
+        let point = msg.0;
+        if self.state_map.is_some() {
+            let color = self.provinces.get_pixel(point.x as u32, point.y as u32);
+            let province_id = self.provinces_by_color.get(color).copied();
+            if let Some(id) = province_id {
+                return self.states_by_province.get(&id).copied();
+            }
+        }
+        None
+    }
+}
+
 impl Handler<GetStrategicRegionFromId> for Map {
     type Result = Option<StrategicRegion>;
     #[inline]
@@ -847,6 +895,14 @@ impl Handler<GetStrategicRegionFromId> for Map {
             .strategic_regions
             .get(&msg.0)
             .cloned()
+    }
+}
+
+impl Handler<GetStateFromId> for Map {
+    type Result = Option<State>;
+    #[inline]
+    fn handle(&mut self, msg: GetStateFromId, _ctx: &mut Context<Self>) -> Self::Result {
+        self.states.get(&msg.0).cloned()
     }
 }
 

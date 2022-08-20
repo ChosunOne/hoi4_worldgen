@@ -52,8 +52,8 @@ pub struct State {
     pub id: StateId,
     /// The name of the state
     pub name: StateName,
-    /// How much manpower the state starts with
-    ///     /// Duplicated because people tend to make mistakes.  The game only considers the last entry however.
+    /// How much manpower the state starts with.  
+    /// Duplicated because people tend to make mistakes.  The game only considers the last entry however.
     #[jomini(duplicated)]
     pub manpower: Vec<Manpower>,
     /// The state category.  
