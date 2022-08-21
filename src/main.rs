@@ -175,7 +175,7 @@ impl App for WorldGenApp {
         ctx.request_repaint();
     }
 
-    fn on_exit(&mut self, _gl: &eframe::glow::Context) {
+    fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {
         trace!("on_exit");
         if let Some(s) = &self.system {
             s.stop();

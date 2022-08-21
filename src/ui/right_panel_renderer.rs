@@ -189,7 +189,7 @@ fn render_strategic_region_info(
     selected_regions: &SelectedRegions,
     ui: &mut Ui,
 ) {
-    ui.label("Strategic Region Information");
+    ui.heading("Strategic Region Information");
     if let (Some(_), Some(_), Some(sr)) = (
         map_addr,
         selected_regions.selected_point,
@@ -205,7 +205,7 @@ fn render_state_info(
     selected_regions: &SelectedRegions,
     ui: &mut Ui,
 ) {
-    ui.label("State Information");
+    ui.heading("State Information");
     if let (Some(_), Some(_), Some(state)) = (
         map_addr,
         selected_regions.selected_point,
@@ -242,7 +242,7 @@ fn render_province_info(
     continent: Option<Continent>,
     ui: &mut Ui,
 ) {
-    ui.label("Province Information");
+    ui.heading("Province Information");
     if let (Some(_), Some(_), Some(definition)) = (
         map_addr,
         selected_regions.selected_point,

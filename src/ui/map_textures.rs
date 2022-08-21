@@ -1,5 +1,5 @@
 use actix::{Actor, AsyncContext, Context as ActixContext, Handler, Message};
-use egui::{ColorImage, Context, TextureHandle};
+use egui::{ColorImage, Context, TextureFilter, TextureHandle};
 use image::{DynamicImage, RgbImage};
 use tokio::task::JoinHandle;
 use world_gen::MapDisplayMode;
@@ -160,7 +160,7 @@ fn load_texture(rgb_image: RgbImage, context: &Context) -> TextureHandle {
     let image_buffer = DynamicImage::ImageRgb8(rgb_image).into_rgba8();
     let pixels = image_buffer.as_flat_samples();
     let color_image = ColorImage::from_rgba_unmultiplied(size, pixels.as_slice());
-    context.load_texture("map", color_image)
+    context.load_texture("map", color_image, TextureFilter::Nearest)
 }
 
 impl Handler<GetTexture> for MapTextures {
