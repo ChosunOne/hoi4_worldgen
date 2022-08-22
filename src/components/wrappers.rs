@@ -67,7 +67,9 @@ impl From<String> for BuildingId {
 pub struct ProvinceId(pub i32);
 
 /// A temperature value.
-#[derive(Copy, Clone, Debug, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr)]
+#[derive(
+    Copy, Clone, Debug, Default, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr,
+)]
 #[non_exhaustive]
 pub struct Temperature(pub f32);
 

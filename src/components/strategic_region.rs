@@ -130,11 +130,11 @@ pub struct Weather {
 #[non_exhaustive]
 pub struct Period {
     /// The start and end dates of the period
-    pub between: Vec<DayMonth>,
+    pub between: [DayMonth; 2],
     /// The temperature during the period
-    pub temperature: Vec<Temperature>,
+    pub temperature: [Temperature; 2],
     /// The range of temperatures during the day & night
-    pub temperature_day_night: Option<Vec<Temperature>>,
+    pub temperature_day_night: Option<[Temperature; 2]>,
     /// The weights for each type of `WeatherEffect`
     pub weather_effects: HashMap<WeatherEffect, Weight>,
     /// The minimum snow level during the period
@@ -150,9 +150,9 @@ impl Period {
         reader: &ObjectReader<'_, '_, Windows1252Encoding>,
     ) -> Result<Self, MapError> {
         let fields = reader.fields().collect::<Vec<_>>();
-        let mut between = vec![];
-        let mut temperature = vec![];
-        let mut temperature_day_night: Option<Vec<Temperature>> = None;
+        let mut between_vec = vec![];
+        let mut temperature_vec = vec![];
+        let mut temperature_day_night_vec: Option<Vec<Temperature>> = None;
         let mut weather_effects = HashMap::new();
         let mut min_snow_level = SnowLevel(0.0);
 
@@ -164,7 +164,7 @@ impl Period {
                     for val in raw_values.values() {
                         let v_string = val.read_string()?;
                         let day_month = v_string.parse::<DayMonth>()?;
-                        between.push(day_month);
+                        between_vec.push(day_month);
                     }
                 }
                 "temperature" => {
@@ -172,7 +172,7 @@ impl Period {
                     for val in raw_values.values() {
                         let v_string = val.read_string()?;
                         let t = v_string.parse::<Temperature>()?;
-                        temperature.push(t);
+                        temperature_vec.push(t);
                     }
                 }
                 "temperature_day_night" => {
@@ -183,9 +183,9 @@ impl Period {
                         let t = v_string.parse::<Temperature>()?;
                         temps.push(t);
                     }
-                    match temperature_day_night.as_mut() {
+                    match temperature_day_night_vec.as_mut() {
                         Some(v) => v.append(&mut temps),
-                        None => temperature_day_night = Some(temps),
+                        None => temperature_day_night_vec = Some(temps),
                     }
                 }
                 "min_snow_level" => {
@@ -201,6 +201,22 @@ impl Period {
                 }
             }
         }
+
+        let mut temperature_day_night = None;
+        if let Some(temps_vec) = &temperature_day_night_vec {
+            let mut temps = [Temperature::default(), Temperature::default()];
+            let temps_slice = temps_vec.get(0..2).ok_or(MapError::InvalidPeriod)?;
+            temps.copy_from_slice(temps_slice);
+            temperature_day_night = Some(temps);
+        }
+
+        let mut between = [DayMonth::default(), DayMonth::default()];
+        let between_slice = between_vec.get(0..2).ok_or(MapError::InvalidPeriod)?;
+        between.copy_from_slice(between_slice);
+
+        let mut temperature = [Temperature::default(), Temperature::default()];
+        let temperature_slice = temperature_vec.get(0..2).ok_or(MapError::InvalidPeriod)?;
+        temperature.copy_from_slice(temperature_slice);
 
         Ok(Self {
             between,
@@ -399,11 +415,11 @@ mod tests {
                 weather: Weather {
                     period: vec![
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.0").expect("invalid daymonth"),
                                 DayMonth::from_str("30.0").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(14.0), Temperature(18.0)],
+                            temperature: [Temperature(14.0), Temperature(18.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.9)),
@@ -418,11 +434,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.1").expect("invalid daymonth"),
                                 DayMonth::from_str("27.1").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(15.0), Temperature(19.0)],
+                            temperature: [Temperature(15.0), Temperature(19.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.9)),
@@ -437,11 +453,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.2").expect("invalid daymonth"),
                                 DayMonth::from_str("30.2").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(19.0), Temperature(21.0)],
+                            temperature: [Temperature(19.0), Temperature(21.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.8)),
@@ -456,11 +472,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.3").expect("invalid daymonth"),
                                 DayMonth::from_str("29.3").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(20.0), Temperature(23.0)],
+                            temperature: [Temperature(20.0), Temperature(23.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.7)),
@@ -475,11 +491,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.4").expect("invalid daymonth"),
                                 DayMonth::from_str("30.4").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(20.0), Temperature(23.0)],
+                            temperature: [Temperature(20.0), Temperature(23.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.5)),
@@ -494,11 +510,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.5").expect("invalid daymonth"),
                                 DayMonth::from_str("29.5").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(20.0), Temperature(23.0)],
+                            temperature: [Temperature(20.0), Temperature(23.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.4)),
@@ -513,11 +529,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.6").expect("invalid daymonth"),
                                 DayMonth::from_str("30.6").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(17.0), Temperature(20.0)],
+                            temperature: [Temperature(17.0), Temperature(20.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.3)),
@@ -532,11 +548,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.7").expect("invalid daymonth"),
                                 DayMonth::from_str("30.7").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(17.0), Temperature(20.0)],
+                            temperature: [Temperature(17.0), Temperature(20.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.3)),
@@ -551,11 +567,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.8").expect("invalid daymonth"),
                                 DayMonth::from_str("29.8").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(17.0), Temperature(20.0)],
+                            temperature: [Temperature(17.0), Temperature(20.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.4)),
@@ -570,11 +586,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.9").expect("invalid daymonth"),
                                 DayMonth::from_str("30.9").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(14.0), Temperature(18.0)],
+                            temperature: [Temperature(14.0), Temperature(18.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.6)),
@@ -589,11 +605,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.10").expect("invalid daymonth"),
                                 DayMonth::from_str("29.10").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(12.0), Temperature(18.0)],
+                            temperature: [Temperature(12.0), Temperature(18.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.8)),
@@ -608,11 +624,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("0.11").expect("invalid daymonth"),
                                 DayMonth::from_str("30.11").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(12.0), Temperature(17.0)],
+                            temperature: [Temperature(12.0), Temperature(17.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(0.9)),
@@ -627,11 +643,11 @@ mod tests {
                             min_snow_level: SnowLevel(0.0)
                         },
                         Period {
-                            between: vec![
+                            between: [
                                 DayMonth::from_str("4.11").expect("invalid daymonth"),
                                 DayMonth::from_str("21.11").expect("invalid daymonth")
                             ],
-                            temperature: vec![Temperature(-10.0), Temperature(35.0)],
+                            temperature: [Temperature(-10.0), Temperature(35.0)],
                             temperature_day_night: None,
                             weather_effects: HashMap::from([
                                 (WeatherEffect("no_phenomenon".to_owned()), Weight(1.5)),

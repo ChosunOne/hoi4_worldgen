@@ -166,6 +166,8 @@ pub enum MapError {
     RecvError(#[from] std::sync::mpsc::RecvError),
     #[error("{0}")]
     RegionNotFoundForProvince(ProvinceId),
+    #[error("Invalid Period")]
+    InvalidPeriod,
 }
 
 /// Appends a directory to the front of a given path.

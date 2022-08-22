@@ -6,13 +6,20 @@ use std::num::ParseIntError;
 use std::str::FromStr;
 
 /// Zero-indexed day of the month (0-30) and month of the year (0-11).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 #[non_exhaustive]
 pub struct DayMonth {
     /// The zero-indexed day of the month (0-30).
     pub day: u8,
     /// The zero-indexed month of the year (0-11).
     pub month: u8,
+}
+
+impl Display for DayMonth {
+    #[inline]
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}/{}", self.day + 1, self.month + 1)
+    }
 }
 
 /// An error parsing a `DayMonth`.

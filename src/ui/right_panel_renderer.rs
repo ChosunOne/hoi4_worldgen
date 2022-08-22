@@ -10,6 +10,7 @@ use egui::{Context, Pos2, SidePanel, TopBottomPanel, Ui};
 use indicatif::InMemoryTerm;
 use log::{debug, trace};
 use std::fmt::Display;
+use std::hash::Hash;
 use world_gen::components::prelude::{Definition, StrategicRegion};
 use world_gen::components::state::State;
 use world_gen::components::wrappers::Continent;
@@ -169,20 +170,22 @@ fn render_info_panel(
     TopBottomPanel::top("info_panel")
         .min_height(200.0)
         .max_height(600.0)
-        .show_inside(ui, |ui| match map_mode {
-            MapDisplayMode::Provinces => {
-                render_province_info(map_addr, selected_regions, continent, ui);
-            }
-            MapDisplayMode::States => {
-                render_state_info(map_addr, selected_regions, ui);
-            }
-            MapDisplayMode::StrategicRegions => {
-                render_strategic_region_info(map_addr, selected_regions, ui);
-            }
-            MapDisplayMode::HeightMap | MapDisplayMode::Terrain | MapDisplayMode::Rivers => {}
-            m => {
-                ui.label(format!("Unknown map mode: {m}"));
-            }
+        .show_inside(ui, |ui| {
+            egui::ScrollArea::vertical().show(ui, |ui| match map_mode {
+                MapDisplayMode::Provinces => {
+                    render_province_info(map_addr, selected_regions, continent, ui);
+                }
+                MapDisplayMode::States => {
+                    render_state_info(map_addr, selected_regions, ui);
+                }
+                MapDisplayMode::StrategicRegions => {
+                    render_strategic_region_info(map_addr, selected_regions, ui);
+                }
+                MapDisplayMode::HeightMap | MapDisplayMode::Terrain | MapDisplayMode::Rivers => {}
+                m => {
+                    ui.label(format!("Unknown map mode: {m}"));
+                }
+            });
         });
 }
 
@@ -199,7 +202,31 @@ fn render_strategic_region_info(
     ) {
         ui.label(format!("Id: {:?}", sr.id.0));
         ui.label(format!("Name: {:?}", sr.name.0));
-        list_items(ui, &sr.provinces.iter().collect::<Vec<_>>());
+        list_items(
+            ui,
+            &sr.provinces.iter().collect::<Vec<_>>(),
+            "Provinces",
+            "strategic_region_provinces_list",
+        );
+        ui.collapsing("Weather", |ui| {
+            egui::ScrollArea::vertical()
+                .auto_shrink([true, true])
+                .id_source("strategic_region_weather")
+                .show(ui, |ui| {
+                    for (i, period) in sr.weather.period.iter().enumerate() {
+                        egui::CollapsingHeader::new("Period")
+                            .id_source(i)
+                            .show(ui, |ui| {
+                                ui.label(format!("Start: {}", period.between[0]));
+                                ui.label(format!("End: {}", period.between[1]));
+                                ui.label(format!(
+                                    "Temperature: {} - {}",
+                                    period.temperature[0].0, period.temperature[1].0
+                                ));
+                            });
+                    }
+                });
+        });
     }
 }
 
@@ -253,14 +280,20 @@ fn render_state_info(
                 });
             });
         }
-        list_items(ui, &state.provinces.iter().collect::<Vec<_>>());
+        list_items(
+            ui,
+            &state.provinces.iter().collect::<Vec<_>>(),
+            "Provinces",
+            "state_provinces_list",
+        );
     }
 }
 
-fn list_items<T: Display>(ui: &mut Ui, list: &[T]) {
-    ui.collapsing("Provinces", |ui| {
+fn list_items<T: Display>(ui: &mut Ui, list: &[T], heading: &str, id: impl Hash) {
+    ui.collapsing(heading, |ui| {
         egui::ScrollArea::vertical()
             .auto_shrink([true, true])
+            .id_source(id)
             .show(ui, |ui| {
                 for item in list {
                     ui.label(format!("{}", item));
