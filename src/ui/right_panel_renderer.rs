@@ -167,6 +167,7 @@ fn render_info_panel(
 ) {
     TopBottomPanel::top("info_panel")
         .min_height(200.0)
+        .max_height(600.0)
         .show_inside(ui, |ui| match map_mode {
             MapDisplayMode::Provinces => {
                 render_province_info(map_addr, selected_regions, continent, ui);
@@ -233,6 +234,32 @@ fn render_state_info(
             "Category: {:?}",
             state.state_category[state.state_category.len() - 1].0
         ));
+        if let Some(history) = &state.history {
+            ui.collapsing("History", |ui| {
+                ui.label(format!("Owner: {:?}", history.owner.0));
+                if let Some(controller) = &history.controller {
+                    ui.label(format!("Controller: {:?}", controller.0));
+                }
+                ui.collapsing("Victory Points", |ui| {
+                    egui::ScrollArea::vertical()
+                        .auto_shrink([true, true])
+                        .show(ui, |ui| {
+                            for (id, vp) in &history.victory_points {
+                                ui.label(format!("{:?}: {:?}", id.0, vp.0));
+                            }
+                        });
+                });
+            });
+        }
+        ui.collapsing("Provinces", |ui| {
+            egui::ScrollArea::vertical()
+                .auto_shrink([true, true])
+                .show(ui, |ui| {
+                    for province in &state.provinces {
+                        ui.label(format!("{:?}", province.0));
+                    }
+                });
+        });
     }
 }
 
