@@ -68,7 +68,7 @@ impl RightPanelRenderer {
                 None
             };
         SidePanel::right("right_panel")
-            .resizable(false)
+            .resizable(true)
             .min_width(200.0)
             .show(ctx, |ui| {
                 render_info_panel(map_mode, &map_addr, &selected_regions, continent, ui);
@@ -170,22 +170,27 @@ fn render_info_panel(
     TopBottomPanel::top("info_panel")
         .min_height(200.0)
         .max_height(600.0)
+        .resizable(true)
         .show_inside(ui, |ui| {
-            egui::ScrollArea::vertical().show(ui, |ui| match map_mode {
-                MapDisplayMode::Provinces => {
-                    render_province_info(map_addr, selected_regions, continent, ui);
-                }
-                MapDisplayMode::States => {
-                    render_state_info(map_addr, selected_regions, ui);
-                }
-                MapDisplayMode::StrategicRegions => {
-                    render_strategic_region_info(map_addr, selected_regions, ui);
-                }
-                MapDisplayMode::HeightMap | MapDisplayMode::Terrain | MapDisplayMode::Rivers => {}
-                m => {
-                    ui.label(format!("Unknown map mode: {m}"));
-                }
-            });
+            egui::ScrollArea::vertical()
+                .auto_shrink([true, false])
+                .show(ui, |ui| match map_mode {
+                    MapDisplayMode::Provinces => {
+                        render_province_info(map_addr, selected_regions, continent, ui);
+                    }
+                    MapDisplayMode::States => {
+                        render_state_info(map_addr, selected_regions, ui);
+                    }
+                    MapDisplayMode::StrategicRegions => {
+                        render_strategic_region_info(map_addr, selected_regions, ui);
+                    }
+                    MapDisplayMode::HeightMap
+                    | MapDisplayMode::Terrain
+                    | MapDisplayMode::Rivers => {}
+                    m => {
+                        ui.label(format!("Unknown map mode: {m}"));
+                    }
+                });
         });
 }
 
@@ -202,20 +207,22 @@ fn render_strategic_region_info(
     ) {
         ui.label(format!("Id: {:?}", sr.id.0));
         ui.label(format!("Name: {:?}", sr.name.0));
+        let mut provinces = sr.provinces.iter().collect::<Vec<_>>();
+        provinces.sort();
         list_items(
             ui,
-            &sr.provinces.iter().collect::<Vec<_>>(),
+            &provinces,
             "Provinces",
             "strategic_region_provinces_list",
         );
         ui.collapsing("Weather", |ui| {
             egui::ScrollArea::vertical()
-                .auto_shrink([true, true])
+                .auto_shrink([true, false])
                 .id_source("strategic_region_weather")
                 .show(ui, |ui| {
                     for (i, period) in sr.weather.period.iter().enumerate() {
-                        egui::CollapsingHeader::new("Period")
-                            .id_source(i)
+                        egui::CollapsingHeader::new(format!("Period {}", period.between[0]))
+                            .id_source(format!("sr_{}_period_{}", sr.id.0, i))
                             .show(ui, |ui| {
                                 ui.label(format!("Start: {}", period.between[0]));
                                 ui.label(format!("End: {}", period.between[1]));
@@ -223,6 +230,23 @@ fn render_strategic_region_info(
                                     "Temperature: {} - {}",
                                     period.temperature[0].0, period.temperature[1].0
                                 ));
+                                if let Some(tdn) = period.temperature_day_night {
+                                    ui.label(format!(
+                                        "Temperature Day/Night: {} - {}",
+                                        tdn[0].0, tdn[1].0
+                                    ));
+                                }
+                                ui.label(format!("Min. Snow Level: {}", period.min_snow_level.0));
+                                egui::CollapsingHeader::new("Weather Effects")
+                                    .id_source(format!(
+                                        "sr_{}_period_{}_weather_effects",
+                                        sr.id.0, i
+                                    ))
+                                    .show(ui, |ui| {
+                                        for (effect, weight) in period.weather_effects.iter() {
+                                            ui.label(format!("{}: {}", effect.0, weight.0));
+                                        }
+                                    });
                             });
                     }
                 });
@@ -280,12 +304,9 @@ fn render_state_info(
                 });
             });
         }
-        list_items(
-            ui,
-            &state.provinces.iter().collect::<Vec<_>>(),
-            "Provinces",
-            "state_provinces_list",
-        );
+        let mut provinces = state.provinces.iter().collect::<Vec<_>>();
+        provinces.sort();
+        list_items(ui, &provinces, "Provinces", "state_provinces_list");
     }
 }
 

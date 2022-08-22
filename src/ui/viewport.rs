@@ -78,7 +78,7 @@ impl Handler<SetViewportArea> for Viewport {
 impl Handler<Scroll> for Viewport {
     type Result = ();
 
-    fn handle(&mut self, msg: Scroll, ctx: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: Scroll, _ctx: &mut Self::Context) -> Self::Result {
         let scroll = msg.0;
         if scroll > 0.0 {
             self.zoom_level = self.zoom_level.map_or(Some(0.01), |z| {
