@@ -8,17 +8,17 @@ edition = "2021"
 [dependencies]
 csv = "1.1.6"
 derive_more = "0.99.17"
-serde = { version = "1.0.140", features = ["derive"] }
+serde = { version = "1.0.144", features = ["derive"] }
 jomini = "0.19.1"
 image = "0.24.3"
-thiserror = "1.0.31"
+thiserror = "1.0.32"
 log = "0.4.17"
 env_logger = "0.9.0"
 egui = "0.19.0"
 eframe = "0.19.0"
 rfd = "0.10.0"
-tokio = {version = "1.20.1", features = ["full"] }
-indicatif = {version = "0.17.0", features = ["in_memory"]}
+tokio = { version = "1.20.1", features = ["full"] }
+indicatif = { version = "0.17.0", features = ["in_memory"] }
 actix = "0.13.0"
 rand = "0.8.5"
 
