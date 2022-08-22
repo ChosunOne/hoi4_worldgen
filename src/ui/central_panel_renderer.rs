@@ -93,7 +93,7 @@ impl CentralPanelRenderer {
                     }
                 }
             } else if self.map.is_some() {
-                ui.label("Loading...");
+                ui.spinner();
             }
         });
         if let Some(point) = selected_point {

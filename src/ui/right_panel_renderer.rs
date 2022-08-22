@@ -148,7 +148,7 @@ impl RightPanelRenderer {
         TopBottomPanel::bottom("log_panel")
             .max_height(200.0)
             .show_inside(ui, |ui| {
-                ui.label("Log Panel");
+                ui.heading("Log Panel");
                 ui.set_style(egui::Style {
                     wrap: Some(false),
                     ..Default::default()

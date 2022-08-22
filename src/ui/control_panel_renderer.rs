@@ -51,7 +51,7 @@ impl ControlPanelRenderer {
                     }
                 });
                 if is_map_loading {
-                    ui.label("Loading map...");
+                    ui.spinner();
                 }
             } else {
                 ui.heading("Please select a root folder");
