@@ -9,6 +9,7 @@ use actix::Addr;
 use egui::{Context, Pos2, SidePanel, TopBottomPanel, Ui};
 use indicatif::InMemoryTerm;
 use log::{debug, trace};
+use std::fmt::Display;
 use world_gen::components::prelude::{Definition, StrategicRegion};
 use world_gen::components::state::State;
 use world_gen::components::wrappers::Continent;
@@ -198,6 +199,7 @@ fn render_strategic_region_info(
     ) {
         ui.label(format!("Id: {:?}", sr.id.0));
         ui.label(format!("Name: {:?}", sr.name.0));
+        list_items(ui, &sr.provinces.iter().collect::<Vec<_>>());
     }
 }
 
@@ -251,16 +253,20 @@ fn render_state_info(
                 });
             });
         }
-        ui.collapsing("Provinces", |ui| {
-            egui::ScrollArea::vertical()
-                .auto_shrink([true, true])
-                .show(ui, |ui| {
-                    for province in &state.provinces {
-                        ui.label(format!("{:?}", province.0));
-                    }
-                });
-        });
+        list_items(ui, &state.provinces.iter().collect::<Vec<_>>());
     }
+}
+
+fn list_items<T: Display>(ui: &mut Ui, list: &[T]) {
+    ui.collapsing("Provinces", |ui| {
+        egui::ScrollArea::vertical()
+            .auto_shrink([true, true])
+            .show(ui, |ui| {
+                for item in list {
+                    ui.label(format!("{}", item));
+                }
+            });
+    });
 }
 
 fn render_province_info(
