@@ -665,6 +665,7 @@ impl Map {
         Ok(())
     }
 
+    /// Gets the province id from a given point.
     fn province_id_from_point(&self, point: Pos2) -> Option<ProvinceId> {
         let color = self.provinces.get_pixel(point.x as u32, point.y as u32);
         self.provinces_by_color.get(color).copied()

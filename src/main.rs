@@ -96,6 +96,7 @@ impl WorldGenApp {
                     root_path,
                     map_loader.clone(),
                     map_mode.clone(),
+                    map_textures.clone(),
                     terminal.clone(),
                 );
                 trace!("Starting selection");

@@ -54,13 +54,6 @@ impl CentralPanelRenderer {
                 self.map = Some(m);
             }
         }
-        if let (Some(map), None) = (self.map.clone(), texture.clone()) {
-            if let Some(image) = map.send(GetMapImage::from(map_mode)).await? {
-                self.map_textures
-                    .send(LoadImage::from_display_mode(map_mode, image, ctx.clone()))
-                    .await?;
-            }
-        }
         let viewport_rect: Rect = self.viewport.send(GetViewportArea).await?.map_or(
             Rect::from([Pos2::new(0.0, 0.0), Pos2::new(1.0, 1.0)]),
             |r| r,
