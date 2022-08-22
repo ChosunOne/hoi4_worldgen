@@ -14,8 +14,8 @@ use std::str::FromStr;
 /// It's important that the provinces are listed in order from beginning to end of the railway and
 /// that they are adjacent. Also, if the same provinces are listed between two railways, the levels
 /// are added together.  
-// Rivers can act as supply routes, as long as there is a supply node (or port) in a province
-// adjacent to the river.
+/// Rivers can act as supply routes, as long as there is a supply node (or port) in a province
+/// adjacent to the river.
 #[derive(Clone, Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub struct Railway {
@@ -34,7 +34,7 @@ impl FromStr for Railway {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let parts = s.split(' ').collect::<Vec<_>>();
         let level = parts
-            .get(0)
+            .first()
             .ok_or_else(|| MapError::InvalidRailway(s.to_owned()))?
             .parse::<RailLevel>()?;
         let length = parts

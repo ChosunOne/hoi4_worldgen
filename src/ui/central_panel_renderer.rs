@@ -6,7 +6,8 @@ use crate::ui::viewport::{GetViewportArea, GetZoomLevel, Scroll, SetViewportArea
 use crate::{MapError, MapLoader, MapMode, MapTextures, Selection, Viewport};
 use actix::Addr;
 use egui::{
-    CentralPanel, Context, ImageButton, Pos2, Rect, Response, Sense, TextureHandle, Ui, Vec2,
+    CentralPanel, Context, ImageButton, Pos2, Rect, Response, Sense, Spinner, TextureHandle, Ui,
+    Vec2,
 };
 use world_gen::map::{GetMapImage, Map};
 use world_gen::MapDisplayMode;
@@ -40,6 +41,9 @@ impl CentralPanelRenderer {
         }
     }
 
+    #[allow(clippy::else_if_without_else)]
+    #[allow(clippy::cast_possible_truncation)]
+    #[allow(clippy::as_conversions)]
     pub async fn render_central_panel(&mut self, ctx: &Context) -> Result<(), MapError> {
         let map_mode: MapDisplayMode = self.map_mode.send(GetMapMode).await?;
         let texture: Option<TextureHandle> =
@@ -67,11 +71,12 @@ impl CentralPanelRenderer {
         CentralPanel::default().show(ctx, |ui| {
             if let Some(tex) = &texture {
                 let tex_size = tex.size_vec2();
-                let size = ui.ctx().available_rect().size() * 0.8;
+                let size = ui.ctx().available_rect().size() * 0.9;
                 let x_scale = size.x / tex_size.x;
                 let y_scale = size.y / tex_size.y;
                 let min_scale = x_scale.min(y_scale);
                 let image_button = ImageButton::new(tex, tex_size * min_scale)
+                    .frame(false)
                     .uv(viewport_rect)
                     .sense(Sense::click_and_drag());
                 let map = ui.add(image_button);
@@ -93,7 +98,9 @@ impl CentralPanelRenderer {
                     }
                 }
             } else if self.map.is_some() {
-                ui.spinner();
+                ui.centered_and_justified(|ui| {
+                    ui.add(Spinner::new().size(100.0));
+                });
             }
         });
         if let Some(point) = selected_point {

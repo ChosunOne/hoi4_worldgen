@@ -23,6 +23,7 @@ impl TopMenuRenderer {
                         if let Err(e) = self.root_path.try_send(SetRootPath) {
                             error!("{e}");
                         }
+                        ui.close_menu();
                     }
                 })
             });
