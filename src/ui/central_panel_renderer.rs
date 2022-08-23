@@ -175,8 +175,7 @@ fn handle_drag(
 #[allow(clippy::similar_names)]
 fn project_to_texture(viewport: &Rect, tex_size: Vec2, pos: Pos2, map_rect: &Rect) -> Pos2 {
     // Get relative position of the map_rect
-    let map_rect_u = pos.x - map_rect.min.x;
-    let map_rect_v = pos.y - map_rect.min.y;
+    let map_rect_uv = pos - map_rect.min;
 
     // Viewports are clamped to the range [0, 1], so get the size of the viewport in pixels.
     let viewport_u_size = viewport.width() * tex_size.x;
@@ -186,8 +185,8 @@ fn project_to_texture(viewport: &Rect, tex_size: Vec2, pos: Pos2, map_rect: &Rec
     let viewport_map_u_scale = viewport_u_size / map_rect.width();
     let viewport_map_v_scale = viewport_v_size / map_rect.height();
 
-    let viewport_u = viewport_map_u_scale * map_rect_u;
-    let viewport_v = viewport_map_v_scale * map_rect_v;
+    let viewport_u = viewport_map_u_scale * map_rect_uv.x;
+    let viewport_v = viewport_map_v_scale * map_rect_uv.y;
 
     // Project viewport uv to texture uv
     let tex_u = viewport.min.x.mul_add(tex_size.x, viewport_u).round();

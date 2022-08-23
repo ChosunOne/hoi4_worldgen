@@ -787,20 +787,26 @@ impl GetContinentFromIndex {
     }
 }
 
+/// A request to generate a strategic region map
 #[derive(Message, Debug)]
 #[rtype(result = "()")]
 pub struct GenerateStrategicRegionMap;
 
+/// A request to generate a state map
 #[derive(Message, Debug)]
 #[rtype(result = "()")]
 pub struct GenerateStateMap;
 
+/// A request to update the strategic region map
 #[derive(Message)]
 #[rtype(result = "()")]
+#[non_exhaustive]
 struct UpdateStrategicRegionMap(RgbImage);
 
+/// A request to update the state map
 #[derive(Message)]
 #[rtype(result = "()")]
+#[non_exhaustive]
 struct UpdateStateMap(RgbImage);
 
 /// A request to get an `RgbImage` from a supplied `MapDisplayMode`

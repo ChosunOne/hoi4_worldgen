@@ -1,5 +1,5 @@
 use crate::ui::map_loader::{GetMap, IsMapLoading, LoadMap, MapLoader};
-use crate::ui::map_mode::SetMapMode;
+use crate::ui::map_mode::{GetMapMode, SetMapMode};
 use crate::ui::map_textures::{GetTexture, LoadImage};
 use crate::ui::root_path::GetRootPath;
 use crate::{MapError, MapMode, MapTextures, RootPath};
@@ -84,6 +84,7 @@ impl ControlPanelRenderer {
     pub async fn render_control_panel(&self, ctx: &Context) -> Result<(), MapError> {
         let root_path: Option<PathBuf> = self.root_path.send(GetRootPath).await?;
         let map: Option<Addr<Map>> = self.map_loader.send(GetMap).await?;
+        let map_mode: MapDisplayMode = self.map_mode.send(GetMapMode).await?;
 
         let texture_handles = TextureHandles::new(&self.map_textures).await?;
         let is_map_loading = self.map_loader.send(IsMapLoading).await?;
@@ -112,7 +113,10 @@ impl ControlPanelRenderer {
             if map.is_some() {
                 ui.horizontal(|ui| {
                     if texture_handles.heightmap.is_some() {
-                        if ui.button("Height Map").clicked() {
+                        if ui
+                            .selectable_label(map_mode == MapDisplayMode::HeightMap, "Height Map")
+                            .clicked()
+                        {
                             self.map_mode
                                 .do_send(SetMapMode::new(MapDisplayMode::HeightMap));
                         }
@@ -121,7 +125,10 @@ impl ControlPanelRenderer {
                     }
 
                     if texture_handles.terrain.is_some() {
-                        if ui.button("Terrain").clicked() {
+                        if ui
+                            .selectable_label(map_mode == MapDisplayMode::Terrain, "Terrain")
+                            .clicked()
+                        {
                             self.map_mode
                                 .do_send(SetMapMode::new(MapDisplayMode::Terrain));
                         }
@@ -130,7 +137,10 @@ impl ControlPanelRenderer {
                     }
 
                     if texture_handles.rivers.is_some() {
-                        if ui.button("Rivers").clicked() {
+                        if ui
+                            .selectable_label(map_mode == MapDisplayMode::Rivers, "Rivers")
+                            .clicked()
+                        {
                             self.map_mode
                                 .do_send(SetMapMode::new(MapDisplayMode::Rivers));
                         }
@@ -139,7 +149,10 @@ impl ControlPanelRenderer {
                     }
 
                     if texture_handles.provinces.is_some() {
-                        if ui.button("Provinces").clicked() {
+                        if ui
+                            .selectable_label(map_mode == MapDisplayMode::Provinces, "Provinces")
+                            .clicked()
+                        {
                             self.map_mode
                                 .do_send(SetMapMode::new(MapDisplayMode::Provinces));
                         }
@@ -148,7 +161,10 @@ impl ControlPanelRenderer {
                     }
 
                     if texture_handles.states.is_some() {
-                        if ui.button("States").clicked() {
+                        if ui
+                            .selectable_label(map_mode == MapDisplayMode::States, "States")
+                            .clicked()
+                        {
                             self.map_mode
                                 .do_send(SetMapMode::new(MapDisplayMode::States));
                         }
@@ -157,13 +173,27 @@ impl ControlPanelRenderer {
                     }
 
                     if texture_handles.strategic_regions.is_some() {
-                        if ui.button("Strategic Regions").clicked() {
+                        if ui
+                            .selectable_label(
+                                map_mode == MapDisplayMode::StrategicRegions,
+                                "Strategic Regions",
+                            )
+                            .clicked()
+                        {
                             self.map_mode
                                 .do_send(SetMapMode::new(MapDisplayMode::StrategicRegions));
                         }
                     } else {
                         ui.spinner();
                     }
+                });
+                ui.horizontal(|ui| match map_mode {
+                    MapDisplayMode::HeightMap => {}
+                    MapDisplayMode::Terrain => {}
+                    MapDisplayMode::Provinces => {}
+                    MapDisplayMode::Rivers => {}
+                    MapDisplayMode::StrategicRegions => {}
+                    MapDisplayMode::States => {}
                 });
             }
         });
