@@ -151,6 +151,7 @@ impl RightPanelRenderer {
             .max_height(200.0)
             .show_inside(ui, |ui| {
                 ui.heading("Log Panel");
+                ui.separator();
                 ui.set_style(egui::Style {
                     wrap: Some(false),
                     ..Default::default()
@@ -200,6 +201,7 @@ fn render_strategic_region_info(
     ui: &mut Ui,
 ) {
     ui.heading("Strategic Region Information");
+    ui.separator();
     if let (Some(_), Some(_), Some(sr)) = (
         map_addr,
         selected_regions.selected_point,
@@ -260,6 +262,7 @@ fn render_state_info(
     ui: &mut Ui,
 ) {
     ui.heading("State Information");
+    ui.separator();
     if let (Some(_), Some(_), Some(state)) = (
         map_addr,
         selected_regions.selected_point,
@@ -330,6 +333,7 @@ fn render_province_info(
     ui: &mut Ui,
 ) {
     ui.heading("Province Information");
+    ui.separator();
     if let (Some(_), Some(_), Some(definition)) = (
         map_addr,
         selected_regions.selected_point,

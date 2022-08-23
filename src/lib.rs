@@ -27,9 +27,10 @@ use derive_more::Display;
 use image::ImageError;
 use indicatif::style::TemplateError;
 use jomini::{ScalarError, TextDeserializer, TextTape};
+use log::error;
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 use std::fs;
 use std::hash::Hash;
 use std::path::{Path, PathBuf};
@@ -260,15 +261,18 @@ where
     /// prior to deserialization.
     /// # Errors
     /// Returns an error if the file cannot be read.
-    fn load_object<P: AsRef<Path>>(path: P) -> Result<Self, MapError>;
+    fn load_object(path: &Path) -> Result<Self, MapError>;
 }
 
 impl<T: Sized + for<'de> Deserialize<'de>> LoadObject for T {
     #[inline]
-    fn load_object<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+    fn load_object(path: &Path) -> Result<Self, MapError> {
         let data = fs::read_to_string(path)?;
-        let object = TextDeserializer::from_windows1252_slice(data.as_bytes())?;
-        Ok(object)
+        let object_result = TextDeserializer::from_windows1252_slice(data.as_bytes());
+        if object_result.is_err() {
+            error!("Error deserializing from {:?}", path.display());
+        }
+        Ok(object_result?)
     }
 }
 

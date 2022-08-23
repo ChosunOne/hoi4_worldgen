@@ -6,11 +6,10 @@ use crate::{MapError, MapMode, MapTextures, RootPath};
 use actix::Addr;
 use eframe::epaint::TextureHandle;
 use egui::{Context, TopBottomPanel};
-use image::RgbImage;
 use indicatif::InMemoryTerm;
 use log::{debug, error, trace};
 use std::path::PathBuf;
-use tokio::{join, try_join};
+use tokio::try_join;
 use world_gen::map::{GetMapImage, Map};
 use world_gen::MapDisplayMode;
 
@@ -32,6 +31,7 @@ struct TextureHandles {
 }
 
 impl TextureHandles {
+    #[allow(clippy::integer_arithmetic)]
     pub async fn new(map_textures: &Addr<MapTextures>) -> Result<Self, MapError> {
         // The type for these are Option<TextureHandle>
         let (
@@ -86,7 +86,6 @@ impl ControlPanelRenderer {
         let map: Option<Addr<Map>> = self.map_loader.send(GetMap).await?;
 
         let texture_handles = TextureHandles::new(&self.map_textures).await?;
-
         let is_map_loading = self.map_loader.send(IsMapLoading).await?;
         self.load_textures(ctx, &map, &texture_handles, is_map_loading)
             .await?;

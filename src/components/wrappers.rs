@@ -373,19 +373,6 @@ pub struct ModelIndex(pub u32);
 pub struct Manpower(pub u32);
 
 /// The amount of victory points in a province
-#[derive(
-    Copy,
-    Clone,
-    Debug,
-    Display,
-    PartialEq,
-    Eq,
-    PartialOrd,
-    Ord,
-    Deserialize,
-    Serialize,
-    Hash,
-    FromStr,
-)]
+#[derive(Copy, Clone, Debug, Display, PartialEq, PartialOrd, Deserialize, Serialize, FromStr)]
 #[non_exhaustive]
-pub struct VictoryPoints(pub u32);
+pub struct VictoryPoints(pub f32);

@@ -111,7 +111,7 @@ mod tests {
 
     #[test]
     fn it_loads_a_state() {
-        let state = RawState::load_object("./test/history/states/1-State.txt")
+        let state = RawState::load_object(Path::new("./test/history/states/1-State.txt"))
             .expect("Failed to load state")
             .state;
 

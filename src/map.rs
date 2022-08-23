@@ -106,7 +106,7 @@ impl Map {
             root_path_buf.push("map/default.map");
             root_path_buf
         };
-        let default_map = DefaultMap::load_object(default_path)?;
+        let default_map = DefaultMap::load_object(&default_path)?;
 
         let provinces_handle = Self::spawn_image_loading_thread(
             root_path,
@@ -464,6 +464,9 @@ impl Map {
             tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading airports...\n");
                 let result = Airports::from_file(&airports_path);
+                if result.is_err() {
+                    error!("Failed to load airports from {}", airports_path.display());
+                }
                 pb.finish();
                 result
             })
@@ -479,6 +482,9 @@ impl Map {
             tokio::task::spawn_blocking(move || {
                 pb.set_message("Loading states...\n");
                 let result = States::from_dir(&states_path);
+                if result.is_err() {
+                    error!("Failed to load states from {}", states_path.display());
+                }
                 pb.finish();
                 result
             })

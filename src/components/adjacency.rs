@@ -4,6 +4,7 @@ use derive_more::Display;
 use jomini::JominiDeserialize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt::Debug;
 use std::path::Path;
 
 /// An adjacency rule
@@ -152,7 +153,7 @@ impl AdjacencyRules {
     /// # Errors
     /// Returns an error if the file could not be loaded.
     #[inline]
-    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, MapError> {
+    pub fn from_file(path: &Path) -> Result<Self, MapError> {
         let mut adjacency_rules = HashMap::new();
         let rules = RawAdjacencyRules::load_object(path)?;
         for rule in rules.adjacency_rule {
@@ -205,7 +206,7 @@ mod tests {
             .expect("Failed to read default.map");
         let adjacency_rules_path =
             append_dir(&map.adjacency_rules, "./test/map").expect("Failed to find adjacency rules");
-        let adjacency_rules = AdjacencyRules::from_file(adjacency_rules_path)
+        let adjacency_rules = AdjacencyRules::from_file(&adjacency_rules_path)
             .expect("Failed to read adjacency rules");
         assert_eq!(adjacency_rules.adjacency_rules.len(), 11);
         assert_eq!(

@@ -149,7 +149,8 @@ impl WorldGenApp {
         if let Some(ui_renderer) = &mut self.ui_renderer {
             if let Some(rt) = &self.runtime {
                 trace!("Render Loop start");
-                ui_renderer.top_menu_renderer.render_top_menu_bar(ctx);
+                trace!("Block on TopMenu");
+                rt.block_on(ui_renderer.top_menu_renderer.render_top_menu_bar(ctx))?;
                 trace!("Block on ControlPanel");
                 rt.block_on(ui_renderer.control_panel_renderer.render_control_panel(ctx))?;
                 trace!("Block on RightPanel");
@@ -158,8 +159,27 @@ impl WorldGenApp {
                 rt.block_on(ui_renderer.central_panel_renderer.render_central_panel(ctx))?;
                 trace!("Render Loop End");
             }
+            if ui_renderer.top_menu_renderer.root_path_changed {
+                let root_path = ui_renderer.top_menu_renderer.new_root_path.clone();
+                self.clear_map()?;
+                if let Some(mut ui_renderer) = self.ui_renderer.as_mut() {
+                    ui_renderer.top_menu_renderer.new_root_path = root_path;
+                }
+            }
         }
 
+        Ok(())
+    }
+
+    fn clear_map(&mut self) -> Result<(), MapError> {
+        self.terminal = InMemoryTerm::new(16, 240);
+        self.ui_renderer = None;
+        if let Some(s) = &self.system {
+            s.stop();
+        }
+        self.runtime = None;
+        self.system_thread = None;
+        self.initialize_renderer()?;
         Ok(())
     }
 }
