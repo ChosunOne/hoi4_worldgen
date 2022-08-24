@@ -1,6 +1,6 @@
 use crate::ui::map_loader::GetMap;
 use crate::ui::map_mode::GetMapMode;
-use crate::ui::map_textures::{GetTexture, LoadImage};
+use crate::ui::map_textures::GetTexture;
 use crate::ui::selection::SetSelectedPoint;
 use crate::ui::viewport::{GetViewportArea, GetZoomLevel, Scroll, SetViewportArea};
 use crate::{MapError, MapLoader, MapMode, MapTextures, Selection, Viewport};
@@ -9,7 +9,7 @@ use egui::{
     CentralPanel, Context, ImageButton, Pos2, Rect, Response, Sense, Spinner, TextureHandle, Ui,
     Vec2,
 };
-use world_gen::map::{GetMapImage, Map};
+use world_gen::map::Map;
 use world_gen::MapDisplayMode;
 
 #[derive(Debug)]
