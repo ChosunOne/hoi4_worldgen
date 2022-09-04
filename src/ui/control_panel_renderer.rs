@@ -5,7 +5,7 @@ use crate::ui::root_path::GetRootPath;
 use crate::{MapError, MapMode, MapTextures, RootPath};
 use actix::Addr;
 use eframe::epaint::TextureHandle;
-use egui::{Context, TopBottomPanel};
+use egui::{Context, TopBottomPanel, Ui};
 use indicatif::InMemoryTerm;
 use log::{debug, error, trace};
 use std::path::PathBuf;
@@ -91,106 +91,56 @@ impl ControlPanelRenderer {
         self.load_textures(ctx, &map, &texture_handles, is_map_loading)
             .await?;
         TopBottomPanel::top("control_panel").show(ctx, |ui| {
-            if let Some(pathbuf) = root_path {
-                ui.horizontal(|ui| {
-                    ui.label("Root Directory: ");
-                    ui.label(pathbuf.display().to_string());
-                    if map.is_none() && ui.button("Load Map").clicked() {
-                        if let Err(e) = self
-                            .map_loader
-                            .try_send(LoadMap::new(pathbuf, self.terminal.clone()))
-                        {
-                            error!("{e}");
-                        }
-                    }
-                });
-                if is_map_loading {
-                    ui.spinner();
-                }
-            } else {
-                ui.heading("Please select a root folder");
-            }
+            self.render_root_directory(root_path, &map, is_map_loading, ui);
             if map.is_some() {
                 ui.horizontal(|ui| {
-                    if texture_handles.heightmap.is_some() {
-                        if ui
-                            .selectable_label(map_mode == MapDisplayMode::HeightMap, "Height Map")
-                            .clicked()
-                        {
-                            self.map_mode
-                                .do_send(SetMapMode::new(MapDisplayMode::HeightMap));
-                        }
-                    } else {
-                        ui.spinner();
-                    }
-
-                    if texture_handles.terrain.is_some() {
-                        if ui
-                            .selectable_label(map_mode == MapDisplayMode::Terrain, "Terrain")
-                            .clicked()
-                        {
-                            self.map_mode
-                                .do_send(SetMapMode::new(MapDisplayMode::Terrain));
-                        }
-                    } else {
-                        ui.spinner();
-                    }
-
-                    if texture_handles.rivers.is_some() {
-                        if ui
-                            .selectable_label(map_mode == MapDisplayMode::Rivers, "Rivers")
-                            .clicked()
-                        {
-                            self.map_mode
-                                .do_send(SetMapMode::new(MapDisplayMode::Rivers));
-                        }
-                    } else {
-                        ui.spinner();
-                    }
-
-                    if texture_handles.provinces.is_some() {
-                        if ui
-                            .selectable_label(map_mode == MapDisplayMode::Provinces, "Provinces")
-                            .clicked()
-                        {
-                            self.map_mode
-                                .do_send(SetMapMode::new(MapDisplayMode::Provinces));
-                        }
-                    } else {
-                        ui.spinner();
-                    }
-
-                    if texture_handles.states.is_some() {
-                        if ui
-                            .selectable_label(map_mode == MapDisplayMode::States, "States")
-                            .clicked()
-                        {
-                            self.map_mode
-                                .do_send(SetMapMode::new(MapDisplayMode::States));
-                        }
-                    } else {
-                        ui.spinner();
-                    }
-
-                    if texture_handles.strategic_regions.is_some() {
-                        if ui
-                            .selectable_label(
-                                map_mode == MapDisplayMode::StrategicRegions,
-                                "Strategic Regions",
-                            )
-                            .clicked()
-                        {
-                            self.map_mode
-                                .do_send(SetMapMode::new(MapDisplayMode::StrategicRegions));
-                        }
-                    } else {
-                        ui.spinner();
-                    }
+                    self.render_map_button(
+                        map_mode,
+                        MapDisplayMode::HeightMap,
+                        "Height Map",
+                        &texture_handles.heightmap,
+                        ui,
+                    );
+                    self.render_map_button(
+                        map_mode,
+                        MapDisplayMode::Terrain,
+                        "Terrain",
+                        &texture_handles.terrain,
+                        ui,
+                    );
+                    self.render_map_button(
+                        map_mode,
+                        MapDisplayMode::Rivers,
+                        "Rivers",
+                        &texture_handles.rivers,
+                        ui,
+                    );
+                    self.render_map_button(
+                        map_mode,
+                        MapDisplayMode::Provinces,
+                        "Provinces",
+                        &texture_handles.provinces,
+                        ui,
+                    );
+                    self.render_map_button(
+                        map_mode,
+                        MapDisplayMode::States,
+                        "States",
+                        &texture_handles.states,
+                        ui,
+                    );
+                    self.render_map_button(
+                        map_mode,
+                        MapDisplayMode::StrategicRegions,
+                        "Strategic Regions",
+                        &texture_handles.strategic_regions,
+                        ui,
+                    );
                 });
                 ui.horizontal(|ui| match map_mode {
                     MapDisplayMode::HeightMap => {}
                     MapDisplayMode::Terrain => {}
-                    MapDisplayMode::Provinces => {}
+                    MapDisplayMode::Provinces => if ui.button("Edit").clicked() {},
                     MapDisplayMode::Rivers => {}
                     MapDisplayMode::StrategicRegions => {}
                     MapDisplayMode::States => {}
@@ -198,6 +148,54 @@ impl ControlPanelRenderer {
             }
         });
         Ok(())
+    }
+
+    fn render_map_button(
+        &self,
+        current_map_mode: MapDisplayMode,
+        button_map_mode: MapDisplayMode,
+        button_text: &str,
+        texture_handle: &Option<TextureHandle>,
+        ui: &mut Ui,
+    ) {
+        if texture_handle.is_some() {
+            if ui
+                .selectable_label(current_map_mode == button_map_mode, button_text)
+                .clicked()
+            {
+                self.map_mode.do_send(SetMapMode::new(button_map_mode));
+            }
+        } else {
+            ui.spinner();
+        }
+    }
+
+    fn render_root_directory(
+        &self,
+        root_path: Option<PathBuf>,
+        map: &Option<Addr<Map>>,
+        is_map_loading: bool,
+        ui: &mut Ui,
+    ) {
+        if let Some(pathbuf) = root_path {
+            ui.horizontal(|ui| {
+                ui.label("Root Directory: ");
+                ui.label(pathbuf.display().to_string());
+                if map.is_none() && ui.button("Load Map").clicked() {
+                    if let Err(e) = self
+                        .map_loader
+                        .try_send(LoadMap::new(pathbuf, self.terminal.clone()))
+                    {
+                        error!("{e}");
+                    }
+                }
+            });
+            if is_map_loading {
+                ui.spinner();
+            }
+        } else {
+            ui.heading("Please select a root folder");
+        }
     }
 
     async fn load_textures(
